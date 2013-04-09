@@ -1,5 +1,5 @@
 package com.topcoder.srm565;
-
+/* minjun wang */
 public class MonstersValley {
 	private int minimumPriceBT(int[] dread, int[] price, int i, long sumDread) {
 		if (i >= dread.length)
