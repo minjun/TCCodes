@@ -15,7 +15,7 @@ public class QuickSort {
 		return s;
 	}
 	
-	
+	@SuppressWarnings("unused")
 	private int partition2(int[] arr, int s, int e) {
 	    int sentry = arr[e];
 	    int j = s;
@@ -32,7 +32,7 @@ public class QuickSort {
 	    arr[e] = temp;
 	    return j;
 	}
-	
+	@SuppressWarnings("unused")
 	private int partition1(int[] arr,int s,int e) {
 	    int sentry = arr[s];
 	    int j = s;
