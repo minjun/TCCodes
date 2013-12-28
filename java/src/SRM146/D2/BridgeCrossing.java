@@ -1,6 +1,7 @@
 package SRM146.D2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -9,7 +10,8 @@ public class BridgeCrossing {
 	// because we need the quickest people to bring back the flashlight
 	List<Integer> timesPassed = new ArrayList<Integer>();
 
-	public int minTime(int[] times) {
+	// backTracking solution
+	public int minTimeBT(int[] times) {
 		int sum = Integer.MAX_VALUE;
 		if (times.length == 1)
 			sum = times[0];
@@ -38,11 +40,29 @@ public class BridgeCrossing {
 					}
 					timesnew[l++] = returned;
 					// now we need to pass left people
-					sum1 += minTime(timesnew);
+					sum1 += minTimeBT(timesnew);
 					sum = Math.min(sum, sum1);
 				}
 			}
 		}
+		return sum;
+	}
+
+	public int minTime(int[] times) {
+		Arrays.sort(times);
+		int n = times.length;
+		int sum = 0;
+		int i = times.length;
+		for (i = n - 1; i > 2; i -= 2) {
+			sum += Math.min(times[0] + times[1] * 2 + times[i], times[0] * 2
+					+ times[i - 1] + times[i]);
+		}
+		if (i == 2)
+			sum = sum + times[0] + times[1] + times[2];
+		else if (i == 1)
+			sum = sum + times[1];
+		else
+			sum = times[0];
 		return sum;
 	}
 }
