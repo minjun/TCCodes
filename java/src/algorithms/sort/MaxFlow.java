@@ -14,9 +14,10 @@ public class MaxFlow {
 		while (qget <= qput) {
 			int vertex = queue[qget++];
 			for (int i = 0; i < weights.length; i++) {
-				if (weights[vertex][i] > 0 && !visited[i]) {
+				if (weights[vertex][i] > 0 && !visited[i] && cap[vertex][i] > 0) {
 					queue[qput++] = i;
 					visited[i] = true;
+					from[i] = vertex;
 					if (i == end) {
 						qget = qput + 1;
 						break;
