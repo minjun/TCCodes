@@ -1,4 +1,4 @@
-package SRM601.D1;
+package SRM601.D2;
 
 import static org.junit.Assert.*;
 
