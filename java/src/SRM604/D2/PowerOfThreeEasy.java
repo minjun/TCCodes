@@ -1,6 +1,7 @@
 package SRM604.D2;
 
 public class PowerOfThreeEasy {
+    @SuppressWarnings("unused")
     private String ableToGet(int x, int y, int p) {
 	// if x or y was negative, it is impossible.
 	// Else if x==0 , y==0 it is already possible.
