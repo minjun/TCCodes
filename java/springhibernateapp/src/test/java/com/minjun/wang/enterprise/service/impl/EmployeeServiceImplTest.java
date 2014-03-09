@@ -14,6 +14,7 @@ public class EmployeeServiceImplTest {
 	System.out.println("load context");
 	ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
 		"applicationContext.xml");
+	/*
 	Employee em = new Employee();
 	em.setId("3");
 	em.setName("John");
@@ -28,6 +29,9 @@ public class EmployeeServiceImplTest {
 	System.out.println("Updated age :"
 		+ emService.findEmployeeById("3").getAge());
 	emService.deleteEmployee(em);
+	*/
+	CutService cutService = (CutService)context.getBean("cutService1");
+	cutService.printName();
 	context.close();
     }
 
