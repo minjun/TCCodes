@@ -4,12 +4,19 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Set;
+import java.util.HashSet;
+import javax.persistence.Embeddable;
+import javax.persistence.Transient;
+import javax.persistence.OneToMany;
+import javax.persistence.CascadeType;
+
+
 
 @Entity
 @Table(name = "EMPLOYEE")
 public class Employee {
-
-    @Id
+	@Id
     @Column(name = "ID", nullable = false)
     private String id;
 
@@ -19,10 +26,16 @@ public class Employee {
     @Column(name = "AGE", nullable = false)
     private long age;
 
-    public Employee() {
+	@OneToMany(cascade = {CascadeType.ALL})
+	private Set<Passport> passports = new HashSet<Passport>();
 
-    }
-
+	public Set<Passport> getPassport() {
+		return passports;
+	}
+	public void addPassport(Passport passport) {
+		passports.add(passport);
+	}
+	
     public String getId() {
 
 	return id;

@@ -3,9 +3,10 @@ package com.minjun.wang.enterprise.dao.impl;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import java.util.Set;
 
 import com.minjun.wang.enterprise.dao.EmployeeDAO;
-import com.minjun.wang.enterprise.model.Employee;
+import com.minjun.wang.enterprise.model.*;
 
 @Repository("employeeDAO")
 public class EmployeeDAOImpl implements EmployeeDAO {
@@ -15,6 +16,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     public void persistEmployee(Employee employee) {
 	// TODO Auto-generated method stub
+	Set<Passport> pts = employee.getPassport();
+	for (Passport pt:pts) {
+		sessionFactory.getCurrentSession().persist(pt);
+	}
 	sessionFactory.getCurrentSession().persist(employee);
     }
 
