@@ -15,6 +15,7 @@
         http://www.springframework.org/schema/aop/spring-aop.xsd">
 	<tx:annotation-driven />
 	<context:component-scan base-package="com.minjun.wang.enterprise.*" />
+	
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -22,23 +23,25 @@
 		<property name="username" value="root" />
 		<property name="password" value="123456" />
 	</bean>
-
-	<bean id="sessionFactory"
+	<!--  mybatis configuration -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+<!--  hibernate configuration -->
+<!-- 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-		<property name="dataSource" ref="dataSource"/>
-		<!--
+		<property name="dataSource" ref="dataSource"></property>
 		<property name="annotatedClasses">
-			<list>
-				<value>com.minjun.wang.enterprise.model.Employee</value>
-			</list>
-		</property>
-		-->
-		<property  name ="packagesToScan"  value ="com.minjun.wang.enterprise.model" />
+            <list>
+                <value>com.minjun.wang.enterprise.model.Employee</value>
+            </list>
+        </property>
+		
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">create</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
 			</props>
 		</property>
 	</bean>
@@ -46,18 +49,12 @@
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="sessionFactory"/>
-	</bean>
-	
+	</bean> -->
 	<!-- aop -->
-	<bean id="debugInterceptor" class="org.springframework.aop.interceptor.DebugInterceptor">
+<!-- 	<bean id="debugInterceptor" class="org.springframework.aop.interceptor.DebugInterceptor">
 	</bean>
 
 	<bean id="cutService1" class="org.springframework.aop.framework.ProxyFactoryBean">
-		<!--
-		<property name="proxyInterfaces">
-			<value>com.mycompany.Person</value>
-		</property>
-		-->
 		<property name="target">
 			<ref bean="cutService" />
 		</property>
@@ -67,7 +64,7 @@
 				<value>debugInterceptor</value>
 			</list>
 		</property>
-	</bean>
+	</bean> -->
 <!--	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
 		<property name="beanNames">
 			<list>

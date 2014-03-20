@@ -1,0 +1,52 @@
+Fri Apr 26 15:23:35 MDT 2013 -  Message has been received:
+<?xml version="1.0" encoding="UTF-8" ?>
+<TWTCePROOrder>
+<Request>
+<Account    Category="Business"    BillingPolicy="Y">
+<CustomerName>Intercon Associates, Inc.</CustomerName>
+
+<CustomerProfileName>INTERCON</CustomerProfileName>
+
+<AccountName>INTERCON</AccountName>
+
+<AccountNumber>259777</AccountNumber>
+
+<BillSysId>CBP</BillSysId>
+
+<BillPlan>BUSINESS</BillPlan>
+
+<Segment>Enterprise</Segment>
+
+<Subsegment>Small</Subsegment>
+
+<ServiceLevel>Diamond</ServiceLevel>
+
+<ServingNOC>OFallon</ServingNOC>
+</Account>
+
+<Order    BillingOnly="N"    HotCutCoordination="N"    FocContact="N"    DlrContact="N"    TTRequired="N">
+<OrderNumber>816024</OrderNumber>
+
+<OrderSource>MACD</OrderSource>
+
+<OrderType>Disconnect</OrderType>
+
+<TWTCInitiator>McGranahan, Sherri</TWTCInitiator>
+
+<NegotiatedDueDate    Format="MMDDCCYY">04292013</NegotiatedDueDate>
+
+<CCDD    Format="MMDDCCYY">04292013</CCDD>
+
+<Expedite>N</Expedite>
+
+<Version>1</Version>
+
+<Supp    Type="Cancel"    CancelOrderCharge="N"></Supp>
+
+<TotalMRC    TotalMRCVersion0="-599.34">0</TotalMRC>
+</Order>
+</Request>
+</TWTCePROOrder>
+
+
+Fri Apr 26 15:23:39 MDT 2013 -  Message has been received:

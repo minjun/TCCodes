@@ -50,5 +50,15 @@
   		<artifactId>spring-aop</artifactId>
   		<version>${spring.version}</version>
   	</dependency>
+  	<dependency>
+  		<groupId>org.mybatis</groupId>
+  		<artifactId>mybatis-spring</artifactId>
+  		<version>1.2.2</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.mybatis</groupId>
+  		<artifactId>mybatis</artifactId>
+  		<version>3.2.5</version>
+  	</dependency>
   </dependencies>
 </project>

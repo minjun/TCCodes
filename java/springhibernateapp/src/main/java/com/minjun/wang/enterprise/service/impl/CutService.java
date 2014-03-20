@@ -16,10 +16,4 @@ public class CutService {
 	public void printName() {
 		System.out.println(name);
 	}
-	//@Pointcut("execution(public * (..))")
-	private void anyPublicOperation() {}
-	//@Pointcut("within(com.minjun.wang.enterprise.dao...)")
-	private void inTrading() {}
-	//@Pointcut("anyPublicOperation() && inTrading()")
-	private void tradingOperation() {}
 }
