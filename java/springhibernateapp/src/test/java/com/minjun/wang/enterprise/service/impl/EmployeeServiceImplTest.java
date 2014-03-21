@@ -9,8 +9,8 @@ import com.minjun.wang.enterprise.service.EmployeeService;
 
 public class EmployeeServiceImplTest {
 
-    @Test
-    public void test() {
+    //@Test
+    public void testHibernate() {
 	System.out.println("load context");
 	ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
 		"applicationContext.xml");
@@ -39,5 +39,8 @@ public class EmployeeServiceImplTest {
 	context.close();
 	*/
     }
+	@Test
+	public void testMyBatis() {
+	
 
 }

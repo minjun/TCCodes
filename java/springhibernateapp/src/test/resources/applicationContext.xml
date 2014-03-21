@@ -15,7 +15,7 @@
         http://www.springframework.org/schema/aop/spring-aop.xsd">
 	<tx:annotation-driven />
 	<context:component-scan base-package="com.minjun.wang.enterprise.*" />
-	
+
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
@@ -27,8 +27,13 @@
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
-<!--  hibernate configuration -->
-<!-- 	<bean id="sessionFactory"
+
+	<bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.minjun.wang.enterprise.mapper.UserMapper" />
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	<!--  hibernate configuration -->
+	<!-- 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
 		<property name="annotatedClasses">
@@ -51,7 +56,7 @@
 		<property name="sessionFactory" ref="sessionFactory"/>
 	</bean> -->
 	<!-- aop -->
-<!-- 	<bean id="debugInterceptor" class="org.springframework.aop.interceptor.DebugInterceptor">
+	<!-- 	<bean id="debugInterceptor" class="org.springframework.aop.interceptor.DebugInterceptor">
 	</bean>
 
 	<bean id="cutService1" class="org.springframework.aop.framework.ProxyFactoryBean">
@@ -65,7 +70,7 @@
 			</list>
 		</property>
 	</bean> -->
-<!--	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+	<!--	<bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
 		<property name="beanNames">
 			<list>
 				<value>cut*</value>

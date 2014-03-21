@@ -13,7 +13,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeDAO employeeDAO;
-    
+	@Autowired
+	private UserMapper userMapper;
+
     @Override
     @Transactional
     public void persistEmployee(Employee employee) {
@@ -25,7 +27,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Transactional
     public Employee findEmployeeById(String id) {
 	// TODO Auto-generated method stub
-	return employeeDAO.findEmployeeById(id);
+	//return employeeDAO.findEmployeeById(id);
+		return this.userMapper.getUser(userId);
     }
 
     @Override
@@ -41,5 +44,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	// TODO Auto-generated method stub
 	employeeDAO.deleteEmployee(employee);
     }
+	
+	
 
 }
