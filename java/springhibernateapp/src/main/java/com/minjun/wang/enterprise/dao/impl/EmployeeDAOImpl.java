@@ -10,7 +10,7 @@ import com.minjun.wang.enterprise.model.*;
 
 @Repository("employeeDAO")
 public class EmployeeDAOImpl implements EmployeeDAO {
-    @Autowired
+    //@Autowired
     SessionFactory sessionFactory;
 
     @Override

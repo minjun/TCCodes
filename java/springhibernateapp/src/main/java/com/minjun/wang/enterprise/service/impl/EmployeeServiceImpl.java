@@ -7,44 +7,42 @@ import org.springframework.stereotype.Service;
 import com.minjun.wang.enterprise.dao.EmployeeDAO;
 import com.minjun.wang.enterprise.model.Employee;
 import com.minjun.wang.enterprise.service.EmployeeService;
+import com.minjun.wang.enterprise.mapper.UserMapper;
 
 @Service("employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
 
-    @Autowired
+    //@Autowired
     private EmployeeDAO employeeDAO;
 	@Autowired
 	private UserMapper userMapper;
 
     @Override
-    @Transactional
+    //@Transactional
     public void persistEmployee(Employee employee) {
 	// TODO Auto-generated method stub
 	employeeDAO.persistEmployee(employee);
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public Employee findEmployeeById(String id) {
 	// TODO Auto-generated method stub
 	//return employeeDAO.findEmployeeById(id);
-		return this.userMapper.getUser(userId);
+		return userMapper.getUser(id);
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public void updateEmployee(Employee employee) {
 	// TODO Auto-generated method stub
 	employeeDAO.updateEmployee(employee);
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public void deleteEmployee(Employee employee) {
 	// TODO Auto-generated method stub
 	employeeDAO.deleteEmployee(employee);
     }
-	
-	
-
 }

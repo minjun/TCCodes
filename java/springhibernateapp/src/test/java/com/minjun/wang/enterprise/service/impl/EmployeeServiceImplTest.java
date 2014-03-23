@@ -41,6 +41,11 @@ public class EmployeeServiceImplTest {
     }
 	@Test
 	public void testMyBatis() {
-	
-
+	ConfigurableApplicationContext context = new ClassPathXmlApplicationContext(
+		"applicationContext.xml");
+	EmployeeService emService = (EmployeeService) context
+		.getBean("employeeService");
+	Employee em = emService.findEmployeeById("1");
+	System.out.println("employee"+em);
+	}
 }

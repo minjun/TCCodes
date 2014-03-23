@@ -25,6 +25,11 @@ public class Employee {
 
     @Column(name = "AGE", nullable = false)
     private long age;
+	
+	@Override
+	public String toString() {
+		return "name = " + name + ";id = " + id + ";age = " + age;
+	}
 
 	@OneToMany(cascade = {CascadeType.ALL})
 	private Set<Passport> passports = new HashSet<Passport>();
