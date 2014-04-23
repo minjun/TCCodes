@@ -13,13 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package wsserver;
+package connector.wsserver;
 
 import io.netty.bootstrap.ServerBootstrap;
+
 import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+
+
 
 /**
  * A HTTP server which serves Web Socket requests at:
