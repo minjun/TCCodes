@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package connector.wsserver;
+package server.connector.wsserver;
 
 import io.netty.bootstrap.ServerBootstrap;
 

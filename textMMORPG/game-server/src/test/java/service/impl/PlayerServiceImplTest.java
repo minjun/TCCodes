@@ -2,6 +2,8 @@ package service.impl;
 
 import static org.junit.Assert.*;
 
+
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ import domain.Player;
 
 import service.PlayerService;
 
-public class LoginServiceImplTest {
+public class PlayerServiceImplTest {
     static ConfigurableApplicationContext context = null;
 
     @BeforeClass
@@ -25,12 +27,12 @@ public class LoginServiceImplTest {
     @Test
     public void testSaveAndGetPlayer() {
 	PlayerService service = (PlayerService)context.getBean("playerService");
-	Player player = new Player("id","name","password");
+	Player player = new Player("id","name1","password");
 	List<Player> players = new ArrayList<Player>();
 	players.add(player);
 	service.savePlayers(players);
 	Player playerGet = service.getPlayer("id");
-	assertEquals(player,playerGet);
+	assertEquals(player.toString(),playerGet.toString());
     }	
 
 }

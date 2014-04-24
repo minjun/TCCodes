@@ -1,4 +1,4 @@
-package connector.socket;
+package server.connector.socket;
 
 public class SocketServer {
 
