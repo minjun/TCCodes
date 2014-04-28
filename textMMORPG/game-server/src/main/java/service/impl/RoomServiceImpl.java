@@ -1,12 +1,14 @@
 package service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import domain.map.Room;
 import repo.RoomRepository;
-import service.MapService;
+import service.RoomService;
 
-public class RoomServiceImpl implements MapService {
+@Service("roomService")
+public class RoomServiceImpl implements RoomService {
 
 	@Autowired
 	RoomRepository roomRepo;

@@ -1,114 +1,164 @@
 package utils.main;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import service.PlayerService;
+import service.RoomService;
+
+import domain.item.Item;
 import domain.map.Exit;
+import domain.map.Room;
+import domain.player.Player;
 
+@Service("importRoom")
 public class ImportRoom {
-	private static Logger logger = LoggerFactory.getLogger(ImportRoom.class);
+    private static Logger logger = LoggerFactory.getLogger(ImportRoom.class);
 
-	private static void printUsage() {
-		System.out.println("Usage:ImportRoom dir suffix(.c/.h)");
+    @Autowired
+    private RoomService roomService;
+
+    private static void printUsage() {
+	System.out.println("Usage:ImportRoom dir suffix(.c/.h)");
+    }
+
+    private String regexFind(String str, String regex) {
+	Pattern p = Pattern.compile(regex);
+	Matcher m = p.matcher(str);
+	if (m.find()) {
+	    logger.debug("regex:" + m.group(0) + "[" + m.start() + "-" + m.end() + "]");
+	    return m.group(1);
 	}
+	return null;
+    }
 
-	private static String regexFind(StringBuffer sb, String regex) {
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(sb);
-		if (m.find()) {
-			logger.debug("regex:" + m.group(0) + "[" + m.start() + "-" + m.end() + "]");
-			return m.group(1);
+    private List<Exit> getExits(String strExits, String countryId) {
+	List<Exit> exits = new ArrayList<Exit>();
+	if (strExits == null)
+	    return exits;
+	for (int i = 0; i < Exit.DIR.END.ordinal(); i++) {
+	    String regex = String.format("\"%s\"[^\"]+\"(.+?)\"", Exit.DIR.values()[i]);
+	    Pattern p = Pattern.compile(regex);
+	    Matcher m = p.matcher(strExits);
+	    if (m.find()) {
+		logger.debug("regex:" + m.group(1) + "[" + m.start() + "-" + m.end() + "]");
+		exits.add(new Exit(Exit.DIR.values()[i], countryId, m.group(1)));
+	    }
+	}
+	return exits;
+    }
+
+    public Room findRoom(String fileName) throws IOException {
+	// read from file
+	File file = new File(fileName);
+	BufferedReader br = null;
+	br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
+	String line;
+	StringBuffer sb = new StringBuffer();
+	while ((line = br.readLine()) != null) {
+	    if (line.trim().equals(""))
+		continue;
+	    logger.debug(line);
+	    sb.append(line);
+	}
+	br.close();
+	// convert to room object
+	String str = sb.toString();
+	String countryId = null;
+	String roomId = null;
+	String[] ss = fileName.split("\\\\");
+	int i = 0;
+	for (i = 0; i < ss.length; i++) {
+	    if (ss[i].equals("d"))
+		break;
+	}
+	if (i < ss.length - 1) {
+	    countryId = ss[i + 1];
+	}
+	roomId = ss[ss.length - 1];
+	String name = regexFind(str, "short\",\\s*\"(.+?)\"");
+	String desc = regexFind(str, "@LONG(.+)LONG");
+	if (desc == null)
+	    desc = regexFind(str, "long\",\\s*\"(.+?)\"");
+	String strExits = regexFind(str, "exits\",\\s*\\(\\[(.+?)\\]\\)");
+	// String strItems = regexFind(str, "objects\",\\s*\\(\\[(.+?)\\]\\)");
+	List<Exit> exits = getExits(strExits, countryId);
+	Room room = null;
+	if (roomId == null || countryId == null || name == null || desc == null) {
+	    logger.error(String.format("Importing %s: failed - country:%s,room:%s,name:%s,desc:%s", fileName, countryId, roomId, name, desc));
+	} else if (exits.isEmpty()) {
+	    logger.warn(String.format("Importing %s: no exits", fileName));
+	    room = new Room(countryId, roomId, name, desc, exits, null, null);
+	} else {
+	    logger.info(String.format("Importing %s: ok", fileName));
+	    room = new Room(countryId, roomId, name, desc, exits, null, null);
+	}
+	return room;
+    }
+
+    private void importNpc(String fileName) {
+
+    }
+
+    private void importObj(String fileName) {
+
+    }
+
+    private void importRoom(String fileName) throws IOException {
+	Room room = findRoom(fileName);
+	if (room != null) {
+	    roomService.saveRoom(room);
+	}
+    }
+
+    private void importDir(String strPath, String suffix) throws IOException {
+	File dir = new File(strPath);
+	File[] files = dir.listFiles();
+	if (files == null)
+	    return;
+	for (int i = 0; i < files.length; i++) {
+	    if (files[i].isDirectory()) {
+		importDir(files[i].getAbsolutePath(), suffix);
+	    } else {
+		String path = files[i].getAbsolutePath();
+		if (path.endsWith(suffix)) {
+		    if (path.contains("\\item\\") || path.contains("\\misc\\") || path.contains("\\obj\\")) {
+			importObj(path);
+		    } else if (path.contains("\\npc\\")) {
+			importNpc(path);
+		    } else {
+			importRoom(path);
+		    }
 		}
-		return null;
+	    }
 	}
+    }
 
-	private static List<Exit> getExits(String exits) {
-		StringBuffer sb = new StringBuffer();
-		sb.append("(");
-		for (int i = 0; i < Exit.DIR.END.ordinal(); i++) {
-			sb.append("\"").append(Exit.DIR.values()[i]).append("\"").append("|");
-		}
-		sb.deleteCharAt(sb.length() - 1);
-		sb.append(")");
-		logger.info(sb.toString());
-		//sb = new StringBuffer("south");
-		Pattern p = Pattern.compile(sb.toString());
-		Matcher m = p.matcher(exits);
-		int i = 0;
-		while (m.find()) {
-			logger.info("regex:" + m.group() + "[" + m.start() + "-" + m.end() + "]");
-			i++;
-		}
-		return null;
+    public static void main(String[] args) throws IOException {
+	if (args.length < 2) {
+	    printUsage();
+	    return;
 	}
-
-	private static void importRoom(String fileName) throws IOException {
-		File file = new File(fileName);
-		BufferedReader br = null;
-		br = new BufferedReader(new InputStreamReader(new FileInputStream(file)));
-		String line;
-		StringBuffer sb = new StringBuffer();
-		while ((line = br.readLine()) != null) {
-			if (line.trim().equals(""))
-				continue;
-			logger.debug(line);
-			sb.append(line);
-		}
-		String name = regexFind(sb, "short\",\\s*\"(\\S+)\"");
-		String desc = regexFind(sb, "@LONG(.+)LONG");
-		String exits = regexFind(sb, "exits\",\\s*\\(\\[(.+?)\\]\\)");
-		String objects = regexFind(sb, "objects\",\\s*\\(\\[(.+?)\\]\\)");
-
-		br.close();
-	}
-
-	private static void importNpc(String fileName) {
-
-	}
-
-	private static void importObj(String fileName) {
-
-	}
-
-	private static void importDir(String strPath, String suffix) throws IOException {
-		File dir = new File(strPath);
-		File[] files = dir.listFiles();
-		if (files == null)
-			return;
-		for (int i = 0; i < files.length; i++) {
-			if (files[i].isDirectory()) {
-				importDir(files[i].getAbsolutePath(), suffix);
-			} else {
-				String path = files[i].getAbsolutePath();
-				if (path.endsWith(suffix)) {
-					if (path.contains("\\item\\") || path.contains("\\misc\\") || path.contains("\\obj\\")) {
-						importObj(path);
-					} else if (path.contains("\\npc\\")) {
-						importNpc(path);
-					} else {
-						importRoom(path);
-						break;
-					}
-				}
-			}
-		}
-	}
-
-	public static void main(String[] args) throws IOException {
-		if (args.length < 2) {
-			printUsage();
-			return;
-		}
-		// importDir(args[0], args[1]);
-		getExits(" //sizeof() == 4		\"south\" : __DIR__\"bank\",                \"north\" : __DIR__\"bookstore\",                \"west\" : __DIR__\"baihu-w2\",                \"east\" : __DIR__\"center\",        ");
-	}
+	ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
+	ImportRoom importRoom = (ImportRoom) context.getBean("importRoom");
+	importRoom.importDir(args[0], args[1]);
+	context.close();
+    }
 }
