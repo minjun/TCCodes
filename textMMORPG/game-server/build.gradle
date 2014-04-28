@@ -23,7 +23,8 @@ repositories {
 dependencies {
     // The production code uses the SLF4J logging API at compile time
     compile 'org.slf4j:slf4j-api:1.7.5'
-    compile 'io.netty:netty-all:4.0.18.Final'
+	compile 'org.slf4j:slf4j-log4j12:1.7.5'
+	compile 'io.netty:netty-all:4.0.18.Final'
     compile 'org.springframework:spring-context:4.0.3.RELEASE'
     compile 'org.springframework:spring-test:4.0.3.RELEASE'
     compile 'org.springframework.data:spring-data-couchbase:1.0.0.RELEASE'
