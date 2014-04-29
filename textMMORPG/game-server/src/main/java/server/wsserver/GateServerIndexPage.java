@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package server.connector.wsserver;
+package server.wsserver;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,7 +26,7 @@ import io.netty.util.CharsetUtil;
 /**
  * Generates the demo HTML page which is served at http://localhost:8080/
  */
-public final class WebSocketServerIndexPage {
+public final class GateServerIndexPage {
     private static ByteBuf bf = null;
 
     public static ByteBuf getContent(String webSocketLocation) throws IOException {
@@ -44,7 +44,7 @@ public final class WebSocketServerIndexPage {
 	return bf;
     }
 
-    private WebSocketServerIndexPage() {
+    private GateServerIndexPage() {
 	// Unused
     }
 }

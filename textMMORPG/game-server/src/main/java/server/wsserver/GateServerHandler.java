@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package server.connector.wsserver;
+package server.wsserver;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -45,8 +45,8 @@ import static io.netty.handler.codec.http.HttpVersion.*;
 /**
  * Handles handshakes and messages
  */
-public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> {
-    private static final Logger logger = Logger.getLogger(WebSocketServerHandler.class.getName());
+public class GateServerHandler extends SimpleChannelInboundHandler<Object> {
+    private static final Logger logger = Logger.getLogger(GateServerHandler.class.getName());
 
     private static final String WEBSOCKET_PATH = "/websocket";
 
@@ -81,7 +81,7 @@ public class WebSocketServerHandler extends SimpleChannelInboundHandler<Object> 
 
         // Send the demo page and favicon.ico
         if ("/".equals(req.getUri())) {
-            ByteBuf content = WebSocketServerIndexPage.getContent(getWebSocketLocation(req));
+            ByteBuf content = ConnectorServerIndexPage.getContent(getWebSocketLocation(req));
             FullHttpResponse res = new DefaultFullHttpResponse(HTTP_1_1, OK, content);
 
             res.headers().set(CONTENT_TYPE, "text/html; charset=UTF-8");

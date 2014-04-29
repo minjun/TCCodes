@@ -5,18 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.data.annotation.Id;
-
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
 
-import service.PlayerService;
-import service.RoomService;
-
 import domain.item.Armor;
-import domain.map.Exit;
 
 @Document
 public class Player {
