@@ -2,9 +2,6 @@ package service.impl;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,9 +24,9 @@ public class PlayerServiceImplTest {
 	public void testSaveAndGetPlayer() {
 		PlayerService service = (PlayerService) context.getBean("playerService");
 		Player player = new Player("id", "name1", "password");
-		List<Player> players = new ArrayList<Player>();
-		players.add(player);
-		service.savePlayers(players);
+		service.move(player, "kezhan.c");
+		System.out.println(service.look(player));
+		service.savePlayer(player);
 		Player playerGet = service.getPlayer("id");
 		assertEquals(player.toString(), playerGet.toString());
 	}
