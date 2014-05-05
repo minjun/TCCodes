@@ -16,69 +16,71 @@
 package server;
 
 import io.netty.channel.ChannelFuture;
+
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
-import java.net.InetAddress;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import service.impl.GameService;
 
 /**
  * Handles a server-side channel.
  */
+@Component
 @Sharable
 public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
-    private static final Logger logger = Logger.getLogger(GameServerHandler.class.getName());
+	private static final Logger logger = Logger.getLogger(GameServerHandler.class.getName());
 
-    @Override
-    public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        // Send greeting for a new connection.
-        ctx.write(
-                "Welcome to " + InetAddress.getLocalHost().getHostName() + "!\r\n");
-        ctx.write("It is " + new Date() + " now.\r\n");
-        ctx.flush();
-    }
+	@Autowired
+	GameService gameService;
 
-    @Override
-    public void channelRead0(ChannelHandlerContext ctx, String request) throws Exception {
+	@Override
+	public void channelActive(ChannelHandlerContext ctx) throws Exception {
+		ctx.write(gameService.Connected());
+		ctx.flush();
+	}
 
-        // Generate and write a response.
-        String response;
-        boolean close = false;
-        if (request.isEmpty()) {
-            response = "Please type something.\r\n";
-        } else if ("bye".equals(request.toLowerCase())) {
-            response = "Have a good day!\r\n";
-            close = true;
-        } else {
-            response = "Did you say '" + request + "'?\r\n";
-        }
+	@Override
+	public void channelRead0(ChannelHandlerContext ctx, String request) throws Exception {
 
-        // We do not need to write a ChannelBuffer here.
-        // We know the encoder inserted at TelnetPipelineFactory will do the conversion.
-        ChannelFuture future = ctx.write(response);
+		// Generate and write a response.
+		String response;
+		boolean close = false;
+		if ("quit".equals(request.toLowerCase())) {
+			response = gameService.logout();
+			close = true;
+		} else {
+			response = gameService.process(request);
+		}
 
-        // Close the connection after sending 'Have a good day!'
-        // if the client has sent 'bye'.
-        if (close) {
-            future.addListener(ChannelFutureListener.CLOSE);
-        }
-    }
+		// We do not need to write a ChannelBuffer here.
+		// We know the encoder inserted at TelnetPipelineFactory will do the
+		// conversion.
+		ChannelFuture future = ctx.write(response);
 
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
-    }
+		// Close the connection after sending 'Have a good day!'
+		// if the client has sent 'bye'.
+		if (close) {
+			future.addListener(ChannelFutureListener.CLOSE);
+		}
+	}
 
-    @Override
-    public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        logger.log(
-                Level.WARNING,
-                "Unexpected exception from downstream.", cause);
-        ctx.close();
-    }
+	@Override
+	public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+		ctx.flush();
+	}
+
+	@Override
+	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+		logger.log(Level.WARNING, "Unexpected exception from downstream.", cause);
+		ctx.close();
+	}
 }

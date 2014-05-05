@@ -1,6 +1,7 @@
 package service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import domain.player.Player;
 
@@ -8,6 +9,7 @@ import domain.player.Player;
 import service.LoginService;
 import service.PlayerService;
 
+@Service("loginService")
 public class LoginServiceImpl implements LoginService {
 
 	@Autowired
