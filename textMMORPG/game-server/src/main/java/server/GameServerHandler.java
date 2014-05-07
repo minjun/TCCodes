@@ -60,7 +60,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 		} else {
 			response = gameService.process(request);
 		}
-
+		
 		// We do not need to write a ChannelBuffer here.
 		// We know the encoder inserted at TelnetPipelineFactory will do the
 		// conversion.

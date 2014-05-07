@@ -25,7 +25,6 @@ public class GameService {
 	public String Connected() throws Exception {
 		// TODO Auto-generated method stub
 		String msg = worldService.getWorld().getProperties("welcome");
-		msg = new String("测试".getBytes("UTF-8"), "GBK");
 		return msg;
 	}
 

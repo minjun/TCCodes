@@ -15,7 +15,10 @@
  */
 package server;
 
+import java.nio.charset.Charset;
+
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Component;
 
 import io.netty.channel.ChannelInitializer;
@@ -31,8 +34,8 @@ import io.netty.handler.codec.string.StringEncoder;
  */
 @Component
 public class GameServerInitializer extends ChannelInitializer<SocketChannel> {
-    private static final StringDecoder DECODER = new StringDecoder();
-    private static final StringEncoder ENCODER = new StringEncoder();
+    private static final StringDecoder DECODER = new StringDecoder(Charset.forName("GBK"));
+    private static final StringEncoder ENCODER = new StringEncoder(Charset.forName("GBK"));
     @Autowired
     private GameServerHandler SERVERHANDLER;
 
