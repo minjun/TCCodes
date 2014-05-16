@@ -26,19 +26,16 @@ public final class RoomServiceImpl implements RoomService {
 
 	@Override
 	public void saveRoom(Room room) {
-		// TODO Auto-generated method stub
 		roomRepo.save(room);
 	}
 
 	@Override
 	public Room getRoom(String id) {
-		// TODO Auto-generated method stub
 		return roomRepo.findOne(id);
 	}
 
 	@Override
 	public Room findRoom(String roomId) {
-		// TODO Auto-generated method stub
 		System.out.println("rooms="+rooms.keySet().size());
 		return rooms.get(roomId);
 	}

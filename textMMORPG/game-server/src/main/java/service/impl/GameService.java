@@ -23,18 +23,15 @@ public class GameService {
 	private static final Logger logger = LoggerFactory.getLogger(GameService.class);
 
 	public String Connected() throws Exception {
-		// TODO Auto-generated method stub
 		String msg = worldService.getWorld().getProperties("welcome");
 		return msg;
 	}
 
 	public String logout() {
-		// TODO Auto-generated method stub
 		return "byebye\n";
 	}
 
 	public String process(String command) {
-		// TODO Auto-generated method stub
 		if (command.equals(""))
 			return "";
 		logger.info("command:" + command);

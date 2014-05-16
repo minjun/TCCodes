@@ -21,12 +21,10 @@ public class WorldServiceImpl implements WorldService {
 	}
 
 	public World getWorld() {
-		// TODO Auto-generated method stub
 		return world;
 	}
 
 	public void saveWorld(World world) {
-		// TODO Auto-generated method stub
 		if (world == null)
 			return;
 		worldRepo.save(world);

@@ -17,7 +17,6 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public Player login(String id, String password) {
-		// TODO Auto-generated method stub
 		Player player = playerService.getPlayer(id);
 		if (player == null || password == null || !password.equals(player.getPassword())) {
 			return null;
@@ -27,7 +26,6 @@ public class LoginServiceImpl implements LoginService {
 
 	@Override
 	public void logout(Player player) {
-		// TODO Auto-generated method stub
 		playerService.savePlayer(player);
 		playerService.removePlayser(player);
 	}
