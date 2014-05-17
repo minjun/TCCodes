@@ -17,7 +17,7 @@
         http://www.springframework.org/schema/data/couchbase/spring-couchbase.xsd
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd">
-	<context:component-scan base-package="service,repo,utils.main" />
+	<context:component-scan base-package="service,repo,utils.main,server" />
 	<couchbase:couchbase host="localhost" bucket="default" password=""/>
 	<couchbase:template/>
 	<couchbase:repositories base-package="repo" />
