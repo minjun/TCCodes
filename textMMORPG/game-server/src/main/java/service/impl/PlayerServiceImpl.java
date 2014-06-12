@@ -16,6 +16,8 @@ import service.RoomService;
 @Service("playerService")
 public class PlayerServiceImpl implements PlayerService {
 	final static int ID_MINLEN = 4;
+	final static int PWD_MINLEN = 4;
+	final static int NAME_MINLEN = 4;
 	Map<String, Player> players = new HashMap<String, Player>();
 	@Autowired
 	PlayerRepository playerRepo;
@@ -58,8 +60,17 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
+	public boolean isValidPassword(String pwd) {
+		return pwd.length() >= PWD_MINLEN;
+	}
+
+	@Override
 	public boolean isValidPlayerID(String id) {
 		return id.length() >= ID_MINLEN;
+	}
+	@Override
+	public boolean isValidName(String name) {
+		return name.length() >= NAME_MINLEN;
 	}
 
 	public Player.PSTATUS getRegisterStatus(String id) {
@@ -71,11 +82,15 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public void setRegisterStatus(String id,Player.PSTATUS status) {
+	public void setRegisterStatus(String id, Player.PSTATUS status) {
 		Player player = players.get(id);
 		if (player == null)
-			player= new Player(id,null,null);
+			player = new Player(id, null, null);
 		player.setStatus(status);
+		if (status == Player.PSTATUS.REGISTERDONE) {
+			player.setPassword(id);
+			savePlayer(player);
+		}
 		players.put(id, player);
 	}
 }

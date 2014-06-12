@@ -14,7 +14,7 @@ import domain.item.Armor;
 @Document
 public class Player {
 	public static enum PSTATUS {
-		NOTEXIST,IDINPUT,PWDINPUT,CONNECTED,DISCONNECTED,LOCKED,END
+		NOTEXIST,IDINPUT,NAMEINPUT,REGISTERDONE,CONNECTED,DISCONNECTED,LOCKED,END
 	};
 	@Id
 	final String id;

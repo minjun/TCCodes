@@ -24,37 +24,51 @@ public class GameService {
 	private static final Logger logger = LoggerFactory.getLogger(GameService.class);
 
 	public String Connected() throws Exception {
-		String msg = worldService.getWorld().getProperties("welcome");
-		return msg;
+		return worldService.getWorld().getProperties("msg.welcome") + worldService.getWorld().getProperties("msg.inputid");
 	}
 
 	public String logout() {
 		return "byebye\n";
 	}
-	private boolean isResitering(String id) {
 
-		Player player = playerService.getPlayer(command);
+	private String register(String idnamepwd) {
+		Player player = playerService.getPlayer(idnamepwd);
+		Player.PSTATUS status = Player.PSTATUS.END;
+		if (player != null)
+			status = player.getStatus();
 		// player doesn't exist, goto register process
-		if (player == null || player.getStatus(command)) {
-			return register(command);
+		if (player == null || status == Player.PSTATUS.NOTEXIST) {
+			if (!playerService.isValidPlayerID(idnamepwd)) {
+				return worldService.getWorld().getProperties("msg.invalidid");
+			} else {
+				playerService.setRegisterStatus(idnamepwd, Player.PSTATUS.IDINPUT);
+				return worldService.getWorld().getProperties("msg.inputname");
+			}
+		} else if (status == Player.PSTATUS.IDINPUT) {
+			if (!playerService.isValidName(idnamepwd)) {
+				return worldService.getWorld().getProperties("msg.invalidname");
+			} else {
+				playerService.setRegisterStatus(idnamepwd, Player.PSTATUS.NAMEINPUT);
+				return worldService.getWorld().getProperties("msg.inputpwd");
+			}
+		} else if (status == Player.PSTATUS.NAMEINPUT) {
+			if (!playerService.isValidPassword(idnamepwd)) {
+				return worldService.getWorld().getProperties("msg.invalidpwd");
+			} else {
+				return worldService.getWorld().getProperties("msg.loginok");
+			}
+		} else {
+			return null;
 		}
-		
-	}
-	private String register(String id) {
-		if (playerService.(id)) {
-			
-		}
-		if (!playerService.isValidPlayerID(id)) {
-			return worldService.getWorld().getProperties("msg_invalidid");
-		}
-		return worldService.getWorld().getProperties("input_password");
 	}
 
 	public String process(String command) {
 		if (command.equals(""))
 			return "";
-		boolean isRgistering = 
 		logger.info("command:" + command);
+		String registered = register(command);
+		if (registered == null) {
+		}
 		return "did you say " + command + "?";
 	}
 }

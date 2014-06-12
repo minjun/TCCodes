@@ -17,6 +17,8 @@ public interface PlayerService {
     String look(Player player);
     // register
     boolean isValidPlayerID(String id);
+    boolean isValidPassword(String pwd);
+    boolean isValidName(String name);
     Player.PSTATUS getRegisterStatus(String id);
     void setRegisterStatus(String id,Player.PSTATUS status);
 }
