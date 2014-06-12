@@ -26,7 +26,7 @@ public class PlayerServiceImplTest {
 		Player player = new Player("id", "name1", "password");
 		service.move(player, "kezhan.c");
 		System.out.println(service.look(player));
-		service.savePlayer(player);
+		service.savePlayerToStore(player);
 		Player playerGet = service.getPlayer("id");
 		assertEquals(player.toString(), playerGet.toString());
 	}

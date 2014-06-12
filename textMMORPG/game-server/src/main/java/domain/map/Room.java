@@ -15,6 +15,8 @@ import domain.player.Player;
 @Document
 public class Room {
 	@Id
+	String countryRoomId;
+	@Field
 	String roomId;
 	@Field
 	String countryId;
@@ -31,7 +33,9 @@ public class Room {
 	@Transient
 	List<Player> players = new LinkedList<Player>();
 
-	public Room(String countryId, String roomId, String name, String desc, List<Exit> exits, List<Npc> npcs, List<Item> items) {
+	public Room(String countryId, String roomId, String name, String desc, List<Exit> exits, List<Npc> npcs,
+			List<Item> items) {
+		this.countryRoomId = countryId + "_" + roomId;
 		this.roomId = roomId;
 		this.countryId = countryId;
 		this.name = name;
@@ -40,14 +44,15 @@ public class Room {
 		this.npcs = npcs;
 		this.items = items;
 	}
-	
+
 	public void addPlayer(Player player) {
 		players.add(player);
 	}
+
 	public void removePlayer(Player player) {
 		players.remove(player);
 	}
-	
+
 	public String getMessage(boolean shortFlag) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(name);

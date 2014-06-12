@@ -1,10 +1,6 @@
 package service;
 
-import domain.player.Player;
-
-
-
 public interface LoginService {
-	Player login(String id, String password);
-	void logout(Player player);
+	String login(String input, String clientId);
+	String logout(String clientId);
 }

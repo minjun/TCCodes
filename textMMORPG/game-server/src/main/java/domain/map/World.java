@@ -17,7 +17,7 @@ public class World {
 	}
 
 	public String getProperties(String key) {
-		return properties.get(key);
+		return properties.get(key) + "\r\n";
 	}
 
 	public void setProperties(String key, String value) {

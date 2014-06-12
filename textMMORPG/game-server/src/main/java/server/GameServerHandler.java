@@ -16,12 +16,12 @@
 package server;
 
 import io.netty.channel.ChannelFuture;
-
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,7 +36,7 @@ import service.impl.GameService;
 @Component
 @Sharable
 public class GameServerHandler extends SimpleChannelInboundHandler<String> {
-
+	
 	private static final Logger logger = Logger.getLogger(GameServerHandler.class.getName());
 
 	@Autowired
@@ -50,15 +50,15 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 
 	@Override
 	public void channelRead0(ChannelHandlerContext ctx, String request) throws Exception {
-
+		String ipport = ((InetSocketAddress)ctx.channel().remoteAddress()).toString();
 		// Generate and write a response.
 		String response;
 		boolean close = false;
 		if ("quit".equals(request.toLowerCase())) {
-			response = gameService.logout();
+			response = gameService.logout(ipport);
 			close = true;
 		} else {
-			response = gameService.process(request);
+			response = gameService.process(request, ipport);
 		}
 		
 		// We do not need to write a ChannelBuffer here.

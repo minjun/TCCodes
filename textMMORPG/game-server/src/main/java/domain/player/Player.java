@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
 
@@ -13,13 +14,15 @@ import domain.item.Armor;
 
 @Document
 public class Player {
+	public static final String PREFIX = "user_";
 	public static enum PSTATUS {
-		NOTEXIST,IDINPUT,NAMEINPUT,REGISTERDONE,CONNECTED,DISCONNECTED,LOCKED,END
+		IDINPUT, IDCONFIRMED, NAMEINPUT, NORMAL, LOCKED, DELETED, END
 	};
+	
 	@Id
-	final String id;
+	String id;
 	@Field
-	final String name;
+	String name;
 	@Field
 	String password;
 	@Field
@@ -32,13 +35,57 @@ public class Player {
 	PSTATUS status;
 	@Field
 	Map<String, String> settings = new HashMap<String, String>();
+	
+	@Transient
+	boolean connected = true;
 
+	@Transient
+	boolean inStore = false;
+
+	
 	public Player(String id, String name, String password) {
-		this.id = id;
+		this.id = PREFIX+id;
 		this.name = name;
 		this.password = password;
-		this.status = PSTATUS.IDINPUT;
+		this.status = PSTATUS.END;
+		this.roomId = "city_kezhan.c";
 		// armors.add(new Armor(Armor.KIND.BOOT,"boots"));
+	}
+	
+	public boolean isInStore() {
+		return inStore;
+	}
+
+	public void setInStore(boolean inStore) {
+		this.inStore = inStore;
+	}
+	
+	public boolean isConnected() {
+		return connected;
+	}
+
+	public void setConnected(boolean connected) {
+		this.connected = connected;
+	}
+
+	public boolean needSave() {
+		return status.ordinal() >= PSTATUS.NORMAL.ordinal() && status.ordinal() < PSTATUS.END.ordinal();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId() {
+		return id;
 	}
 
 	public String getPassword() {
@@ -67,6 +114,6 @@ public class Player {
 
 	@Override
 	public String toString() {
-		return "id=" + id + ";" + "name=" + name + ";" + "password=" + password + ";";
+		return "id=" + id + ";name=" + name + ";password=" + password + ";status=" + status;
 	}
 }
