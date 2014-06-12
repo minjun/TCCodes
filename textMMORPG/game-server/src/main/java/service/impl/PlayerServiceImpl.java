@@ -15,7 +15,8 @@ import service.RoomService;
 
 @Service("playerService")
 public class PlayerServiceImpl implements PlayerService {
-	Map<String, Player> map = new HashMap<String, Player>();
+	final static int ID_MINLEN = 4;
+	Map<String, Player> players = new HashMap<String, Player>();
 	@Autowired
 	PlayerRepository playerRepo;
 	@Autowired
@@ -39,17 +40,42 @@ public class PlayerServiceImpl implements PlayerService {
 	@Override
 	public void removePlayser(Player player) {
 	}
-    @Override
+
+	@Override
 	public void move(Player player, String roomId) {
 		player.setRoomId(roomId);
 		roomService.findRoom(roomId).addPlayer(player);
 	}
-    @Override
+
+	@Override
 	public void go(Player player, Exit.DIR dir) {
 
 	}
-    @Override
+
+	@Override
 	public String look(Player player) {
 		return roomService.findRoom(player.getRoomId()).getMessage(false);
+	}
+
+	@Override
+	public boolean isValidPlayerID(String id) {
+		return id.length() >= ID_MINLEN;
+	}
+
+	public Player.PSTATUS getRegisterStatus(String id) {
+		Player player = players.get(id);
+		if (player == null)
+			return Player.PSTATUS.NOTEXIST;
+		else
+			return player.getStatus();
+	}
+
+	@Override
+	public void setRegisterStatus(String id,Player.PSTATUS status) {
+		Player player = players.get(id);
+		if (player == null)
+			player= new Player(id,null,null);
+		player.setStatus(status);
+		players.put(id, player);
 	}
 }

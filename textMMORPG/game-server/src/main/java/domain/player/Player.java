@@ -13,6 +13,9 @@ import domain.item.Armor;
 
 @Document
 public class Player {
+	public static enum PSTATUS {
+		NOTEXIST,IDINPUT,PWDINPUT,CONNECTED,DISCONNECTED,LOCKED,END
+	};
 	@Id
 	final String id;
 	@Field
@@ -26,12 +29,15 @@ public class Player {
 	@Field
 	Bag bag;
 	@Field
+	PSTATUS status;
+	@Field
 	Map<String, String> settings = new HashMap<String, String>();
 
 	public Player(String id, String name, String password) {
 		this.id = id;
 		this.name = name;
 		this.password = password;
+		this.status = PSTATUS.IDINPUT;
 		// armors.add(new Armor(Armor.KIND.BOOT,"boots"));
 	}
 
@@ -49,6 +55,14 @@ public class Player {
 
 	public void setRoomId(String roomId) {
 		this.roomId = roomId;
+	}
+
+	public PSTATUS getStatus() {
+		return status;
+	}
+
+	public void setStatus(PSTATUS status) {
+		this.status = status;
 	}
 
 	@Override

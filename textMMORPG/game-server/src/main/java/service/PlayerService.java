@@ -15,4 +15,8 @@ public interface PlayerService {
     void move(Player player, String roomId);
     void go(Player player, Exit.DIR dir);
     String look(Player player);
+    // register
+    boolean isValidPlayerID(String id);
+    Player.PSTATUS getRegisterStatus(String id);
+    void setRegisterStatus(String id,Player.PSTATUS status);
 }
