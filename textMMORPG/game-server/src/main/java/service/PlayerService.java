@@ -2,7 +2,6 @@ package service;
 
 import java.util.List;
 
-import domain.map.Exit;
 import domain.player.Player;
 
 public interface PlayerService {
@@ -23,11 +22,13 @@ public interface PlayerService {
 	void removePlayer(String clientId);
 
 	// commands
-	void move(Player player, String roomId);
+	String move(Player player, String roomId);
 
-	void go(Player player, Exit.DIR dir);
+	String go(Player player, String exit);
 
 	String look(Player player);
+
+	String command(String commandId, String clientId);
 
 	// register
 	boolean isValidPlayerID(String id);

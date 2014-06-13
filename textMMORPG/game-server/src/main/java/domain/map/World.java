@@ -8,19 +8,20 @@ import org.springframework.data.couchbase.core.mapping.Document;
 
 @Document
 public class World {
+	final static String NEWLINE = "\r\n";
 	@Id
 	String worldName;
-	Map<String,String> properties = new HashMap<String,String>();
-	
+	Map<String, String> properties = new HashMap<String, String>();
+
 	public World(String worldName) {
 		this.worldName = worldName;
 	}
 
 	public String getProperties(String key) {
-		return properties.get(key) + "\r\n";
+		return properties.get(key) + NEWLINE;
 	}
 
 	public void setProperties(String key, String value) {
-		properties.put(key,value);
+		properties.put(key, value);
 	}
 }

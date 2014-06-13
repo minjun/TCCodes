@@ -70,8 +70,8 @@ public class LoginServiceImpl implements LoginService {
 				player.setStatus(Player.PSTATUS.NORMAL);
 				playerService.updatePlayer(clientId, player);
 				playerService.savePlayerToStore(player);
-				playerService.move(player, player.getRoomId());
-				return worldService.getWorld().getProperties("msg.loginok");
+				String msg = playerService.move(player, player.getRoomId());
+				return worldService.getWorld().getProperties("msg.loginok") + msg;
 			}
 		} else {
 			return null;

@@ -18,7 +18,7 @@ public class Player {
 	public static enum PSTATUS {
 		IDINPUT, IDCONFIRMED, NAMEINPUT, NORMAL, LOCKED, DELETED, END
 	};
-	
+	public static final String SET_BRIEF = "brief";
 	@Id
 	String id;
 	@Field
@@ -110,6 +110,14 @@ public class Player {
 
 	public void setStatus(PSTATUS status) {
 		this.status = status;
+	}
+	
+	public void setSettings(String key, String value) {
+		settings.put(key, value);
+	}
+	
+	public String getSettings(String key) {
+		return settings.get(key);
 	}
 
 	@Override

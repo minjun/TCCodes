@@ -38,7 +38,8 @@ public class GameService {
 		String registered = loginService.login(command, clientId);
 		if (registered != null) {
 			return registered;
+		} else {
+			return playerService.command(command, clientId);
 		}
-		return "did you say " + command + "?";
 	}
 }

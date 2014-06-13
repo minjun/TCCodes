@@ -14,6 +14,7 @@ import domain.player.Player;
 
 @Document
 public class Room {
+	final static String  NEWLINE = "\r\n";
 	@Id
 	String countryRoomId;
 	@Field
@@ -44,6 +45,10 @@ public class Room {
 		this.npcs = npcs;
 		this.items = items;
 	}
+	
+	public List<Exit> getExits() {
+		return exits;
+	}
 
 	public void addPlayer(Player player) {
 		players.add(player);
@@ -56,9 +61,11 @@ public class Room {
 	public String getMessage(boolean shortFlag) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(name);
+		sb.append(NEWLINE);
 		if (!shortFlag) {
 			sb.append(desc);
 		}
+		sb.append(NEWLINE);
 		return sb.toString();
 	}
 }

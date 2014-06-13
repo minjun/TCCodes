@@ -21,11 +21,9 @@ public final class RoomServiceImpl implements RoomService {
 	RoomRepository roomRepo;
 
 	/*
-	@PostConstruct
-	public void init() {
-		rooms.put("kezhan.c", getRoom("kezhan.c"));
-	}
-	*/
+	 * @PostConstruct public void init() { rooms.put("kezhan.c",
+	 * getRoom("kezhan.c")); }
+	 */
 
 	@Override
 	public void saveRoom(Room room) {
@@ -39,13 +37,17 @@ public final class RoomServiceImpl implements RoomService {
 
 	@Override
 	public Room findRoom(String roomId) {
+		if (!roomId.endsWith(".c")) {
+			roomId = roomId + ".c";
+		}
 		Room room = rooms.get(roomId);
 		if (room == null) {
 			room = roomRepo.findOne(roomId);
 			if (room != null) {
-				logger.info("Loading room:"+roomId+" successful!");
+				rooms.put(roomId, room);
+				logger.info("Loading room:" + roomId + " successful!");
 			} else {
-				logger.error("Loading room:"+roomId+" failed!");
+				logger.error("Loading room:" + roomId + " failed!");
 			}
 		}
 		return room;

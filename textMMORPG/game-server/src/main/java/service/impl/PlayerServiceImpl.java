@@ -15,6 +15,7 @@ import domain.player.Player.PSTATUS;
 import repo.PlayerRepository;
 import service.PlayerService;
 import service.RoomService;
+import service.WorldService;
 
 @Service("playerService")
 public class PlayerServiceImpl implements PlayerService {
@@ -24,6 +25,8 @@ public class PlayerServiceImpl implements PlayerService {
 	Map<String, Player> players = new HashMap<String, Player>();
 	@Autowired
 	PlayerRepository playerRepo;
+	@Autowired
+	WorldService worldService;
 	@Autowired
 	RoomService roomService;
 	private static final Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
@@ -90,20 +93,45 @@ public class PlayerServiceImpl implements PlayerService {
 	}
 
 	@Override
-	public void move(Player player, String roomId) {
+	public String move(Player player, String roomId) {
 		roomService.findRoom(player.getRoomId()).removePlayer(player);
 		player.setRoomId(roomId);
 		roomService.findRoom(player.getRoomId()).addPlayer(player);
-
+		return roomService.findRoom(player.getRoomId()).getMessage(player.getSettings(Player.SET_BRIEF) != null);
 	}
 
 	@Override
-	public void go(Player player, Exit.DIR dir) {
-
+	public String go(Player player, String dir) {
+		logger.info("dir=" + dir);
+		List<Exit> exits = roomService.findRoom(player.getRoomId()).getExits();
+		for (Exit ex : exits) {
+			logger.info(String.format("exit = %s[%s-%s]", ex.getDir(), ex.getCountryId(), ex.getRoomId()));
+			if (dir.equals(ex.getDir().toString())) {
+				return move(player, ex.getCountryId()+"_"+ex.getRoomId());
+			}
+		}
+		return worldService.getWorld().getProperties("msg.noexits");
 	}
 
 	@Override
 	public String look(Player player) {
 		return roomService.findRoom(player.getRoomId()).getMessage(false);
+	}
+
+	@Override
+	public String command(String commandId, String clientId) {
+		Player player = players.get(clientId);
+		String rsp = null;
+		if (player == null) {
+			logger.error("can't find player from " + clientId);
+			return "";
+		}
+		if (commandId.equalsIgnoreCase("look") || commandId.equalsIgnoreCase("l")) {
+			return look(player);
+		} else if ((rsp = Exit.getExit(commandId)) != null) {
+			return go(player, rsp);
+		} else {
+			return worldService.getWorld().getProperties("msg.unknowncmd");
+		}
 	}
 }
