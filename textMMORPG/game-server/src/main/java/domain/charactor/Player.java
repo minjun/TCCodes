@@ -1,26 +1,26 @@
-package domain.player;
+package domain.charactor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
 
 import domain.item.Armor;
+import domain.item.Bag;
 
 @Document
-public class Player {
+public class Player extends Char {
 	public static final String PREFIX = "user_";
+
 	public static enum PSTATUS {
 		IDINPUT, IDCONFIRMED, NAMEINPUT, NORMAL, LOCKED, DELETED, END
 	};
+
 	public static final String SET_BRIEF = "brief";
-	@Id
-	String id;
 	@Field
 	String name;
 	@Field
@@ -35,23 +35,22 @@ public class Player {
 	PSTATUS status;
 	@Field
 	Map<String, String> settings = new HashMap<String, String>();
-	
+
 	@Transient
 	boolean connected = true;
 
 	@Transient
 	boolean inStore = false;
 
-	
 	public Player(String id, String name, String password) {
-		this.id = PREFIX+id;
+		super(PREFIX + id);
 		this.name = name;
 		this.password = password;
 		this.status = PSTATUS.END;
-		this.roomId = "city_kezhan.c";
+		this.roomId = "/d/city/kezhan.c";
 		// armors.add(new Armor(Armor.KIND.BOOT,"boots"));
 	}
-	
+
 	public boolean isInStore() {
 		return inStore;
 	}
@@ -59,7 +58,7 @@ public class Player {
 	public void setInStore(boolean inStore) {
 		this.inStore = inStore;
 	}
-	
+
 	public boolean isConnected() {
 		return connected;
 	}
@@ -111,11 +110,11 @@ public class Player {
 	public void setStatus(PSTATUS status) {
 		this.status = status;
 	}
-	
+
 	public void setSettings(String key, String value) {
 		settings.put(key, value);
 	}
-	
+
 	public String getSettings(String key) {
 		return settings.get(key);
 	}

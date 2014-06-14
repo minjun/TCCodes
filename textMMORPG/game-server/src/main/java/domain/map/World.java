@@ -18,7 +18,11 @@ public class World {
 	}
 
 	public String getProperties(String key) {
-		return properties.get(key) + NEWLINE;
+		String msg = properties.get(key);
+		if (msg.charAt(msg.length() - 1) == '-') {
+			return msg.substring(0, msg.length() - 1);
+		}
+		return msg + NEWLINE;
 	}
 
 	public void setProperties(String key, String value) {

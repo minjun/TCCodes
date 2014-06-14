@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import domain.charactor.Player;
+import domain.charactor.Player.PSTATUS;
 import domain.map.Exit;
-import domain.player.Player;
-import domain.player.Player.PSTATUS;
 import repo.PlayerRepository;
 import service.PlayerService;
 import service.RoomService;
@@ -97,7 +97,7 @@ public class PlayerServiceImpl implements PlayerService {
 		roomService.findRoom(player.getRoomId()).removePlayer(player);
 		player.setRoomId(roomId);
 		roomService.findRoom(player.getRoomId()).addPlayer(player);
-		return roomService.findRoom(player.getRoomId()).getMessage(player.getSettings(Player.SET_BRIEF) != null);
+		return roomService.getRoomDesc(player.getRoomId(), player.getSettings(Player.SET_BRIEF) != null);
 	}
 
 	@Override
@@ -105,17 +105,23 @@ public class PlayerServiceImpl implements PlayerService {
 		logger.info("dir=" + dir);
 		List<Exit> exits = roomService.findRoom(player.getRoomId()).getExits();
 		for (Exit ex : exits) {
-			logger.info(String.format("exit = %s[%s-%s]", ex.getDir(), ex.getCountryId(), ex.getRoomId()));
+			logger.info(String.format("exit:%s = %s", ex.getDir(), ex.getRoomId()));
 			if (dir.equals(ex.getDir().toString())) {
-				return move(player, ex.getCountryId()+"_"+ex.getRoomId());
+				// the same area as current room?
+				String roomId = ex.getRoomId();
+				if (!ex.getRoomId().startsWith("/d/")) {
+					int index = player.getRoomId().lastIndexOf("/");
+					roomId = player.getRoomId().substring(0,index+1)+ex.getRoomId();
+				}
+				return move(player, roomId);
 			}
 		}
-		return worldService.getWorld().getProperties("msg.noexits");
+		return worldService.getWorld().getProperties("msg.nosuchexit");
 	}
 
 	@Override
 	public String look(Player player) {
-		return roomService.findRoom(player.getRoomId()).getMessage(false);
+		return roomService.getRoomDesc(player.getRoomId(), false);
 	}
 
 	@Override

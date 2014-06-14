@@ -2,7 +2,7 @@ package service;
 
 import java.util.List;
 
-import domain.player.Player;
+import domain.charactor.Player;
 
 public interface PlayerService {
 	// store related player actions

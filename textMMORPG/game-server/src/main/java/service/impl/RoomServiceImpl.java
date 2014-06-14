@@ -1,6 +1,7 @@
 package service.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -8,22 +9,22 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import domain.map.Exit;
 import domain.map.Room;
 import repo.RoomRepository;
 import service.RoomService;
+import service.WorldService;
 
 @Service("roomService")
 public final class RoomServiceImpl implements RoomService {
 
 	private static final Logger logger = LoggerFactory.getLogger(RoomServiceImpl.class);
 	final Map<String, Room> rooms = new HashMap<String, Room>();
+	final static String NEWLINE = "\r\n";
 	@Autowired
 	RoomRepository roomRepo;
-
-	/*
-	 * @PostConstruct public void init() { rooms.put("kezhan.c",
-	 * getRoom("kezhan.c")); }
-	 */
+	@Autowired
+	WorldService worldService;
 
 	@Override
 	public void saveRoom(Room room) {
@@ -51,5 +52,32 @@ public final class RoomServiceImpl implements RoomService {
 			}
 		}
 		return room;
+	}
+
+	@Override
+	public String getRoomDesc(String roomId, boolean brief) {
+		Room room = findRoom(roomId);
+		if (room == null) {
+			return "";
+		}
+		StringBuilder sb = new StringBuilder();
+		sb.append(" - " + room.getName());
+		sb.append(NEWLINE);
+		if (!brief) {
+			sb.append(room.getDesc());
+		}
+		sb.append(NEWLINE);
+		List<Exit> exs = room.getExits();
+		if (exs.size() > 0) {
+			sb.append(worldService.getWorld().getProperties("msg.exit"));
+			for (Exit ex : exs) {
+				sb.append(ex.getDir().toString()).append('¡¢');
+			}
+			sb.setCharAt(sb.length() - 1, '¡£');
+		} else {
+			sb.append(worldService.getWorld().getProperties("msg.noexits"));
+		}
+		sb.append(NEWLINE);
+		return sb.toString();
 	}
 }

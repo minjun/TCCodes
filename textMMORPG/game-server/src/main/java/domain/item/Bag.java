@@ -1,4 +1,4 @@
-package domain.player;
+package domain.item;
 
 public class Bag {
 

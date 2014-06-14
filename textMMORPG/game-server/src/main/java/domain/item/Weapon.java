@@ -1,5 +1,7 @@
 package domain.item;
 
-public class Weapon {
-
+public class Weapon extends Item {
+	public Weapon(String id) {
+		super(id);
+	}
 }

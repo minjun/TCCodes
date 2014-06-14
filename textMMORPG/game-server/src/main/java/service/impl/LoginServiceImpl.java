@@ -3,8 +3,7 @@ package service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import domain.player.Player;
-
+import domain.charactor.Player;
 import service.LoginService;
 import service.PlayerService;
 import service.WorldService;

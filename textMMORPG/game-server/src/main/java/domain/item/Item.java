@@ -1,5 +1,8 @@
 package domain.item;
 
-public final class Item {
-
+public class Item {
+	String id;
+	public Item(String id) {
+		this.id = id;
+	}
 }

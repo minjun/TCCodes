@@ -32,22 +32,21 @@ public final class Exit {
 		dirs.put("et", "enter");
 	}
 	DIR dir;
-	String countryId;
-	String roomId;
+	// String countryId;
+	String id;
 
-	public Exit(DIR dir, String countryId, String roomId) {
+	public Exit(DIR dir, String id) {
 		this.dir = dir;
-		this.countryId = countryId;
-		this.roomId = roomId;
+		// this.countryId = countryId;
+		this.id = id;
 	}
+
 	public DIR getDir() {
 		return dir;
 	}
-	public String getCountryId() {
-		return countryId;
-	}
+
 	public String getRoomId() {
-		return roomId;
+		return id;
 	}
 
 	public static String getExit(String dir) {

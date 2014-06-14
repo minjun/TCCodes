@@ -4,12 +4,10 @@ import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import domain.player.Player;
-
+import domain.charactor.Player;
 import service.PlayerService;
 
 public class PlayerServiceImplTest {
