@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import service.*;
 
 @Service("gameService")
-public class GameService {
+public class GameServiceImpl {
 
 	@Autowired
 	WorldService worldService;
@@ -20,7 +20,7 @@ public class GameService {
 	TranslatorService translatorService;
 	@Autowired
 	LoginService loginService;
-	private static final Logger logger = LoggerFactory.getLogger(GameService.class);
+	private static final Logger logger = LoggerFactory.getLogger(GameServiceImpl.class);
 
 	public String Connected() throws Exception {
 		return worldService.getWorld().getProperties("msg.welcome")

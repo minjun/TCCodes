@@ -102,20 +102,20 @@ public class PlayerServiceImpl implements PlayerService {
 
 	@Override
 	public String go(Player player, String dir) {
-		logger.info("dir=" + dir);
-		List<Exit> exits = roomService.findRoom(player.getRoomId()).getExits();
-		for (Exit ex : exits) {
-			logger.info(String.format("exit:%s = %s", ex.getDir(), ex.getRoomId()));
-			if (dir.equals(ex.getDir().toString())) {
-				// the same area as current room?
-				String roomId = ex.getRoomId();
-				if (!ex.getRoomId().startsWith("/d/")) {
-					int index = player.getRoomId().lastIndexOf("/");
-					roomId = player.getRoomId().substring(0,index+1)+ex.getRoomId();
-				}
-				return move(player, roomId);
-			}
-		}
+//		logger.info("dir=" + dir);
+//		List<Exit> exits = roomService.findRoom(player.getRoomId()).getExits();
+//		for (Exit ex : exits) {
+//			logger.info(String.format("exit:%s = %s", ex.getDir(), ex.getRoomId()));
+//			if (dir.equals(ex.getDir().toString())) {
+//				// the same area as current room?
+//				String roomId = ex.getRoomId();
+//				if (!ex.getRoomId().startsWith("/d/")) {
+//					int index = player.getRoomId().lastIndexOf("/");
+//					roomId = player.getRoomId().substring(0,index+1)+ex.getRoomId();
+//				}
+//				return move(player, roomId);
+//			}
+//		}
 		return worldService.getWorld().getProperties("msg.nosuchexit");
 	}
 

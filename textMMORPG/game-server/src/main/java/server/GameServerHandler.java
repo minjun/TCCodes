@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import service.impl.GameService;
+import service.impl.GameServiceImpl;
 
 /**
  * Handles a server-side channel.
@@ -40,7 +40,7 @@ public class GameServerHandler extends SimpleChannelInboundHandler<String> {
 	private static final Logger logger = Logger.getLogger(GameServerHandler.class.getName());
 
 	@Autowired
-	GameService gameService;
+	GameServiceImpl gameService;
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {

@@ -21,7 +21,7 @@ public class PlayerServiceImplTest {
 	@Test
 	public void testSaveAndGetPlayer() {
 		PlayerService service = (PlayerService) context.getBean("playerService");
-		Player player = new Player("id", "name1", "password");
+		Player player = new Player("id", "name1","password");
 		service.move(player, "kezhan.c");
 		System.out.println(service.look(player));
 		service.savePlayerToStore(player);

@@ -1,7 +1,6 @@
 package service.impl;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -9,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import domain.map.Exit;
 import domain.map.Room;
 import repo.RoomRepository;
 import service.RoomService;
@@ -61,22 +59,22 @@ public final class RoomServiceImpl implements RoomService {
 			return "";
 		}
 		StringBuilder sb = new StringBuilder();
-		sb.append(" - " + room.getName());
+		sb.append(" - " + room.getSets("short"));
 		sb.append(NEWLINE);
 		if (!brief) {
-			sb.append(room.getDesc());
+			sb.append(room.getSets("long"));
 		}
 		sb.append(NEWLINE);
-		List<Exit> exs = room.getExits();
-		if (exs.size() > 0) {
-			sb.append(worldService.getWorld().getProperties("msg.exit"));
-			for (Exit ex : exs) {
-				sb.append(ex.getDir().toString()).append('、');
-			}
-			sb.setCharAt(sb.length() - 1, '。');
-		} else {
-			sb.append(worldService.getWorld().getProperties("msg.noexits"));
-		}
+//		List<Exit> exs = room.getExits();
+//		if (exs.size() > 0) {
+//			sb.append(worldService.getWorld().getProperties("msg.exit"));
+//			for (Exit ex : exs) {
+//				sb.append(ex.getDir().toString()).append('、');
+//			}
+//			sb.setCharAt(sb.length() - 1, '。');
+//		} else {
+//			sb.append(worldService.getWorld().getProperties("msg.noexits"));
+//		}
 		sb.append(NEWLINE);
 		return sb.toString();
 	}

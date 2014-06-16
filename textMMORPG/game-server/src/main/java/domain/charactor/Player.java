@@ -44,7 +44,6 @@ public class Player extends Char {
 
 	public Player(String id, String name, String password) {
 		super(PREFIX + id);
-		this.name = name;
 		this.password = password;
 		this.status = PSTATUS.END;
 		this.roomId = "/d/city/kezhan.c";
@@ -71,20 +70,12 @@ public class Player extends Char {
 		return status.ordinal() >= PSTATUS.NORMAL.ordinal() && status.ordinal() < PSTATUS.END.ordinal();
 	}
 
-	public String getName() {
-		return name;
+	public void setKey(String id) {
+		this.key = id;
 	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getId() {
-		return id;
+	public String getKey() {
+		return key;
 	}
 
 	public String getPassword() {
@@ -118,9 +109,16 @@ public class Player extends Char {
 	public String getSettings(String key) {
 		return settings.get(key);
 	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getName() {
+		return name;
+	}
 
 	@Override
 	public String toString() {
-		return "id=" + id + ";name=" + name + ";password=" + password + ";status=" + status;
+		return "key=" + getKey() + ";name=" + name + ";password=" + password + ";status=" + status;
 	}
 }

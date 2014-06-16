@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service("timerService")
-public class TimerService {
-	private static final Logger logger = LoggerFactory.getLogger(TimerService.class);
+public class TimerServiceImpl {
+	private static final Logger logger = LoggerFactory.getLogger(TimerServiceImpl.class);
 
 	@Value("${heartbeat}")
 	public int heartbeat = 2000;

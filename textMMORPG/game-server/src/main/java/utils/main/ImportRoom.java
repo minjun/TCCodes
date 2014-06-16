@@ -5,8 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -18,9 +19,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import service.RoomService;
+import service.impl.NpcServiceImpl;
 import domain.charactor.Npc;
-import domain.item.Item;
-import domain.map.Exit;
 import domain.map.Room;
 
 @Component("importRoom")
@@ -30,6 +30,8 @@ public class ImportRoom {
 
 	@Autowired
 	private RoomService roomService;
+	@Autowired
+	private NpcServiceImpl npcService;
 
 	private static void printUsage() {
 		System.out.println("Usage:ImportRoom dir suffix(.c/.h)");
@@ -38,76 +40,122 @@ public class ImportRoom {
 	private String cleanName(String name) {
 		if (name == null)
 			return name;
-		return name.replaceAll("\"", "").trim();
+		return name.replaceAll("\"", "").replaceAll("\\(\\[", "").replace("__DIR__", "").trim();
 	}
 
-	private String regexFind(String str, String regex) {
+	private boolean isRoom(String inherits) {
+		return inherits.contains("ROOM;");
+	}
+
+	private boolean isNPC(String inherits) {
+		return inherits.contains("NPC");
+	}
+	
+	private Map<String, String> regexFind(String str, String regex) {
+		Map<String, String> map = new HashMap<String, String>();
+		if (str != null) {
+			Pattern p = Pattern.compile(regex);
+			Matcher m = p.matcher(str);
+			while (m.find()) {
+				String key = cleanName(m.group(1));
+				String value = cleanName(m.group(2));
+				map.put(key, value);
+			}
+		}
+		return map;
+	}
+
+	private String getInherits(String str) {
+		String regex = "inherit\\s+(.*)";
 		Pattern p = Pattern.compile(regex);
 		Matcher m = p.matcher(str);
-		if (m.find()) {
-			logger.debug("regex:" + m.group(0) + "[" + m.start() + "-" + m.end() + "]");
-			return m.group(1);
-		}
-		return null;
-	}
-
-	private void getExits(String strExits, List<Exit> exits) {
-		if (strExits == null)
-			return;
-		for (int i = 0; i < Exit.DIR.END.ordinal(); i++) {
-			String regex = String.format("\"%s\"[^\"]+\"([\\s\\S]+?)\"", Exit.DIR.values()[i]);
-			Pattern p = Pattern.compile(regex);
-			Matcher m = p.matcher(strExits);
-			if (m.find()) {
-				logger.debug("regex:" + m.group(1) + "[" + m.start() + "-" + m.end() + "]");
-				exits.add(new Exit(Exit.DIR.values()[i], m.group(1)));
-			}
-		}
-	}
-
-	private void getItems(String strItems, List<Npc> npcs, List<Item> items) {
-		if (strItems == null)
-			return;
-		String regex = "\"([\\s\\S]+?)\"\\s*:\\s*(\\d+)";
-		Pattern p = Pattern.compile(regex);
-		Matcher m = p.matcher(strItems);
+		StringBuffer sb = new StringBuffer();
 		while (m.find()) {
-			String id = m.group(1);
-			int number = Integer.parseInt(m.group(2));
-			logger.info("id="+id+";number="+number);
-			if (isNPC(id)) {
-				Npc npc = new Npc(id);
-				for (int i = 0; i < number; i++) {
-					npcs.add(npc);
-				}
-			} else if (isItem(id)) {
-				Item item = new Item(id);
-				for (int i = 0; i < number; i++) {
-					items.add(item);
-				}
-			}
+			sb.append(m.group(1));
+		}
+		return sb.toString();
+	}
+
+	private String getId(String fileName) {
+		// id = unique file name
+		int index = fileName.indexOf("\\d\\");
+		String id = null;
+		if (index != -1) {
+			id = fileName.substring(index);
+			id = id.replace("\\", "/");
+		}
+		return id;
+	}
+
+	private void printMap(Map<String, String> map) {
+		Iterator<Map.Entry<String, String>> iter = map.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, String> entry = (Map.Entry<String, String>) iter.next();
+			Object key = entry.getKey();
+			Object val = entry.getValue();
+			logger.info("key=" + key + ";value=" + val);
 		}
 	}
 
-	private boolean isNPC(String id) {
-		id.replace("\\","/");
-		return id.contains("npc/");
+	private void importRoom(String fileName, String src, String inherits) {
+		String id = getId(fileName);
+		Map<String, String> sets = regexFind(src, "(?s)set\\s*\\((.+?),(.+?)\\)");
+		Room room = null;
+		if (id == null || sets.get("short") == null || sets.get("long") == null || inherits == null) {
+			logger.error(String.format("Importing room:%s: failed - name:%s,desc:%s,inherits:%s", fileName, sets.get("short"), sets.get("long"), inherits));
+		} else {
+			String exits = sets.get("exits");
+			sets.remove("exits");
+			Map<String, String> exitMap = regexFind(exits, "(?s)(.+?):(.+?),");
+			String objects = sets.get("objects");
+			sets.remove("objects");
+			Map<String, String> objMap = regexFind(objects, "(?s)(.+?):(.+?),");
+			if (exitMap.isEmpty()) {
+				logger.warn(String.format("Importing room:%s: no exits", fileName));
+			} else {
+				logger.info(String.format("Importing room:%s: ok", fileName));
+			}
+			room = new Room(id, inherits);
+			room.setExits(exitMap);
+			room.setObjs(objMap);
+			room.setSets(sets);
+		}
+		if (room != null) {
+			roomService.saveRoom(room);
+		}
 	}
 
-	private boolean isItem(String id) {
-		id.replace("\\","/");
-		return id.contains("item/") || id.contains("misc/") || id.contains("obj/");
+	private void importNpc(String fileName, String src, String inherits) {
+		String id = getId(fileName);
+		// get name, ids
+		String name = null, ids = null;
+		Map<String, String> nameids = regexFind(src, "set_name\\(\"(.+?)\".+\\{(.+)\\}");
+		Iterator<Map.Entry<String, String>> iter = nameids.entrySet().iterator();
+		if (iter.hasNext()) {
+			Map.Entry<String, String> entry = (Map.Entry<String, String>) iter.next();
+			name = entry.getKey();
+			ids = entry.getValue();
+		}
+		Npc npc = null;
+		if (id == null || name == null || ids == null || inherits == null) {
+			logger.error(String.format("Importing npc:%s: failed - name:%s,ids:%s,inherits:%s", fileName, name, ids, inherits));
+		} else {
+			logger.info(String.format("Importing npc:%s: ok", fileName));
+			npc = new Npc(id, name, ids, inherits);
+			npc.setSets(regexFind(src, "(?s)set\\s*\\((.+?),(.+?)\\)"));
+			npc.setSkills(regexFind(src, "(?s)set_skill\\s*\\((.+?),(.+?)\\)"));
+			npc.setMapSkills(regexFind(src, "(?s)map_skill\\s*\\((.+?),(.+?)\\)"));
+		}
+		if (npc != null) {
+			npcService.saveNpc(npc);
+		}
 	}
 
-	private void importNpc(String fileName) {
+	private void importItem(String fileName, String src, String inherits) {
 
 	}
 
-	private void importItem(String fileName) {
-
-	}
-
-	private void importRoom(String fileName) throws IOException {
+	private void importSrc(String fileName) throws IOException {
 		// read from file
 		File file = new File(fileName);
 		BufferedReader br = null;
@@ -115,44 +163,22 @@ public class ImportRoom {
 		String line;
 		StringBuffer sb = new StringBuffer();
 		while ((line = br.readLine()) != null) {
+			line = line.replaceAll("//.*", "");
 			if (line.trim().equals(""))
 				continue;
-			logger.debug(line);
 			sb.append(line).append(NEWLINE);
 		}
 		br.close();
-		// convert to room object
-		int index = fileName.indexOf("\\d\\");
-		String id = null;
-		if (index != -1) {
-			id = fileName.substring(index);
-			id = id.replace("\\", "/");
-		}
-		String str = sb.toString();
-		String name = regexFind(str, "short\",([\\s\\S]+?)\\)");
-		String desc = regexFind(str, "long\",([\\s\\S]+?)\\)");
-		name = cleanName(name);
-		desc = cleanName(desc);
-		String strExits = regexFind(str, "exits\",\\s*\\(\\[([\\s\\S]+?)\\]\\)");
-		String strItems = regexFind(str, "objects\",\\s*\\(\\[([\\s\\S]+?)\\]\\)");
-		List<Exit> exits = new ArrayList<Exit>();
-		List<Npc> npcs = new ArrayList<Npc>();
-		List<Item> items = new ArrayList<Item>();
-		getItems(strItems, npcs, items);
-		getExits(strExits, exits);
-		Room room = null;
-		if (id == null || name == null || desc == null) {
-			logger.error(String.format("Importing %s: failed - name:%s,desc:%s", fileName, name, desc));
+		String src = sb.toString();
+		src = src.replaceAll("(?s)/\\*.*\\*/", "");
+		logger.debug("filename=" + fileName + ";content=" + src + NEWLINE);
+		String inherits = getInherits(src);
+		if (isNPC(inherits)) {
+			importNpc(fileName, src, inherits);
+		} else if (isRoom(inherits)) {
+			importRoom(fileName, src, inherits);
 		} else {
-			if (exits.isEmpty()) {
-				logger.warn(String.format("Importing %s: no exits", fileName));
-			} else {
-				logger.info(String.format("Importing %s: ok", fileName));
-			}
-			room = new Room(id, name, desc, exits, npcs, items);
-		}
-		if (room != null) {
-			roomService.saveRoom(room);
+			importItem(fileName, src, inherits);
 		}
 	}
 
@@ -167,13 +193,7 @@ public class ImportRoom {
 			} else {
 				String path = files[i].getAbsolutePath();
 				if (path.endsWith(suffix)) {
-					if (isItem(path)) {
-						importItem(path);
-					} else if (isNPC(path)) {
-						importNpc(path);
-					} else {
-						importRoom(path);
-					}
+					importSrc(path);
 				}
 			}
 		}
@@ -186,8 +206,9 @@ public class ImportRoom {
 		}
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		ImportRoom importRoom = (ImportRoom) context.getBean("importRoom");
-		importRoom.importDir(args[0], args[1]);
-		//importRoom.importRoom("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\ziyanglou.c");
+		//importRoom.importDir(args[0], args[1]);
+		//importRoom.importSrc("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\ziyanglou.c");
+		importRoom.importSrc("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\misc\\npc_scorekeeper.c");
 		context.close();
 	}
 }
