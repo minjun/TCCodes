@@ -23,6 +23,7 @@ public class TimerServiceImpl {
 	private void heartBeat() {
 		logger.debug("hearbeat running");
 	}
+
 	private void refresh() {
 		logger.debug("refreshing...");
 	}

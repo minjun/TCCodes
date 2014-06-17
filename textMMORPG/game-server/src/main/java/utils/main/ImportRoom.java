@@ -18,20 +18,25 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
-import service.RoomService;
+import static utils.Utils.NEWLINE;
+import service.impl.ItemServiceImpl;
 import service.impl.NpcServiceImpl;
+import service.impl.RoomServiceImpl;
+import utils.Utils;
 import domain.charactor.Npc;
+import domain.item.Item;
 import domain.map.Room;
 
 @Component("importRoom")
 public class ImportRoom {
-	private static final String NEWLINE = "\r\n";
 	private static Logger logger = LoggerFactory.getLogger(ImportRoom.class);
 
 	@Autowired
-	private RoomService roomService;
+	private RoomServiceImpl roomService;
 	@Autowired
 	private NpcServiceImpl npcService;
+	@Autowired
+	private ItemServiceImpl itemService;
 
 	private static void printUsage() {
 		System.out.println("Usage:ImportRoom dir suffix(.c/.h)");
@@ -43,14 +48,6 @@ public class ImportRoom {
 		return name.replaceAll("\"", "").replaceAll("\\(\\[", "").replace("__DIR__", "").trim();
 	}
 
-	private boolean isRoom(String inherits) {
-		return inherits.contains("ROOM;");
-	}
-
-	private boolean isNPC(String inherits) {
-		return inherits.contains("NPC");
-	}
-	
 	private Map<String, String> regexFind(String str, String regex) {
 		Map<String, String> map = new HashMap<String, String>();
 		if (str != null) {
@@ -99,7 +96,7 @@ public class ImportRoom {
 
 	private void importRoom(String fileName, String src, String inherits) {
 		String id = getId(fileName);
-		Map<String, String> sets = regexFind(src, "(?s)set\\s*\\((.+?),(.+?)\\)");
+		Map<String, String> sets = regexFind(src, "(?s)\\s+set\\s*\\((.+?),(.+?)\\)");
 		Room room = null;
 		if (id == null || sets.get("short") == null || sets.get("long") == null || inherits == null) {
 			logger.error(String.format("Importing room:%s: failed - name:%s,desc:%s,inherits:%s", fileName, sets.get("short"), sets.get("long"), inherits));
@@ -125,34 +122,60 @@ public class ImportRoom {
 		}
 	}
 
+	private String[] getKeyValuePair(Map<String, String> nameids) {
+		Iterator<Map.Entry<String, String>> iter = nameids.entrySet().iterator();
+		if (iter.hasNext()) {
+			Map.Entry<String, String> entry = (Map.Entry<String, String>) iter.next();
+			return new String[] { entry.getKey(), entry.getValue() };
+		} else
+			return new String[] { null, null };
+	}
+
 	private void importNpc(String fileName, String src, String inherits) {
 		String id = getId(fileName);
 		// get name, ids
 		String name = null, ids = null;
-		Map<String, String> nameids = regexFind(src, "set_name\\(\"(.+?)\".+\\{(.+)\\}");
-		Iterator<Map.Entry<String, String>> iter = nameids.entrySet().iterator();
-		if (iter.hasNext()) {
-			Map.Entry<String, String> entry = (Map.Entry<String, String>) iter.next();
-			name = entry.getKey();
-			ids = entry.getValue();
-		}
+		String[] nameids = getKeyValuePair(regexFind(src, "set_name\\s*\\((.+?),.*\\{(.+)\\}"));
+		name = nameids[0];
+		ids = nameids[1];
 		Npc npc = null;
 		if (id == null || name == null || ids == null || inherits == null) {
 			logger.error(String.format("Importing npc:%s: failed - name:%s,ids:%s,inherits:%s", fileName, name, ids, inherits));
 		} else {
 			logger.info(String.format("Importing npc:%s: ok", fileName));
 			npc = new Npc(id, name, ids, inherits);
-			npc.setSets(regexFind(src, "(?s)set\\s*\\((.+?),(.+?)\\)"));
-			npc.setSkills(regexFind(src, "(?s)set_skill\\s*\\((.+?),(.+?)\\)"));
-			npc.setMapSkills(regexFind(src, "(?s)map_skill\\s*\\((.+?),(.+?)\\)"));
+			npc.setSets(regexFind(src, "(?s)\\s+set\\s*\\((.+?),(.+?)\\)"));
+			npc.setSkills(regexFind(src, "(?s)\\s+set_skill\\s*\\((.+?),(.+?)\\)"));
+			npc.setMapSkills(regexFind(src, "(?s)\\s+map_skill\\s*\\((.+?),(.+?)\\)"));
+			String[] family = getKeyValuePair(regexFind(src, "(?s)\\s+create_family\\s*\\((.+?),(.+?)\\)"));
+			npc.setFamily(family);
+			Map<String, String> objs = regexFind(src, "(?s)\\s+carry_object\\s*\\((.+?)\\)(.*?);");
+			npc.setObjs(objs);
 		}
 		if (npc != null) {
-			npcService.saveNpc(npc);
+			npcService.save(npc);
 		}
 	}
 
 	private void importItem(String fileName, String src, String inherits) {
-
+		String id = getId(fileName);
+		src = src.replace("set_weight", "set(\"weight\",");
+		// get name, ids
+		String name = null, ids = null;
+		String[] nameids = getKeyValuePair(regexFind(src, "set_name\\s*\\((.+?),.*\\{(.+)\\}"));
+		name = nameids[0];
+		ids = nameids[1];
+		Item item = null;
+		if (id == null || name == null || ids == null || inherits == null) {
+			logger.error(String.format("Importing item:%s: failed - name:%s,ids:%s,inherits:%s", fileName, name, ids, inherits));
+		} else {
+			logger.info(String.format("Importing item:%s: ok", fileName));
+			item = new Item(id, name, ids, inherits);
+			item.setSets(regexFind(src, "(?s)\\s+set\\s*\\((.+?),(.+?)\\)"));
+		}
+		if (item != null) {
+			itemService.save(item);
+		}
 	}
 
 	private void importSrc(String fileName) throws IOException {
@@ -170,12 +193,12 @@ public class ImportRoom {
 		}
 		br.close();
 		String src = sb.toString();
-		src = src.replaceAll("(?s)/\\*.*\\*/", "");
+		src = src.replaceAll("(?s)/\\*.*?\\*/", "");
 		logger.debug("filename=" + fileName + ";content=" + src + NEWLINE);
 		String inherits = getInherits(src);
-		if (isNPC(inherits)) {
+		if (Utils.isNPC(inherits)) {
 			importNpc(fileName, src, inherits);
-		} else if (isRoom(inherits)) {
+		} else if (Utils.isRoom(inherits)) {
 			importRoom(fileName, src, inherits);
 		} else {
 			importItem(fileName, src, inherits);
@@ -206,9 +229,10 @@ public class ImportRoom {
 		}
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		ImportRoom importRoom = (ImportRoom) context.getBean("importRoom");
-		//importRoom.importDir(args[0], args[1]);
-		//importRoom.importSrc("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\ziyanglou.c");
-		importRoom.importSrc("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\misc\\npc_scorekeeper.c");
+		importRoom.importDir(args[0], args[1]);
+		// importRoom.importSrc("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\fangzhang1.c");
+		// importRoom.importSrc("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\npc\\bai.c");
 		context.close();
+		System.exit(0);
 	}
 }

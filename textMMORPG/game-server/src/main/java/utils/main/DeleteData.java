@@ -13,6 +13,7 @@ import repo.RoomRepository;
 public class DeleteData {
 	@Autowired
 	RoomRepository roomRepo;
+
 	public void deleteAll() {
 		roomRepo.deleteAll();
 	}
@@ -22,5 +23,6 @@ public class DeleteData {
 		DeleteData component = (DeleteData) context.getBean("DeleteData");
 		component.deleteAll();
 		context.close();
+		System.exit(0);
 	}
 }

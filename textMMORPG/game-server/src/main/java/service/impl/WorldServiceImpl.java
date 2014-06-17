@@ -7,10 +7,9 @@ import org.springframework.stereotype.Service;
 
 import domain.map.World;
 import repo.WorldRepository;
-import service.WorldService;
 
 @Service("worldService")
-public class WorldServiceImpl implements WorldService {
+public class WorldServiceImpl {
 	World world = null;
 	@Autowired
 	WorldRepository worldRepo;

@@ -70,14 +70,6 @@ public class Player extends Char {
 		return status.ordinal() >= PSTATUS.NORMAL.ordinal() && status.ordinal() < PSTATUS.END.ordinal();
 	}
 
-	public void setKey(String id) {
-		this.key = id;
-	}
-
-	public String getKey() {
-		return key;
-	}
-
 	public String getPassword() {
 		return password;
 	}
@@ -109,16 +101,17 @@ public class Player extends Char {
 	public String getSettings(String key) {
 		return settings.get(key);
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getName() {
 		return name;
 	}
 
 	@Override
 	public String toString() {
-		return "key=" + getKey() + ";name=" + name + ";password=" + password + ";status=" + status;
+		return "id=" + getId() + ";name=" + name + ";password=" + password + ";status=" + status;
 	}
 }

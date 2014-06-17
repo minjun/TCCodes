@@ -12,13 +12,12 @@ import org.springframework.stereotype.Service;
 import domain.charactor.Player;
 import domain.charactor.Player.PSTATUS;
 import domain.map.Exit;
+import domain.map.Room;
 import repo.PlayerRepository;
-import service.PlayerService;
-import service.RoomService;
-import service.WorldService;
+import utils.Utils;
 
 @Service("playerService")
-public class PlayerServiceImpl implements PlayerService {
+public class PlayerServiceImpl {
 	final static int ID_MINLEN = 4;
 	final static int PWD_MINLEN = 4;
 	final static int NAME_MINLEN = 4;
@@ -26,29 +25,25 @@ public class PlayerServiceImpl implements PlayerService {
 	@Autowired
 	PlayerRepository playerRepo;
 	@Autowired
-	WorldService worldService;
+	WorldServiceImpl worldService;
 	@Autowired
-	RoomService roomService;
+	RoomServiceImpl roomService;
 	private static final Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
-	@Override
 	public void savePlayersToStore(List<Player> players) {
 		playerRepo.save(players);
 	}
 
-	@Override
 	public void savePlayerToStore(Player player) {
 		if (player.needSave())
 			playerRepo.save(player);
 	}
 
-	@Override
 	public void removePlayserFromStore(Player player) {
 		player.setStatus(PSTATUS.DELETED);
 		playerRepo.save(player);
 	}
 
-	@Override
 	public Player getPlayerFromStore(String id) {
 		Player player = playerRepo.findOne(Player.PREFIX + id);
 		if (player != null)
@@ -56,33 +51,27 @@ public class PlayerServiceImpl implements PlayerService {
 		return player;
 	}
 
-	@Override
 	public boolean isValidPassword(String pwd) {
 		return pwd.length() >= PWD_MINLEN;
 	}
 
-	@Override
 	public boolean isValidPlayerID(String id) {
 		return id.length() >= ID_MINLEN;
 	}
 
-	@Override
 	public boolean isValidName(String name) {
 		return name.length() >= NAME_MINLEN;
 	}
 
-	@Override
 	public Player getPlayer(String clientId) {
 		return players.get(clientId);
 	}
 
-	@Override
 	public void updatePlayer(String clientId, Player player) {
 		logger.info("player updated:" + player.toString());
 		players.put(clientId, player);
 	}
 
-	@Override
 	public void removePlayer(String clientId) {
 		Player player = getPlayer(clientId);
 		if (player == null)
@@ -92,39 +81,33 @@ public class PlayerServiceImpl implements PlayerService {
 		players.remove(clientId);
 	}
 
-	@Override
 	public String move(Player player, String roomId) {
-		roomService.findRoom(player.getRoomId()).removePlayer(player);
-		player.setRoomId(roomId);
-		roomService.findRoom(player.getRoomId()).addPlayer(player);
-		return roomService.getRoomDesc(player.getRoomId(), player.getSettings(Player.SET_BRIEF) != null);
+		Room room = roomService.findRoom(roomId);
+		if (room != null) {
+			roomService.findRoom(player.getRoomId()).removePlayer(player);
+			player.setRoomId(roomId);
+			room.addPlayer(player);
+			return roomService.getRoomDesc(player.getRoomId(), player.getSettings(Player.SET_BRIEF) != null);
+		} else {
+			logger.error("room:" + roomId + " doesn't exit!");
+			return worldService.getWorld().getProperties("msg.noroomexist");
+		}
 	}
 
-	@Override
 	public String go(Player player, String dir) {
-//		logger.info("dir=" + dir);
-//		List<Exit> exits = roomService.findRoom(player.getRoomId()).getExits();
-//		for (Exit ex : exits) {
-//			logger.info(String.format("exit:%s = %s", ex.getDir(), ex.getRoomId()));
-//			if (dir.equals(ex.getDir().toString())) {
-//				// the same area as current room?
-//				String roomId = ex.getRoomId();
-//				if (!ex.getRoomId().startsWith("/d/")) {
-//					int index = player.getRoomId().lastIndexOf("/");
-//					roomId = player.getRoomId().substring(0,index+1)+ex.getRoomId();
-//				}
-//				return move(player, roomId);
-//			}
-//		}
+		Map<String, String> exits = roomService.findRoom(player.getRoomId()).getExits();
+		String roomId = exits.get(dir);
+		if (roomId != null) {
+			roomId = Utils.getFullId(roomId, player.getRoomId());
+			return move(player, roomId);
+		}
 		return worldService.getWorld().getProperties("msg.nosuchexit");
 	}
 
-	@Override
 	public String look(Player player) {
 		return roomService.getRoomDesc(player.getRoomId(), false);
 	}
 
-	@Override
 	public String command(String commandId, String clientId) {
 		Player player = players.get(clientId);
 		String rsp = null;

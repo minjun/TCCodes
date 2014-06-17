@@ -3,23 +3,24 @@ package service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import domain.charactor.Npc;
-import repo.NpcRepository;
+import repo.ItemRepository;
+import domain.item.Item;
+import static utils.Utils.NEWLINE;
 
-@Service("npcService")
-public final class NpcServiceImpl {
+@Service("itemService")
+public final class ItemServiceImpl {
 	// private static final Logger logger =
 	// LoggerFactory.getLogger(NpcServiceImpl.class);
 	@Autowired
-	NpcRepository npcRepo;
+	ItemRepository itemRepo;
 	@Autowired
 	WorldServiceImpl worldService;
 
-	public void save(Npc npc) {
-		npcRepo.save(npc);
+	public void save(Item item) {
+		itemRepo.save(item);
 	}
 
-	public Npc load(String id) {
-		return npcRepo.findOne(id);
+	public Item load(String id) {
+		return itemRepo.findOne(id);
 	}
 }

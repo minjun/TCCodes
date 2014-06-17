@@ -5,26 +5,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import service.*;
-
 @Service("gameService")
 public class GameServiceImpl {
 
 	@Autowired
-	WorldService worldService;
+	WorldServiceImpl worldService;
 	@Autowired
-	PlayerService playerService;
+	PlayerServiceImpl playerService;
 	@Autowired
-	RoomService roomService;
-	// @Autowired
-	TranslatorService translatorService;
+	RoomServiceImpl roomService;
 	@Autowired
-	LoginService loginService;
+	LoginServiceImpl loginService;
 	private static final Logger logger = LoggerFactory.getLogger(GameServiceImpl.class);
 
 	public String Connected() throws Exception {
-		return worldService.getWorld().getProperties("msg.welcome")
-				+ worldService.getWorld().getProperties("msg.inputid");
+		return worldService.getWorld().getProperties("msg.welcome") + worldService.getWorld().getProperties("msg.inputid");
 	}
 
 	public String logout(String clientId) {

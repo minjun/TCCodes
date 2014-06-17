@@ -4,20 +4,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import domain.charactor.Player;
-import service.LoginService;
-import service.PlayerService;
-import service.WorldService;
 
 @Service("loginService")
-public class LoginServiceImpl implements LoginService {
+public class LoginServiceImpl {
 
 	@Autowired
-	PlayerService playerService;
+	PlayerServiceImpl playerService;
 
 	@Autowired
-	WorldService worldService;
+	WorldServiceImpl worldService;
 
-	@Override
 	public String login(String input, String clientId) {
 		Player player = playerService.getPlayer(clientId);
 		Player.PSTATUS status = Player.PSTATUS.END;
@@ -77,7 +73,6 @@ public class LoginServiceImpl implements LoginService {
 		}
 	}
 
-	@Override
 	public String logout(String clientId) {
 		Player player = playerService.getPlayer(clientId);
 		if (player != null) {

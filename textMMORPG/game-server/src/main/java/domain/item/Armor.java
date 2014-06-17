@@ -6,14 +6,9 @@ public final class Armor extends Item {
 	};
 
 	KIND kind;
-	String name;
-	int armor;
-	int armor_vs_force;
-	int armor_vs_spells;
 
-	public Armor(String id, KIND kind, String name) {
-		super(id);
+	public Armor(String id, String name, String ids, String inherits, KIND kind) {
+		super(id, name, ids, inherits);
 		this.kind = kind;
-		this.name = name;
 	}
 }

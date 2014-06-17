@@ -13,16 +13,14 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
-
+import service.impl.WorldServiceImpl;
 import domain.map.World;
-
-import service.WorldService;
 
 @Component("importWorld")
 public class ImportWorld {
 	private static Logger logger = LoggerFactory.getLogger(ImportRoom.class);
 	@Autowired
-	private WorldService worldService;
+	private WorldServiceImpl worldService;
 
 	private void importWorld() throws IOException {
 		// read from configuration file
@@ -33,7 +31,7 @@ public class ImportWorld {
 			return;
 		}
 		Properties prop = new Properties();
-		prop.load(new InputStreamReader(input,"UTF-8"));
+		prop.load(new InputStreamReader(input, "UTF-8"));
 		// write into database
 		World world = worldService.getWorld();
 		if (world == null) {
@@ -54,5 +52,6 @@ public class ImportWorld {
 		ImportWorld importWorld = (ImportWorld) context.getBean("importWorld");
 		importWorld.importWorld();
 		context.close();
+		System.exit(0);
 	}
 }
