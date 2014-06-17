@@ -81,6 +81,11 @@ public final class RoomServiceImpl {
 		return room;
 	}
 
+	private String getObjDesc(Room room, boolean brief) {
+		Map<String, Npc> npcs = room.getNpcs();
+		return "";
+	}
+
 	public String getRoomDesc(String roomId, boolean brief) {
 		Room room = findRoom(roomId);
 		if (room == null) {
@@ -99,12 +104,13 @@ public final class RoomServiceImpl {
 			sb.append(worldService.getWorld().getProperties("msg.exit"));
 			Iterator<String> iter = exits.keySet().iterator();
 			while (iter.hasNext()) {
-				sb.append(iter.next()).append('°¢');
+				sb.append(iter.next()).append('„ÄÅ');
 			}
-			sb.setCharAt(sb.length() - 1, '°£');
+			sb.setCharAt(sb.length() - 1, '„ÄÇ');
 		} else {
 			sb.append(worldService.getWorld().getProperties("msg.noexits"));
 		}
+		sb.append(getObjDesc(room, brief));
 		sb.append(NEWLINE);
 		return sb.toString();
 	}

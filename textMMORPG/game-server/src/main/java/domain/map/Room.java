@@ -74,4 +74,29 @@ public class Room {
 	public Map<String, String> getObjs() {
 		return objs;
 	}
+
+	public Map<String, Player> getPlayers() {
+		return players;
+	}
+
+	public void setPlayers(Map<String, Player> players) {
+		this.players = players;
+	}
+
+	public Map<String, Npc> getNpcs() {
+		return npcs;
+	}
+
+	public void setNpcs(Map<String, Npc> npcs) {
+		this.npcs = npcs;
+	}
+
+	public Map<String, Item> getItems() {
+		return items;
+	}
+
+	public void setItems(Map<String, Item> items) {
+		this.items = items;
+	}
+	
 }

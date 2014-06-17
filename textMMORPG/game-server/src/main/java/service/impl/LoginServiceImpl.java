@@ -75,7 +75,7 @@ public class LoginServiceImpl {
 
 	public String logout(String clientId) {
 		Player player = playerService.getPlayer(clientId);
-		if (player != null) {
+		if (player != null && player.needSave()) {
 			playerService.savePlayerToStore(player);
 			playerService.removePlayer(clientId);
 		}
