@@ -19,6 +19,10 @@ public class Char {
 		this.id = id;
 	}
 
+	public String getHP() {
+		return "";
+	}
+	
 	public String getId() {
 		return id;
 	}
@@ -42,6 +46,10 @@ public class Char {
 
 	public String getSet(String key) {
 		return sets.get(key);
+	}
+
+	public void setSet(String key, String value) {
+		sets.put(key, value);
 	}
 
 	public void setSets(Map<String, String> sets) {

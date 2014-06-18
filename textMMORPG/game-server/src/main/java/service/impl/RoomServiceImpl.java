@@ -13,8 +13,7 @@ import domain.charactor.Npc;
 import domain.item.Item;
 import domain.map.Room;
 import repo.RoomRepository;
-import utils.Utils;
-import static utils.Utils.NEWLINE;
+import static utils.Utils.*;
 
 @Service("roomService")
 public final class RoomServiceImpl {
@@ -42,7 +41,7 @@ public final class RoomServiceImpl {
 		Iterator<Map.Entry<String, String>> iter = objs.entrySet().iterator();
 		while (iter.hasNext()) {
 			Map.Entry<String, String> entry = (Map.Entry<String, String>) iter.next();
-			String id = Utils.getFullId(entry.getKey(), room.getId());
+			String id = getFullId(entry.getKey(), room.getId());
 			int number = Integer.parseInt(entry.getValue());
 			Npc npc;
 			Item item;
@@ -87,8 +86,8 @@ public final class RoomServiceImpl {
 		Iterator<Npc> iter = map.values().iterator();
 		while (iter.hasNext()) {
 			Npc npc = iter.next();
-			String title = Utils.nullStringtoEmpty(npc.getSet("title"), true);
-			sb.append(title).append(npc.getName()).append('(').append(npc.getNpcId()).append(')').append(Utils.NEWLINE);
+			String title = nullStringtoEmpty(npc.getSet("title"), true);
+			sb.append(title).append(npc.getName()).append('(').append(npc.getNpcId()).append(')').append(NEWLINE);
 		}
 		return sb.toString();
 	}
@@ -111,9 +110,9 @@ public final class RoomServiceImpl {
 			sb.append(worldService.getWorld().getProperties("msg.exit"));
 			Iterator<String> iter = exits.keySet().iterator();
 			while (iter.hasNext()) {
-				sb.append(iter.next()).append('¡¢');
+				sb.append(iter.next()).append(chComma);
 			}
-			sb.setCharAt(sb.length() - 1, '¡£');
+			sb.setCharAt(sb.length() - 1, chPeriod);
 		} else {
 			sb.append(worldService.getWorld().getProperties("msg.noexits"));
 		}

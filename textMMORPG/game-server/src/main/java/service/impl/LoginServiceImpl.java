@@ -10,9 +10,10 @@ public class LoginServiceImpl {
 
 	@Autowired
 	PlayerServiceImpl playerService;
-
 	@Autowired
 	WorldServiceImpl worldService;
+	@Autowired
+	RoomServiceImpl roomService;
 
 	public String login(String input, String clientId) {
 		Player player = playerService.getPlayer(clientId);
@@ -60,6 +61,8 @@ public class LoginServiceImpl {
 			} else {
 				if (player.isInStore() && !player.getPassword().equalsIgnoreCase(input)) {
 					return worldService.getWorld().getProperties("msg.wrongpwd");
+				} else if (!player.isInStore()) {
+					player.born();
 				}
 				player.setPassword(input);
 				player.setStatus(Player.PSTATUS.NORMAL);

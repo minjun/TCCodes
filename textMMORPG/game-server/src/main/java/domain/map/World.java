@@ -3,7 +3,7 @@ package domain.map;
 import java.util.HashMap;
 import java.util.Map;
 
-import static utils.Utils.NEWLINE;
+import static utils.Utils.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 

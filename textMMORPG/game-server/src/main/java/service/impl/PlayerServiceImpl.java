@@ -11,10 +11,8 @@ import org.springframework.stereotype.Service;
 
 import domain.charactor.Player;
 import domain.charactor.Player.PSTATUS;
-import domain.map.Exit;
 import domain.map.Room;
 import repo.PlayerRepository;
-import utils.Utils;
 
 @Service("playerService")
 public class PlayerServiceImpl {
@@ -91,36 +89,6 @@ public class PlayerServiceImpl {
 		} else {
 			logger.error("room:" + roomId + " doesn't exit!");
 			return worldService.getWorld().getProperties("msg.noroomexist");
-		}
-	}
-
-	public String go(Player player, String dir) {
-		Map<String, String> exits = roomService.findRoom(player.getRoomId()).getExits();
-		String roomId = exits.get(dir);
-		if (roomId != null) {
-			roomId = Utils.getFullId(roomId, player.getRoomId());
-			return move(player, roomId);
-		}
-		return worldService.getWorld().getProperties("msg.nosuchexit");
-	}
-
-	public String look(Player player) {
-		return roomService.getRoomDesc(player.getRoomId(), false);
-	}
-
-	public String command(String commandId, String clientId) {
-		Player player = players.get(clientId);
-		String rsp = null;
-		if (player == null) {
-			logger.error("can't find player from " + clientId);
-			return "";
-		}
-		if (commandId.equalsIgnoreCase("look") || commandId.equalsIgnoreCase("l")) {
-			return look(player);
-		} else if ((rsp = Exit.getExit(commandId)) != null) {
-			return go(player, rsp);
-		} else {
-			return worldService.getWorld().getProperties("msg.unknowncmd");
 		}
 	}
 }

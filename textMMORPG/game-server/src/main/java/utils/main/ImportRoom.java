@@ -18,11 +18,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
-import static utils.Utils.NEWLINE;
+import static utils.Utils.*;
 import service.impl.ItemServiceImpl;
 import service.impl.NpcServiceImpl;
 import service.impl.RoomServiceImpl;
-import utils.Utils;
 import domain.charactor.Npc;
 import domain.item.Item;
 import domain.map.Room;
@@ -196,9 +195,9 @@ public class ImportRoom {
 		src = src.replaceAll("(?s)/\\*.*?\\*/", "");
 		logger.debug("filename=" + fileName + ";content=" + src + NEWLINE);
 		String inherits = getInherits(src);
-		if (Utils.isNPC(inherits)) {
+		if (isNPC(inherits)) {
 			importNpc(fileName, src, inherits);
-		} else if (Utils.isRoom(inherits)) {
+		} else if (isRoom(inherits)) {
 			importRoom(fileName, src, inherits);
 		} else {
 			importItem(fileName, src, inherits);

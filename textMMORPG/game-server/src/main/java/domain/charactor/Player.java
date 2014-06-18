@@ -53,6 +53,10 @@ public class Player extends Char {
 	public boolean isInStore() {
 		return inStore;
 	}
+	
+	public void born() {
+		
+	}
 
 	public void setInStore(boolean inStore) {
 		this.inStore = inStore;

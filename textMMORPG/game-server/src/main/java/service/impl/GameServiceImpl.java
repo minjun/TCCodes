@@ -11,7 +11,7 @@ public class GameServiceImpl {
 	@Autowired
 	WorldServiceImpl worldService;
 	@Autowired
-	PlayerServiceImpl playerService;
+	CommandServiceImpl commandService;
 	@Autowired
 	RoomServiceImpl roomService;
 	@Autowired
@@ -19,7 +19,8 @@ public class GameServiceImpl {
 	private static final Logger logger = LoggerFactory.getLogger(GameServiceImpl.class);
 
 	public String Connected() throws Exception {
-		return worldService.getWorld().getProperties("msg.welcome") + worldService.getWorld().getProperties("msg.inputid");
+		return worldService.getWorld().getProperties("msg.welcome")
+				+ worldService.getWorld().getProperties("msg.inputid");
 	}
 
 	public String logout(String clientId) {
@@ -34,7 +35,7 @@ public class GameServiceImpl {
 		if (registered != null) {
 			return registered;
 		} else {
-			return playerService.command(command, clientId);
+			return commandService.command(command, clientId);
 		}
 	}
 }

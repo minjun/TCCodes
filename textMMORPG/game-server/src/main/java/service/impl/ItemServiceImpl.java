@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 
 import repo.ItemRepository;
 import domain.item.Item;
-import static utils.Utils.NEWLINE;
 
 @Service("itemService")
 public final class ItemServiceImpl {

@@ -1,6 +1,8 @@
 package utils;
 
 public class Utils {
+	public final static char chComma = '¡¢';
+	public final static char chPeriod= '¡£';
 	public final static String NEWLINE = "\r\n";
 
 	public static String getFullId(String id, String currentId) {
