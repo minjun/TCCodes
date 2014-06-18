@@ -23,4 +23,12 @@ public class Utils {
 	public static boolean isNPC(String inherits) {
 		return inherits.contains("NPC");
 	}
+
+	public static String nullStringtoEmpty(String str, boolean addTrailEmpty) {
+		if (str == null) {
+			return "";
+		} else {
+			return str + (addTrailEmpty ? " " : "");
+		}
+	}
 }

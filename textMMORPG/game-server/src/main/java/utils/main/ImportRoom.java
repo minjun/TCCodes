@@ -143,7 +143,7 @@ public class ImportRoom {
 			logger.error(String.format("Importing npc:%s: failed - name:%s,ids:%s,inherits:%s", fileName, name, ids, inherits));
 		} else {
 			logger.info(String.format("Importing npc:%s: ok", fileName));
-			npc = new Npc(id, name, ids, inherits);
+			npc = new Npc(id, name, ids.split(","), inherits);
 			npc.setSets(regexFind(src, "(?s)\\s+set\\s*\\((.+?),(.+?)\\)"));
 			npc.setSkills(regexFind(src, "(?s)\\s+set_skill\\s*\\((.+?),(.+?)\\)"));
 			npc.setMapSkills(regexFind(src, "(?s)\\s+map_skill\\s*\\((.+?),(.+?)\\)"));

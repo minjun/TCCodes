@@ -82,8 +82,15 @@ public final class RoomServiceImpl {
 	}
 
 	private String getObjDesc(Room room, boolean brief) {
-		Map<String, Npc> npcs = room.getNpcs();
-		return "";
+		Map<String, Npc> map = room.getNpcs();
+		StringBuffer sb = new StringBuffer();
+		Iterator<Npc> iter = map.values().iterator();
+		while (iter.hasNext()) {
+			Npc npc = iter.next();
+			String title = Utils.nullStringtoEmpty(npc.getSet("title"), true);
+			sb.append(title).append(npc.getName()).append('(').append(npc.getNpcId()).append(')').append(Utils.NEWLINE);
+		}
+		return sb.toString();
 	}
 
 	public String getRoomDesc(String roomId, boolean brief) {
@@ -104,14 +111,14 @@ public final class RoomServiceImpl {
 			sb.append(worldService.getWorld().getProperties("msg.exit"));
 			Iterator<String> iter = exits.keySet().iterator();
 			while (iter.hasNext()) {
-				sb.append(iter.next()).append('„ÄÅ');
+				sb.append(iter.next()).append('°¢');
 			}
-			sb.setCharAt(sb.length() - 1, '„ÄÇ');
+			sb.setCharAt(sb.length() - 1, '°£');
 		} else {
 			sb.append(worldService.getWorld().getProperties("msg.noexits"));
 		}
-		sb.append(getObjDesc(room, brief));
 		sb.append(NEWLINE);
+		sb.append(getObjDesc(room, brief));
 		return sb.toString();
 	}
 }

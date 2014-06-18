@@ -5,7 +5,7 @@ import org.springframework.data.couchbase.core.mapping.Document;
 
 @Document
 public class Npc extends Char {
-	String ids;
+	String[] ids;
 	String name;
 	String inherits;
 	@Transient
@@ -13,7 +13,7 @@ public class Npc extends Char {
 	@Transient
 	int numberInRoom;
 
-	public Npc(String id, String name, String ids, String inherits) {
+	public Npc(String id, String name, String[] ids, String inherits) {
 		super(id);
 		this.name = name;
 		this.ids = ids;
@@ -42,6 +42,10 @@ public class Npc extends Char {
 
 	public String getInherits() {
 		return inherits;
+	}
+
+	public String getNpcId() {
+		return ids[0];
 	}
 
 }
