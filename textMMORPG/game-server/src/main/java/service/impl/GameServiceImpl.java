@@ -31,6 +31,7 @@ public class GameServiceImpl {
 		if (command.equals(""))
 			return "";
 		logger.info(clientId + ":" + command);
+		command = command.toLowerCase();
 		String registered = loginService.login(command, clientId);
 		if (registered != null) {
 			return registered;

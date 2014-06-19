@@ -22,7 +22,7 @@ public class Char {
 	public String getHP() {
 		return "";
 	}
-	
+
 	public String getId() {
 		return id;
 	}
@@ -48,8 +48,16 @@ public class Char {
 		return sets.get(key);
 	}
 
+	public int getSetInt(String key) {
+		return Integer.parseInt(sets.get(key));
+	}
+
 	public void setSet(String key, String value) {
 		sets.put(key, value);
+	}
+
+	public void setSet(String key, int value) {
+		sets.put(key, "" + value);
 	}
 
 	public void setSets(Map<String, String> sets) {

@@ -64,6 +64,7 @@ public class LoginServiceImpl {
 				} else if (!player.isInStore()) {
 					player.born();
 				}
+				player.setup();
 				player.setPassword(input);
 				player.setStatus(Player.PSTATUS.NORMAL);
 				playerService.updatePlayer(clientId, player);

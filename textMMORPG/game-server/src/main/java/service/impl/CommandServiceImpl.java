@@ -43,8 +43,8 @@ public class CommandServiceImpl {
 
 	@PostConstruct
 	private void buildCommandMapper() {
-		commandMapper.put("look", new LookImpl());
-		commandMapper.put("hp", new HpImpl());
+		commandMapper.put("look", new Look());
+		commandMapper.put("hp", new Hp());
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
@@ -66,11 +66,12 @@ public class CommandServiceImpl {
 			logger.error("can't find player from " + clientId);
 			return "";
 		}
+		String[] cmds = commandId.split(" ");
 		commandId = getInputMap(commandId);
 		if (Exit.isValidExit(commandId)) {
 			return go(player, commandId);
-		} else if ((command = commandMapper.get(getInputMap(commandId))) != null) {
-			return command.execute(this, commandId, player);
+		} else if ((command = commandMapper.get(getInputMap(cmds[0]))) != null) {
+			return command.execute(this, cmds, player);
 		} else {
 			return worldService.getWorld().getProperties("msg.unknowncmd");
 		}

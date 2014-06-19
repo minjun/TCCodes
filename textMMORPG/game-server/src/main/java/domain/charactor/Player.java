@@ -50,12 +50,47 @@ public class Player extends Char {
 		// armors.add(new Armor(Armor.KIND.BOOT,"boots"));
 	}
 
+	public String getId() {
+		return super.getId().replace(PREFIX, "");
+	}
+
 	public boolean isInStore() {
 		return inStore;
 	}
-	
+
+	public void setup() {
+		if (getSet("age") == null)
+			born();
+		int max_kee = (getSetInt("age") - 4) * (getSetInt("con") + getSetInt("str")) + getSetInt("max_force") / 2;
+		int max_sen = (getSetInt("age") - 4) * (getSetInt("spi") + getSetInt("int")) + getSetInt("max_mana") / 2;
+		setSet("max_kee", max_kee);
+		setSet("max_sen", max_sen);
+		setSet("eff_kee", max_kee);
+		setSet("eff_sen", max_sen);
+		setSet("kee", max_kee);
+		setSet("sen", max_sen);
+		setSet("force", getSetInt("max_force") * 2);
+		setSet("mana", getSetInt("max_mana") * 2);
+	}
+
 	public void born() {
-		
+		setSet("age", 14);
+		setSet("str", 20);
+		setSet("cor", 20);
+		setSet("int", 20);
+		setSet("kar", 20);
+		setSet("spi", 20);
+		setSet("per", 20);
+		setSet("con", 20);
+		setSet("kar", 20);
+		setSet("force", 100);
+		setSet("mana", 100);
+		setSet("max_force", 100);
+		setSet("max_mana", 100);
+	}
+	
+	public String getHP() {
+		return "";
 	}
 
 	public void setInStore(boolean inStore) {
