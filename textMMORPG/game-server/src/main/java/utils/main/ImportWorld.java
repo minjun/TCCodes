@@ -14,7 +14,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
 import service.impl.WorldServiceImpl;
-import static utils.Ansi.*;
 import domain.map.World;
 
 @Component("importWorld")

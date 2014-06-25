@@ -1,5 +1,6 @@
 package domain.charactor;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
@@ -9,7 +10,7 @@ import org.springframework.data.couchbase.core.mapping.Document;
 public class Char {
 	@Id
 	private String id;
-	private Map<String, String> sets;
+	private Map<String, String> sets = new HashMap<String,String>();
 	private Map<String, String> skills;
 	private Map<String, String> mapSkills;
 	private String[] family;

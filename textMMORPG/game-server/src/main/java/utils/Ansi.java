@@ -5,8 +5,6 @@ import java.lang.reflect.Field;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import utils.main.ImportRoom;
-
 public class Ansi {
 	private static Logger logger = LoggerFactory.getLogger(Ansi.class);
 	public static final String ESC = "";
@@ -153,5 +151,24 @@ public class Ansi {
 			logger.error("replaceAnsi failed:" + e.getMessage());
 		}
 		return null;
+	}
+
+	public static String status_color(int current, int max) {
+		int percent;
+		if (max > 0)
+			percent = current * 100 / max;
+		else
+			percent = 100;
+		if (percent > 100)
+			return HIC;
+		if (percent >= 90)
+			return HIG;
+		if (percent >= 60)
+			return HIY;
+		if (percent >= 30)
+			return YEL;
+		if (percent >= 10)
+			return HIR;
+		return RED;
 	}
 }

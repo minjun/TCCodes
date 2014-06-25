@@ -7,10 +7,12 @@ import java.util.Map;
 
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.couchbase.core.mapping.Document;
-import org.springframework.data.couchbase.core.mapping.Field;
 
 import domain.item.Armor;
 import domain.item.Bag;
+import domain.item.Weapon;
+import static utils.Ansi.*;
+import static utils.Utils.NEWLINE;
 
 @Document
 public class Player extends Char {
@@ -19,29 +21,19 @@ public class Player extends Char {
 	public static enum PSTATUS {
 		IDINPUT, IDCONFIRMED, NAMEINPUT, NORMAL, LOCKED, DELETED, END
 	};
-
 	public static final String SET_BRIEF = "brief";
-	@Field
 	String name;
-	@Field
 	String password;
-	@Field
-	List<Armor> armors = new ArrayList<Armor>();
-	@Field
 	String roomId;
-	@Field
-	Bag bag;
-	@Field
 	PSTATUS status;
-	@Field
+	String gender;
 	Map<String, String> settings = new HashMap<String, String>();
-
 	@Transient
 	boolean connected = true;
-
 	@Transient
 	boolean inStore = false;
-
+	
+	
 	public Player(String id, String name, String password) {
 		super(PREFIX + id);
 		this.password = password;
@@ -88,9 +80,31 @@ public class Player extends Char {
 		setSet("max_force", 100);
 		setSet("max_mana", 100);
 	}
-	
+
 	public String getHP() {
-		return "";
+		StringBuffer sb = new StringBuffer();
+		int kee = Integer.parseInt(getSet("kee"));
+		int max_kee = Integer.parseInt(getSet("max_kee"));
+		int sen = Integer.parseInt(getSet("sen"));
+		int max_sen = Integer.parseInt(getSet("max_sen"));
+		int force = Integer.parseInt(getSet("force"));
+		int max_force = Integer.parseInt(getSet("max_force"));
+		int mana = Integer.parseInt(getSet("mana"));
+		int max_mana = Integer.parseInt(getSet("max_mana"));
+		int pot = 0;
+		int bellicosity = 0;
+		int combat_exp = 0;
+		int daoxing = 0;
+		sb.append(String.format("个人状态 姓名：%s 性别：%s ID：%s", name, gender, getId())).append(NEWLINE);
+		sb.append(String.format("〖 气血 〗%s%d/%d" + NOR, status_color(kee, max_kee), kee, max_kee)).append(" ");
+		sb.append(String.format("〖 内力 〗%s%d/%d" + NOR, status_color(force, max_force), force, max_force)).append(NEWLINE);
+		sb.append(String.format("〖 精神 〗%s%d/%d" + NOR, status_color(sen, max_sen), sen, max_sen)).append(" ");
+		sb.append(String.format("〖 法力 〗%s%d/%d" + NOR, status_color(mana, max_mana), mana, max_mana)).append(NEWLINE);
+		sb.append(String.format("〖 潜能 〗%d", pot)).append(" ");
+		sb.append(String.format("〖 杀气 〗%d", bellicosity)).append(NEWLINE);
+		sb.append(String.format("〖 武学 〗%d", combat_exp)).append(" ");
+		sb.append(String.format("〖 道行 〗%d", daoxing)).append(NEWLINE);
+		return sb.toString();
 	}
 
 	public void setInStore(boolean inStore) {

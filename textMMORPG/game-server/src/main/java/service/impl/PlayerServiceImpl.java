@@ -33,10 +33,11 @@ public class PlayerServiceImpl {
 	}
 
 	public void savePlayerToStore(Player player) {
-		if (player.needSave())
+		if (player.needSave()) {
 			playerRepo.save(player);
+		}
 	}
-
+	
 	public void removePlayserFromStore(Player player) {
 		player.setStatus(PSTATUS.DELETED);
 		playerRepo.save(player);

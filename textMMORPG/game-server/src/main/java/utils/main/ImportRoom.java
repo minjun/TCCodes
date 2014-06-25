@@ -83,7 +83,7 @@ public class ImportRoom {
 		}
 		return id;
 	}
-
+	@SuppressWarnings("unused")
 	private void printMap(Map<String, String> map) {
 		Iterator<Map.Entry<String, String>> iter = map.entrySet().iterator();
 		while (iter.hasNext()) {
