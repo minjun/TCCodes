@@ -1,5 +1,5 @@
 package domain.item;
 
-public class Bag {
+public class BagBuilder {
 
 }

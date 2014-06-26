@@ -86,7 +86,7 @@ public final class RoomServiceImpl {
 		Iterator<Npc> iter = map.values().iterator();
 		while (iter.hasNext()) {
 			Npc npc = iter.next();
-			String title = nullStringtoEmpty(npc.getSet("title"), true);
+			String title = nullStringtoEmpty(npc.getStrSet("title"), true);
 			sb.append(title).append(npc.getName()).append('(').append(npc.getNpcId()).append(')').append(NEWLINE);
 		}
 		return sb.toString();

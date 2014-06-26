@@ -6,22 +6,21 @@ import java.util.Map;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.couchbase.core.mapping.Document;
 
+import utils.Utils;
+
 @Document
 public class Char {
 	@Id
 	private String id;
-	private Map<String, String> sets = new HashMap<String,String>();
-	private Map<String, String> skills;
-	private Map<String, String> mapSkills;
-	private String[] family;
-	private Map<String, String> objs;
+	private Map<String, String> strSets = new HashMap<String, String>();
+	private Map<String, Long> numSets = new HashMap<String, Long>();
+	private Map<String, Long> skills = new HashMap<String, Long>();
+	private Map<String, String> mapSkills = new HashMap<String, String>();
+	private Map<String, String> objs = new HashMap<String, String>();
+	private String[] family = new String[2];
 
 	public Char(String id) {
 		this.id = id;
-	}
-
-	public String getHP() {
-		return "";
 	}
 
 	public String getId() {
@@ -45,35 +44,38 @@ public class Char {
 		return family;
 	}
 
-	public String getSet(String key) {
-		return sets.get(key);
+	public long getNumSet(String key) {
+		if (numSets.containsKey(key))
+			return numSets.get(key);
+		else
+			return 0;
 	}
 
-	public int getSetInt(String key) {
-		return Integer.parseInt(sets.get(key));
+	public void setNumSet(String key, long value) {
+		numSets.put(key, value);
 	}
 
-	public void setSet(String key, String value) {
-		sets.put(key, value);
+	public String getStrSet(String key) {
+		return strSets.get(key);
 	}
 
-	public void setSet(String key, int value) {
-		sets.put(key, "" + value);
+	public void setStrSet(String key, String value) {
+		strSets.put(key, value);
 	}
 
 	public void setSets(Map<String, String> sets) {
-		this.sets = sets;
+		Utils.setSets(sets, strSets, numSets);
 	}
 
-	public String getSkills(String key) {
+	public long getSkill(String key) {
 		return skills.get(key);
 	}
 
 	public void setSkills(Map<String, String> skills) {
-		this.skills = skills;
+		Utils.setSets(skills, null, this.skills);
 	}
 
-	public String getMapSkills(String key) {
+	public String getMapSkill(String key) {
 		return mapSkills.get(key);
 	}
 

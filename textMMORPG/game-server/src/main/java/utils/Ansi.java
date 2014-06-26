@@ -153,8 +153,8 @@ public class Ansi {
 		return null;
 	}
 
-	public static String status_color(int current, int max) {
-		int percent;
+	public static String status_color(long current, long max) {
+		long percent;
 		if (max > 0)
 			percent = current * 100 / max;
 		else
