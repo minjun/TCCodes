@@ -15,6 +15,9 @@ public class Item {
 		weapon, armor, END
 	};
 
+	public static int EQUIPPED = -1;
+	public static int NOTEQUIPPED = 0;
+
 	@Id
 	String id;
 	String name;
@@ -26,6 +29,8 @@ public class Item {
 	Map<String, String> strSets = new HashMap<String, String>();
 	@Transient
 	int numberInRoom;
+	@Transient
+	boolean isRegular, isEquipped;
 
 	public Item(String id, String name, String ids, String inherits) {
 		this.id = id;
@@ -68,5 +73,19 @@ public class Item {
 
 	public void setKind(ItemKind kind) {
 		this.itemKind = kind;
+	}
+
+	public boolean isRegular() {
+		return isRegular;
+	}
+
+	public void setRegular(boolean isRegular) {
+		this.isRegular = isRegular;
+	}
+	public boolean getEquipped() {
+		return isEquipped;
+	}
+	public void setEquipped(boolean isEquipped) {
+		this.isEquipped = isEquipped;
 	}
 }

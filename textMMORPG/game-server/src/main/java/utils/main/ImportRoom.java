@@ -156,15 +156,19 @@ public class ImportRoom {
 			npcService.save(npc);
 		}
 	}
-
+	
 	private void importItem(String fileName, String src, String inherits) {
 		String id = getId(fileName);
-		src = src.replace("set_weight", "set(\"weight\",");
+		src = src.replaceFirst("set_weight\\s*\\(", "set(\"weight\",");
+		src = src.replaceFirst("init_\\S+\\((\\d+)", "set(\"damage\",$1");
+		//logger.info(src);
 		// get name, ids
 		String name = null, ids = null;
-		String[] nameids = getKeyValuePair(regexFind(src, "set_name\\s*\\((.+?),.*\\{(.+)\\}"));
+		String[] nameids = getKeyValuePair(regexFind(src, "(?s)set_name\\s*\\((.+?),.*?\\{(.+?)\\}"));
 		name = nameids[0];
 		ids = nameids[1];
+		if (ids!= null)
+			ids = ids.replaceAll("\r\n", "");
 		Item item = null;
 		if (id == null || name == null || ids == null || inherits == null) {
 			logger.error(String.format("Importing item:%s: failed - name:%s,ids:%s,inherits:%s", fileName, name, ids, inherits));
@@ -204,7 +208,7 @@ public class ImportRoom {
 			importItem(fileName, src, inherits);
 		}
 	}
-
+	@SuppressWarnings("unused")
 	private void importDir(String strPath, String suffix) throws IOException {
 		File dir = new File(strPath);
 		File[] files = dir.listFiles();
@@ -229,9 +233,9 @@ public class ImportRoom {
 		}
 		ConfigurableApplicationContext context = new ClassPathXmlApplicationContext("applicationContext.xml");
 		ImportRoom importRoom = (ImportRoom) context.getBean("importRoom");
-		importRoom.importDir(args[0], args[1]);
+		//importRoom.importDir(args[0], args[1]);
 		// importRoom.importSrc("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\fangzhang1.c");
-		// importRoom.importSrc("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\npc\\bai.c");
+		importRoom.importSrc("C:\\Users\\minjun.wang\\Downloads\\dtxy2009\\d\\city\\npc\\obj\\dao.c");
 		context.close();
 		System.exit(0);
 	}

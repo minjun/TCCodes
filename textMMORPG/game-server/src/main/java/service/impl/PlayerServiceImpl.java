@@ -26,6 +26,8 @@ public class PlayerServiceImpl {
 	WorldServiceImpl worldService;
 	@Autowired
 	RoomServiceImpl roomService;
+	@Autowired
+	ItemServiceImpl itemService;
 	private static final Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
 
 	public void savePlayersToStore(List<Player> players) {
@@ -45,6 +47,7 @@ public class PlayerServiceImpl {
 
 	public Player getPlayerFromStore(String id) {
 		Player player = playerRepo.findOne(Player.PREFIX + id);
+		player.loadRegularItem(itemService);
 		if (player != null)
 			player.setInStore(true);
 		return player;

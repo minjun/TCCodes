@@ -1,6 +1,8 @@
 package domain.charactor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.annotation.Transient;
@@ -24,7 +26,7 @@ public class Player extends Char {
 	String roomId;
 	PSTATUS status;
 	String gender;
-	Item[] item;
+	List<Item> speItems = new ArrayList<Item>();
 	Map<String, String> settings = new HashMap<String, String>();
 	@Transient
 	boolean connected = true, inStore = false;
@@ -46,8 +48,8 @@ public class Player extends Char {
 	}
 
 	public void setup() {
-		if (getNumSet("age") == 0)
-			born();
+		// if (getNumSet("age") == 0)
+		born();
 		long max_kee = (getNumSet("age") - 4) * (getNumSet("con") + getNumSet("str")) + getNumSet("max_force") / 2;
 		long max_sen = (getNumSet("age") - 4) * (getNumSet("spi") + getNumSet("int")) + getNumSet("max_mana") / 2;
 		setNumSet("max_kee", max_kee);
@@ -74,6 +76,8 @@ public class Player extends Char {
 		setNumSet("mana", 100);
 		setNumSet("max_force", 100);
 		setNumSet("max_mana", 100);
+		objs.put("/d/city/npc/obj/dao.c", Item.EQUIPPED);
+		objs.put("/d/city/npc/obj/choupao.c", Item.EQUIPPED);
 	}
 
 	public String getHP() {
@@ -154,4 +158,13 @@ public class Player extends Char {
 	public String toString() {
 		return "id=" + getId() + ";name=" + name + ";password=" + password + ";status=" + status;
 	}
+	
+	public void loadSpecialItem() {
+		
+	}
+	
+	public String score() {
+		return "";
+	}
+
 }

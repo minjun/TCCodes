@@ -1,23 +1,34 @@
 package domain.charactor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.couchbase.core.mapping.Document;
 
+import domain.item.Item;
+import service.impl.ItemServiceImpl;
 import utils.Utils;
 
 @Document
 public class Char {
+
 	@Id
-	private String id;
-	private Map<String, String> strSets = new HashMap<String, String>();
-	private Map<String, Long> numSets = new HashMap<String, Long>();
-	private Map<String, Long> skills = new HashMap<String, Long>();
-	private Map<String, String> mapSkills = new HashMap<String, String>();
-	private Map<String, String> objs = new HashMap<String, String>();
-	private String[] family = new String[2];
+	protected String id;
+	protected Map<String, String> strSets = new HashMap<String, String>();
+	protected Map<String, Long> numSets = new HashMap<String, Long>();
+	protected Map<String, Long> skills = new HashMap<String, Long>();
+	protected Map<String, String> mapSkills = new HashMap<String, String>();
+	protected Map<String, Integer> objs = new HashMap<String, Integer>();
+	protected String[] family = new String[2];
+	@Transient
+	protected List<Item> items = new ArrayList<Item>();
+	@Transient
+	protected long tmpAttack, tmpDamage, tmp;
 
 	public Char(String id) {
 		this.id = id;
@@ -27,12 +38,29 @@ public class Char {
 		return id;
 	}
 
-	public Map<String, String> getObjs() {
+	public int getObj(String key) {
+		if (objs.containsKey(key))
+			return objs.get(key);
+		else
+			return 0;
+	}
+
+	public Map<String, Integer> getObjs() {
 		return objs;
 	}
 
 	public void setObjs(Map<String, String> objs) {
-		this.objs = objs;
+		Iterator<Map.Entry<String, String>> iter = objs.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, String> entry = iter.next();
+			String key = entry.getKey();
+			String value = entry.getValue();
+			if (value.contains("wield") || value.contains("wear")) {
+				this.objs.put(key, Item.EQUIPPED);
+			} else {
+				this.objs.put(key, Item.NOTEQUIPPED);
+			}
+		}
 	}
 
 	public void setFamily(String[] family) {
@@ -83,4 +111,28 @@ public class Char {
 		this.mapSkills = mapSkills;
 	}
 
+	public void addItem(Item e) {
+		items.add(e);
+	}
+
+	public void removeItem(Item e) {
+		items.remove(e);
+	}
+
+	public void equip(Item e) {
+
+	}
+
+	public void loadRegularItem(ItemServiceImpl itemService) {
+		Iterator<Map.Entry<String, Integer>> iter = objs.entrySet().iterator();
+		while (iter.hasNext()) {
+			Map.Entry<String, Integer> entry = iter.next();
+			String key = entry.getKey();
+			int value = entry.getValue();
+			Item item = itemService.load(key);
+			item.setEquipped(value == Item.EQUIPPED);
+			equip(item);
+			items.add(item);
+		}
+	}
 }

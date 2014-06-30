@@ -46,6 +46,9 @@ public class CommandServiceImpl {
 		commandMapper.put("look", new Look());
 		commandMapper.put("hp", new Hp());
 		commandMapper.put("save", new Save());
+		commandMapper.put("score", new Score());
+		commandMapper.put("skills", new Skills());
+		commandMapper.put("Cemote",new Cemote());
 	}
 
 	private static final Logger logger = LoggerFactory.getLogger(PlayerServiceImpl.class);
