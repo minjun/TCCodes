@@ -11,28 +11,12 @@ public class Jewelry {
 			sum += values[i];
 		}
 		sum = (int) Math.ceil(sum / 2);
-		int[] ways = new int[sum + 1];
-		// find ways
-		for (int i = 0; i < ways.length; i++) {
-			ways[i] = 0;
-		}
-		ways[0] = 1;
-		for (int j = 0; j < values.length; j++) {
-			for (int i = sum; i >= values[j]; i--) {
-				ways[i] += ways[i - values[j]];
+		long[][] dp = new long[values.length][sum];
+		for (int i = 1; i < dp.length; i++) {
+			for (int j = 0; j < i; j++) {
+
 			}
 		}
-		for (int i = 0; i < ways.length; i++) {
-			System.out.print("sum[" + i + "]=" + ways[i] + " ");
-		}
-		System.out.println();
-		// count
-		int count = 0;
-		for (int i = 0; i < values.length; i++) {
-			for (int s = values[i]; s <= sum; s++) {
-				count += ways[s - values[i]] * ways[s];
-			}
-		}
-		return count;
+		return dp[values.length - 1][sum];
 	}
 }

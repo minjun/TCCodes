@@ -1,0 +1,2 @@
+class StripePainter(object)
+	pass
