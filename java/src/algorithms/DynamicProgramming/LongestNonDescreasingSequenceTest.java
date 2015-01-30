@@ -1,4 +1,4 @@
-package algorithms.sort;
+package algorithms.DynamicProgramming;
 
 import static org.junit.Assert.*;
 

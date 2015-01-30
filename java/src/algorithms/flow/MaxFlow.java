@@ -1,4 +1,4 @@
-package algorithms.sort;
+package algorithms.flow;
 
 public class MaxFlow {
 	private int find_path(int[][] weights, int start, int end, int[][] cap) {

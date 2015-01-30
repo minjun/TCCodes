@@ -1,4 +1,4 @@
-package algorithms.sort;
+package algorithms.others;
 
 public class SelectRank {
     private int partition(int[] arr, int s, int e) {

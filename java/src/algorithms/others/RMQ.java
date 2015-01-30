@@ -1,4 +1,4 @@
-package algorithms.sort;
+package algorithms.others;
 
 public class RMQ {
 	// sparse table

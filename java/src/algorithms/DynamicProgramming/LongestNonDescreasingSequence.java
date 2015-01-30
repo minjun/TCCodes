@@ -1,4 +1,4 @@
-package algorithms.sort;
+package algorithms.DynamicProgramming;
 
 public class LongestNonDescreasingSequence {
 	public int maxLongestNonDescreasingSequence(int[] args) {

@@ -1,15 +1,14 @@
-package algorithms.sort;
+package algorithms.tree;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class QueensTest {
+public class BSTTest {
 
 	@Test
 	public void test() {
-		Queens q = new Queens();
-		q.PlaceQueens(0, 8);
+		fail("Not yet implemented");
 	}
 
 }

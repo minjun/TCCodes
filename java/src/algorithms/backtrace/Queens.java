@@ -1,4 +1,4 @@
-package algorithms.sort;
+package algorithms.backtrace;
 
 public class Queens {
 	private int[][] board = null;

@@ -1,4 +1,4 @@
-package algorithms.sort;
+package algorithms.graph;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;

@@ -1,4 +1,4 @@
-package algorithms.sort;
+package algorithms.others;
 
 import static org.junit.Assert.*;
 

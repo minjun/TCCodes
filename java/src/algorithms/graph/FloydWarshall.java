@@ -1,4 +1,4 @@
-package algorithms.sort;
+package algorithms.graph;
 
 public class FloydWarshall {
 	public int[][] shortestPath(int[][] weights) {
