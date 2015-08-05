@@ -10,13 +10,16 @@ public class HeapSort {
 	}
 
 	private void minHeapify(int[] numbers, int index) {
-		int parent = index;
-		while ((parent = (int) Math.floor((float) (parent - 1) / 2)) >= 0) {
+		int parent;
+		while ((parent = (int) Math.floor((float) (index - 1) / 2)) >= 0) {
 			if (numbers[index] < numbers[parent]) {
 				int temp = numbers[index];
 				numbers[index] = numbers[parent];
 				numbers[parent] = temp;
-				minHeapify(numbers, parent);
+				index = parent;
+				//minHeapify(numbers, parent);
+			} else {
+				break;
 			}
 		}
 	}
