@@ -7,14 +7,14 @@ public class BridgeBuildingDiv2 {
 		for (int mask = 0; mask < (1 << n); mask++) {
 			if (Integer.bitCount(mask) == K) {
 				int dist[][] = new int[2 * n][2 * n];
-				for (int i = 0; i < n; i++)
-					for (int j = 0; j < n; j++) {
+				for (int i = 0; i < 2*n; i++)
+					for (int j = 0; j < 2*n; j++) {
 						dist[i][j] = Integer.MAX_VALUE;
 					}
 				for (int i = 0; i < n; i++) {
 					if ((mask & (1 << i)) > 0) {
-						dist[i][i + 1] = 0;
-						dist[i + 1][i] = 0;
+						dist[i][i + n] = 0;
+						dist[i + n][i] = 0;
 					}
 				}
 				for (int i = 0; i < n - 1; i++) {
@@ -32,10 +32,11 @@ public class BridgeBuildingDiv2 {
 									+ dist[k][j]);
 						}
 				int max_dist = 0;
-				for (int i = 0; i < 2 * n; i++)
+				for (int i = 0; i < 2 * n; i++) {
 					for (int j = i + 1; j < 2 * n; j++) {
 						max_dist = Math.max(max_dist, dist[i][j]);
 					}
+				}
 				res = Math.min(res, max_dist);
 			}
 		}
