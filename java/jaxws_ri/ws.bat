@@ -1,1 +1,0 @@
-c:\users\minjun.wang\Downloads\jaxws-ri\bin\wsimport -b binding.xml -keep -Xnocompile -p client.ws -d src\main\java\ http://localhost:8080/mockito/HelloWs?wsdl
