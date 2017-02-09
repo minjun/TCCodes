@@ -1,0 +1,37 @@
+<command>
+  <messageType>E.Customer.Ordering.CPO.911.ValidatedTN.Command</messageType>
+  <commandType>Update</commandType>
+  <eventTimestamp>2017-01-03T22:34:34.0Z</eventTimestamp>
+  <correlationId>1122134-0</correlationId>
+  <messageSource>911Manager</messageSource>
+  <businessKeys>
+    <businessKey>
+      <entity>tnResponse</entity>
+      <name>westResponse</name>
+      <value>true</value>
+    </businessKey>
+    <businessKey>
+      <entity>cpn</entity>
+      <name>tnNumber</name>
+      <value>6618438501</value>
+    </businessKey>
+    <businessKey>
+      <entity>foc</entity>
+      <name>functionCode</name>
+      <value>I</value>
+    </businessKey>
+  </businessKeys>
+  <payload>
+    <ResponseDetail>
+      <CorrectedAddress>
+        <ZIP>12345</ZIP>
+        <STA>CO</STA>
+        <MCN>DENVER</MCN>
+        <STN>LONG VALLEY</STN>
+        <PRD>N</PRD>
+        <HNS>SW</HNS>
+        <HNO>2000</HNO>
+      </CorrectedAddress>
+    </ResponseDetail>
+  </payload>
+</command>
