@@ -12,9 +12,27 @@ from selenium.webdriver.common.by import By
 import time
 import json
 import datetime
+import requests
 
 def log(str):
 	print(datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y:") + str)
+
+	
+def send_notification_via_pushbullet(title, body):
+    """ Sending notification via pushbullet.
+        Args:
+            title (str) : title of text.
+            body (str) : Body of text.
+    """
+    data_send = {"type": "note", "title": title, "body": body}
+ 
+    ACCESS_TOKEN = 'o.ABm9hO6AqEuXH1tMBYcQhxe5lYpLTHZf'
+    resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
+                         headers={'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json'})
+    if resp.status_code != 200:
+        log('send failed')
+    else:
+        log('complete sending')
 
 def click(e):
 	e.click()
@@ -59,6 +77,10 @@ def qinglong():
 				strNew = text[idx:]
 				if strNew.find(u'【系统】游侠会：') != -1 or strNew.find(u'【系统】青龙会组织：') != -1:
 					driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
+					try:
+						send_notification_via_pushbullet("游侠青龙会",strNew)
+					except:
+						pass
 				strOld = text[-100:]
 				time.sleep(5)
 
@@ -89,8 +111,14 @@ def killzuihan():
 
 tc = 5
 driver = webdriver.Chrome()
+'''
 #driver.get("file:///Users/minjun/Downloads/TCCodes/python/test.html")
 #driver.find_element_by_class_name('prev').click()
+browser_url = r'C:\Documents and Settings\Administrator\Local Settings\Application Data\360Chrome\Chrome\Application\360chrome.exe'
+chromeOptions = webdriver.ChromeOptions()
+chromeOptions.binary_location = browser_url
+driver = webdriver.Chrome(chrome_options = chromeOptions)
+'''
 #url = "http://sword-direct16.yytou.cn:8083/?id=3704963&time=1488748381067&key=a79f77b6b4eb3de745dd3b2bedca88d2&s_line=1"
 url="http://sword-direct16.yytou.cn:8083/?id=3912631&time=1489857020294&key=e2f4aecfd1326bc476f67219ad5f537a&s_line=1&game_skin=3"
 driver.get(url)
@@ -98,5 +126,3 @@ while True:
 	#killzuihan()
 	qinglong()
 driver.close()
-
-
