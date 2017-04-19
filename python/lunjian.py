@@ -28,7 +28,6 @@ def clickIfExists(by, text, tc=1):
 		pass
 
 def qinglong():
-	#driver.execute_script("alert('qwer');")
 	success = False
 	strOld = ""
 	while True:
@@ -39,15 +38,19 @@ def qinglong():
 				success = True
 			except (TimeoutException,StaleElementReferenceException,UnexpectedAlertPresentException):
 				log('failed1, retrying...')
-				time.sleep(2)
+				time.sleep(5)
 				pass
 		else:		
 			while True:
 				try:
 					click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="系统"]'))))
-				except (TimeoutException,StaleElementReferenceException,UnexpectedAlertPresentException):
+				except (TimeoutException,StaleElementReferenceException):
 					log('failed2, retrying...')
-					time.sleep(2)
+					time.sleep(5)
+					success = False
+					break
+				except UnexpectedAlertPresentException:
+					time.sleep(5)
 					break
 				text = driver.find_element_by_class_name('out').text[-200:]
 				idx = 0
@@ -55,10 +58,7 @@ def qinglong():
 					idx = text.rfind(strOld) + len(strOld) + 1
 				strNew = text[idx:]
 				if strNew.find(u'【系统】游侠会：') != -1 or strNew.find(u'【系统】青龙会组织：') != -1:
-					try:
-						driver.execute_script("alert('"+strNew+"');")
-					except:
-						pass
+					driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
 				strOld = text[-100:]
 				time.sleep(5)
 
@@ -79,7 +79,7 @@ def killzuihan():
 			click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="进入关卡"]'))))
 			for d in path:
 				click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_click_exits_'+d))))
-		except TimeoutException,StaleElementReferenceException:
+		except (TimeoutException,StaleElementReferenceException):
 			return
 	while True:
 			clickIfExists(By.XPATH, '//button[text()="'+npc+'"]')
