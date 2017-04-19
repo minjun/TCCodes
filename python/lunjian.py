@@ -55,7 +55,10 @@ def qinglong():
 					idx = text.rfind(strOld) + len(strOld) + 1
 				strNew = text[idx:]
 				if strNew.find(u'【系统】游侠会：') != -1 or strNew.find(u'【系统】青龙会组织：') != -1:
-					driver.execute_script("alert('"+strNew+"');")
+					try:
+						driver.execute_script("alert('"+strNew+"');")
+					except:
+						pass
 				strOld = text[-100:]
 				time.sleep(5)
 
