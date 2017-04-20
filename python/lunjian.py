@@ -45,6 +45,25 @@ def clickIfExists(by, text, tc=1):
 	except (TimeoutException,StaleElementReferenceException):
 		pass
 
+def isCap(strNew):
+	ql = (u'明月鞋',u'月光宝甲衣',u'明月戒',u'明月帽',u'明月项链',u'明月手镯',
+		u'屠龙刀',u'倚天剑',u'冰魄银针',u'墨玄掌套',u'碧磷鞭',u'烈日棍',u'西毒蛇杖',
+		u'软猬甲',u'陨铁盾',u'孔雀氅',u'墨磷腰带',u'扬文',
+		u'烈日宝靴',u'日光宝甲衣',u'烈日宝戒',u'烈日帽',u'烈日宝链',u'烈日宝镯',
+		u'斩神刀',u'诛仙剑',u'暴雨梨花针',u'龙象拳套',u'七星鞭',u'残阳棍',u'伏虎杖',
+		u'玄铁宝甲',u'罗刹盾',u'披星戴月',u'钨金腰带',u'清刚',
+		u'斩龙宝靴',u'龙皮至尊衣',u'斩龙宝戒',u'斩龙帽',u'斩龙宝链',u'斩龙宝镯',
+		u'飞宇天怒刀',u'九天龙吟剑',u'小李飞刀',u'天罡掌套',u'乌金玄火鞭',u'开天宝棍',u'达摩杖',
+		u'龙骨宝甲',u'轩辕神盾',u'鎏金缦罗',u'天蚕围腰',u'龙鳞')
+	if strNew.find(u'【系统】游侠会：') != -1:
+		return True;
+	if strNew.find(u'【系统】青龙会组织：') != -1:
+		for ql1 in ql:
+			if strNew.find(ql1) != -1:
+				return True;
+		return False;
+	return False;
+
 def qinglong():
 	success = False
 	strOld = ""
@@ -75,10 +94,10 @@ def qinglong():
 				if strOld != "":
 					idx = text.rfind(strOld) + len(strOld) + 1
 				strNew = text[idx:]
-				if strNew.find(u'【系统】游侠会：') != -1 or strNew.find(u'【系统】青龙会组织：') != -1:
+				if isCap(strNew):
 					driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
 					try:
-						send_notification_via_pushbullet("游侠青龙会",strNew)
+						send_notification_via_pushbullet("您收到一条新消息！",strNew)
 					except:
 						pass
 				strOld = text[-100:]
