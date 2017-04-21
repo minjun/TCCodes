@@ -13,9 +13,10 @@ import time
 import json
 import datetime
 import requests
+import sys
 
 def log(str):
-	print(datetime.datetime.now().strftime("%I:%M%p on %B %d, %Y:") + str)
+	print(datetime.datetime.now().strftime("%m:%d %H:%M:%S ") + str)
 
 	
 def send_notification_via_pushbullet(title, body):
@@ -55,6 +56,8 @@ def isCap(strNew):
 		u'斩龙宝靴',u'龙皮至尊衣',u'斩龙宝戒',u'斩龙帽',u'斩龙宝链',u'斩龙宝镯',
 		u'飞宇天怒刀',u'九天龙吟剑',u'小李飞刀',u'天罡掌套',u'乌金玄火鞭',u'开天宝棍',u'达摩杖',
 		u'龙骨宝甲',u'轩辕神盾',u'鎏金缦罗',u'天蚕围腰',u'龙鳞')
+	if strNew[0:1] != '【':
+		log(strNew)
 	if strNew.find(u'【系统】游侠会：') != -1:
 		return True;
 	if strNew.find(u'【系统】青龙会组织：') != -1:
@@ -89,27 +92,22 @@ def qinglong():
 				except UnexpectedAlertPresentException:
 					time.sleep(5)
 					break
-				text = driver.find_element_by_class_name('out').text[-200:]
+				text = driver.find_element_by_class_name('out').text[-600:]
 				idx = 0
 				if strOld != "":
 					idx = text.rfind(strOld) + len(strOld) + 1
 				strNew = text[idx:]
-				if isCap(strNew):
-					driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
+				if len(strNew) > 0 and isCap(strNew):
+					#driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
 					try:
 						send_notification_via_pushbullet("您收到一条新消息！",strNew)
 					except:
 						pass
-				strOld = text[-100:]
+				strOld = text[-300:]
 				time.sleep(5)
 
 
-def killzuihan():
-	chapter = '第一章'
-	path = ('e','n','n')
-	npc = '醉汉'
-	pfm1 = '乾坤大挪移'
-	pfm2 = '易筋经神功'
+def killnpc(chapter, npc, path):
 	try:
 		driver.find_element_by_class_name('cmd_map')
 		log('already in place')
@@ -130,8 +128,6 @@ def killzuihan():
 			clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
 			clickIfExists(By.CLASS_NAME, 'prev')
 
-tc = 5
-driver = webdriver.Chrome()
 '''
 #driver.get("file:///Users/minjun/Downloads/TCCodes/python/test.html")
 #driver.find_element_by_class_name('prev').click()
@@ -140,13 +136,30 @@ chromeOptions = webdriver.ChromeOptions()
 chromeOptions.binary_location = browser_url
 driver = webdriver.Chrome(chrome_options = chromeOptions)
 '''
-#url = "http://sword-direct16.yytou.cn:8083/?id=3704963&time=1488748381067&key=a79f77b6b4eb3de745dd3b2bedca88d2&s_line=1"
-url="http://sword-direct16.yytou.cn:8083/?id=3912631&time=1489857020294&key=e2f4aecfd1326bc476f67219ad5f537a&s_line=1&game_skin=3"
-url_take="http://sword-direct16.yytou.cn:8083/?key=1ca170f824016f138db234aabcd4c404&id=3502846&name=take777&time=1490724173851&area=16&arg=2612541"
-url_nkgd1="http://sword-direct16.yytou.cn:8083/?id=3766773&time=1488748435257&key=1d07ac13bfe17ac32374a3b7fc67b4ac&s_line=1&arg=3704963"
-url_nkgd="http://sword-direct16.yytou.cn:8083/?id=3704963&time=1488748381067&key=a79f77b6b4eb3de745dd3b2bedca88d2&s_line=1"
+tc = 5
+id = ''
+pfm1 = '乾坤大挪移'
+pfm2 = '易筋经神功'
+task = 'qinglong'
+url="http://sword-direct16.yytou.cn:8083/?id=3996817&time=1489858143854&key=39c22dc86d6e92ead011c7ee4f8abd3e&s_line=1"
+if len(sys.argv) > 1:
+	id = sys.argv[1]
+	task = sys.argv[2]
+	if id == 'nkgd':
+		url="http://sword-direct16.yytou.cn:8083/?id=3704963&time=1488748381067&key=a79f77b6b4eb3de745dd3b2bedca88d2&s_line=1"
+	elif id == 'take':
+		url="http://sword-direct16.yytou.cn:8083/?key=1ca170f824016f138db234aabcd4c404&id=3502846&name=take777&time=1490724173851"
+	elif id == 'nkgd1':
+		url="http://sword-direct16.yytou.cn:8083/?id=3766773&time=1488748435257&key=1d07ac13bfe17ac32374a3b7fc67b4ac&s_line=1"
+		pfm1 = '无影毒阵'
+		pfm2 = '葵花宝典'
+driver = webdriver.Chrome()		
 driver.get(url)
 while True:
-	#killzuihan()
-	qinglong()
+	if task == 'zuihan':
+		killnpc('第一章','醉汉',('e','n','n'))
+	elif task == 'dipi':
+		killnpc('第二章','地痞', ('n','n','n','n'))
+	elif task == 'qinglong':
+		qinglong()
 driver.close()
