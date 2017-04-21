@@ -108,7 +108,8 @@ def killzuihan():
 	chapter = '第一章'
 	path = ('e','n','n')
 	npc = '醉汉'
-	pfm = '乾坤大挪移'
+	pfm1 = '乾坤大挪移'
+	pfm2 = '易筋经神功'
 	try:
 		driver.find_element_by_class_name('cmd_map')
 		log('already in place')
@@ -125,7 +126,8 @@ def killzuihan():
 	while True:
 			clickIfExists(By.XPATH, '//button[text()="'+npc+'"]')
 			clickIfExists(By.XPATH, '//button[text()="杀死"]')
-			clickIfExists(By.XPATH, '//span[text()="'+pfm+'"]')
+			clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
+			clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
 			clickIfExists(By.CLASS_NAME, 'prev')
 
 tc = 5
@@ -140,6 +142,9 @@ driver = webdriver.Chrome(chrome_options = chromeOptions)
 '''
 #url = "http://sword-direct16.yytou.cn:8083/?id=3704963&time=1488748381067&key=a79f77b6b4eb3de745dd3b2bedca88d2&s_line=1"
 url="http://sword-direct16.yytou.cn:8083/?id=3912631&time=1489857020294&key=e2f4aecfd1326bc476f67219ad5f537a&s_line=1&game_skin=3"
+url_take="http://sword-direct16.yytou.cn:8083/?key=1ca170f824016f138db234aabcd4c404&id=3502846&name=take777&time=1490724173851&area=16&arg=2612541"
+url_nkgd1="http://sword-direct16.yytou.cn:8083/?id=3766773&time=1488748435257&key=1d07ac13bfe17ac32374a3b7fc67b4ac&s_line=1&arg=3704963"
+url_nkgd="http://sword-direct16.yytou.cn:8083/?id=3704963&time=1488748381067&key=a79f77b6b4eb3de745dd3b2bedca88d2&s_line=1"
 driver.get(url)
 while True:
 	#killzuihan()
