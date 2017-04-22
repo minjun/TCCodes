@@ -16,7 +16,11 @@ import requests
 import sys
 
 def log(str):
-	print(datetime.datetime.now().strftime("%m:%d %H:%M:%S ") + str)
+	str = datetime.datetime.now().strftime("%m:%d %H:%M:%S ") + str
+	print(str)
+	f = open('lunijan.log','a')
+	f.write(str + '\n')
+	f.close()
 
 	
 def send_notification_via_pushbullet(title, body):
