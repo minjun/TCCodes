@@ -47,16 +47,19 @@ def clickIfExists(by, text, tc=1):
 		pass
 
 def isCap(strNew):
-	ql = (u'明月鞋',u'月光宝甲衣',u'明月戒',u'明月帽',u'明月项链',u'明月手镯',
+	ql = (
+		#u'明月鞋',u'月光宝甲衣',u'明月戒',u'明月帽',u'明月项链',u'明月手镯',
 		u'屠龙刀',u'倚天剑',u'冰魄银针',u'墨玄掌套',u'碧磷鞭',u'烈日棍',u'西毒蛇杖',
-		u'软猬甲',u'陨铁盾',u'孔雀氅',u'墨磷腰带',u'扬文',
-		u'烈日宝靴',u'日光宝甲衣',u'烈日宝戒',u'烈日帽',u'烈日宝链',u'烈日宝镯',
+		#u'软猬甲',u'陨铁盾',u'孔雀氅',u'墨磷腰带',u'扬文',
+		#u'烈日宝靴',u'日光宝甲衣',u'烈日宝戒',u'烈日帽',u'烈日宝链',u'烈日宝镯',
 		u'斩神刀',u'诛仙剑',u'暴雨梨花针',u'龙象拳套',u'七星鞭',u'残阳棍',u'伏虎杖',
-		u'玄铁宝甲',u'罗刹盾',u'披星戴月',u'钨金腰带',u'清刚',
-		u'斩龙宝靴',u'龙皮至尊衣',u'斩龙宝戒',u'斩龙帽',u'斩龙宝链',u'斩龙宝镯',
+		#u'玄铁宝甲',u'罗刹盾',u'披星戴月',u'钨金腰带',u'清刚',
+		#u'斩龙宝靴',u'龙皮至尊衣',u'斩龙宝戒',u'斩龙帽',u'斩龙宝链',u'斩龙宝镯',
 		u'飞宇天怒刀',u'九天龙吟剑',u'小李飞刀',u'天罡掌套',u'乌金玄火鞭',u'开天宝棍',u'达摩杖',
-		u'龙骨宝甲',u'轩辕神盾',u'鎏金缦罗',u'天蚕围腰',u'龙鳞')
-	if strNew[0:1] != '【':
+		#u'龙骨宝甲',u'轩辕神盾',u'鎏金缦罗',u'天蚕围腰',u'龙鳞',
+		u'明月',u'月光宝甲衣',u'烈日',u'日光宝甲衣',u'残雪',u'金丝宝甲衣',u'斩龙',u'龙皮至尊衣',
+		u'星河剑',u'血屠刀',u'霹雳拳套',u'生死符',u'玉清棍',u'疯魔杖',u'毒龙鞭')
+	if True or strNew[0:1] != '【':
 		log(strNew)
 	if strNew.find(u'【系统】游侠会：') != -1:
 		return True;
@@ -148,7 +151,7 @@ if len(sys.argv) > 1:
 	if id == 'nkgd':
 		url="http://sword-direct16.yytou.cn:8083/?id=3704963&time=1488748381067&key=a79f77b6b4eb3de745dd3b2bedca88d2&s_line=1"
 	elif id == 'take':
-		url="http://sword-direct16.yytou.cn:8083/?key=1ca170f824016f138db234aabcd4c404&id=3502846&name=take777&time=1490724173851"
+		url="http://sword-direct16.yytou.cn:8083/?key=1ca170f824016f138db234aabcd4c404&id=3502846&name=take777&time=1490724173851&s_line=1"
 	elif id == 'nkgd1':
 		url="http://sword-direct16.yytou.cn:8083/?id=3766773&time=1488748435257&key=1d07ac13bfe17ac32374a3b7fc67b4ac&s_line=1"
 		pfm1 = '无影毒阵'
