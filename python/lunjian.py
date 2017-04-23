@@ -49,7 +49,7 @@ def clickIfExists(by, text, tc=1):
 	try:
 		elem = WebDriverWait(driver, tc).until(EC.presence_of_element_located((by, text)))
 		elem.click()
-	except (TimeoutException,StaleElementReferenceException):
+	except (TimeoutException,StaleElementReferenceException,ElementNotVisibleException):
 		pass
 
 def isCap(strNew):
@@ -67,9 +67,9 @@ def isCap(strNew):
 		'星河剑','血屠刀','霹雳拳套','生死符','玉清棍','疯魔杖','毒龙鞭')
 	if True or strNew[0:1] != '【':
 		log(strNew)
-	if strNew.find('游侠会') != -1:
+	if strNew.find('【系统】游侠会：') != -1:
 		return True;
-	if strNew.find('青龙会组织') != -1:
+	if strNew.find('【系统】青龙会组织：') != -1:
 		for ql1 in ql:
 			if strNew.find(ql1) != -1:
 				return True;
