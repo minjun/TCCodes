@@ -6,6 +6,8 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.common.exceptions import UnexpectedAlertPresentException
+from selenium.common.exceptions import WebDriverException
+from selenium.common.exceptions import ElementNotVisibleException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
@@ -126,7 +128,7 @@ def killnpc(chapter, npc, path):
 			click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="进入关卡"]'))))
 			for d in path:
 				click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_click_exits_'+d))))
-		except (TimeoutException,StaleElementReferenceException):
+		except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
 			return
 	while True:
 			clickIfExists(By.XPATH, '//button[text()="'+npc+'"]')
@@ -169,4 +171,4 @@ while True:
 		killnpc('第二章','地痞', ('n','n','n','n'))
 	elif task == 'qinglong':
 		qinglong()
-driver.close()
+#driver.close()
