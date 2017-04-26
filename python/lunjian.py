@@ -24,22 +24,26 @@ def log(str):
     f.write(str + '\n')
     f.close()
 
-    
+send_times = 0
 def send_notification_via_pushbullet(title, body):
-    """ Sending notification via pushbullet.
-        Args:
-            title (str) : title of text.
-            body (str) : Body of text.
-    """
+    global send_times 
+    send_times = send_times + 1
+    if send_times > 5:
+        send_times = 0
+        log('send failed, aborting...')
+        return
     data_send = {"type": "note", "title": title, "body": body}
-
     ACCESS_TOKEN = 'o.ABm9hO6AqEuXH1tMBYcQhxe5lYpLTHZf'
     try:
         resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
                         headers={'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json'})
-    except:
-        log('send failed due to network issue')
-        return
+    except Exception as e:
+        print(e)
+        log('send failed ' + str(send_times))
+        time.sleep(5)
+        send_notification_via_pushbullet(title, body)
+        return;
+    send_times = 0
     if resp.status_code != 200:
         log('send failed')
     else:
