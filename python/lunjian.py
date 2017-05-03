@@ -72,7 +72,7 @@ def isCap(strNew):
         '飞宇天怒刀','九天龙吟剑','小李飞刀','天罡掌套','乌金玄火鞭','开天宝棍','达摩杖',
         #'龙骨宝甲','轩辕神盾','鎏金缦罗','天蚕围腰','龙鳞',
         '明月','月光宝甲衣','烈日','日光宝甲衣','残雪','金丝宝甲衣','斩龙','龙皮至尊甲衣',
-        '星河剑','血屠刀','霹雳拳套','生死符','玉清棍','疯魔杖','毒龙鞭')
+        '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭')
     if True or strNew[0:1] != '【':
         log(strNew)
     if strNew.find('【系统】游侠会：') != -1:
@@ -153,9 +153,10 @@ driver = webdriver.Chrome(chrome_options = chromeOptions)
 tc = 5
 id = ''
 pfm1 = '乾坤大挪移'
-pfm2 = '易筋经神功'
+pfm2 = '混元一气功'
 task = 'qinglong'
 url="http://sword-direct16.yytou.cn:8083/?id=3996817&time=1489858143854&key=39c22dc86d6e92ead011c7ee4f8abd3e&s_line=1"
+url="http://res.yytou.cn/site/sword/sword.html?key=7cc641d692a843b3cf1527b28e31f8ac&id=3996817&name=leid2&time=1493780769445&area=16&port=8083&type=1&arg=2757918"
 if len(sys.argv) > 1:
     id = sys.argv[1]
     task = sys.argv[2]
