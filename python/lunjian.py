@@ -141,6 +141,9 @@ def killnpc(chapter, npc, path):
             clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
             clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
             clickIfExists(By.CLASS_NAME, 'prev')
+def key():
+    clickIfExists(By.XPATH, '//span[text()="银钥匙"]', 10)
+    clickIfExists(By.XPATH, '//button[text()="捡起"]', 10)
 
 '''
 #driver.get("file:///Users/minjun/Downloads/TCCodes/python/test.html")
@@ -156,7 +159,7 @@ pfm1 = '乾坤大挪移'
 pfm2 = '混元一气功'
 task = 'qinglong'
 url="http://sword-direct16.yytou.cn:8083/?id=3996817&time=1489858143854&key=39c22dc86d6e92ead011c7ee4f8abd3e&s_line=1"
-url="http://res.yytou.cn/site/sword/sword.html?key=7cc641d692a843b3cf1527b28e31f8ac&id=3996817&name=leid2&time=1493780769445&area=16&port=8083&type=1&arg=2757918"
+#url="http://res.yytou.cn/site/sword/sword.html?key=7cc641d692a843b3cf1527b28e31f8ac&id=3996817&name=leid2&time=1493780769445&area=16&port=8083&type=1&arg=2757918"
 if len(sys.argv) > 1:
     id = sys.argv[1]
     task = sys.argv[2]
@@ -177,4 +180,6 @@ while True:
         killnpc('第二章','地痞', ('n','n','n','n'))
     elif task == 'qinglong':
         qinglong()
+    elif task == 'key':
+        key()
 #driver.close()
