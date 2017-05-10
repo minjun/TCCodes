@@ -25,31 +25,6 @@ def log(str):
     f.write(str + '\n')
     f.close()
 
-send_times = 0
-def send_notification_via_pushbullet(title, body):
-    global send_times 
-    send_times = send_times + 1
-    if send_times > 5:
-        send_times = 0
-        log('send failed, aborting...')
-        return
-    data_send = {"type": "note", "title": title, "body": body}
-    ACCESS_TOKEN = 'o.ABm9hO6AqEuXH1tMBYcQhxe5lYpLTHZf'
-    try:
-        resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
-                        headers={'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json'})
-    except Exception as e:
-        print(e)
-        log('send failed ' + str(send_times))
-        time.sleep(5)
-        send_notification_via_pushbullet(title, body)
-        return;
-    send_times = 0
-    if resp.status_code != 200:
-        log('send failed')
-    else:
-        log('complete sending')
-
 def click(e):
     e.click()
     time.sleep(0.5)
@@ -116,8 +91,7 @@ def qinglong():
                     idx = text.rfind(strOld) + len(strOld) + 1
                 strNew = text[idx:]
                 if len(strNew) > 0 and isCap(strNew):
-                    #driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
-                    send_notification_via_pushbullet("您收到一条新消息！",strNew)
+                    driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
                 strOld = text[-300:]
                 time.sleep(5)
 
@@ -155,23 +129,11 @@ chromeOptions.binary_location = browser_url
 driver = webdriver.Chrome(chrome_options = chromeOptions)
 '''
 tc = 5
-id = ''
 pfm1 = '乾坤大挪移'
 pfm2 = '混元一气功'
 task = 'qinglong'
-url="http://sword-direct16.yytou.cn:8083/?id=3996817&time=1489858143854&key=39c22dc86d6e92ead011c7ee4f8abd3e&s_line=1"
-#url="http://res.yytou.cn/site/sword/sword.html?key=7cc641d692a843b3cf1527b28e31f8ac&id=3996817&name=leid2&time=1493780769445&area=16&port=8083&type=1&arg=2757918"
-if len(sys.argv) > 1:
-    id = sys.argv[1]
-    task = sys.argv[2]
-    if id == 'nkgd':
-        url="http://sword-direct16.yytou.cn:8083/?id=3704963&time=1488748381067&key=a79f77b6b4eb3de745dd3b2bedca88d2&s_line=1"
-    elif id == 'take':
-        url="http://sword-direct16.yytou.cn:8083/?key=1ca170f824016f138db234aabcd4c404&id=3502846&name=take777&time=1490724173851&s_line=1"
-    elif id == 'nkgd1':
-        url="http://sword-direct16.yytou.cn:8083/?id=3766773&time=1488748435257&key=1d07ac13bfe17ac32374a3b7fc67b4ac&s_line=1"
-        pfm1 = '无影毒阵'
-        pfm2 = '葵花宝典'
+url = sys.argv[1]
+task = sys.argv[2]
 driver = webdriver.Chrome()        
 driver.get(url)
 while True:
