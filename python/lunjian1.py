@@ -132,8 +132,12 @@ tc = 5
 pfm1 = '乾坤大挪移'
 pfm2 = '混元一气功'
 task = 'qinglong'
-url = sys.argv[1]
-task = sys.argv[2]
+if len(sys.argv) > 1:
+    url = sys.argv[1]
+    if len(sys.argv) > 2:
+        task = sys.argv[2]
+else:
+    sys.exit()
 driver = webdriver.Chrome()        
 driver.get(url)
 while True:

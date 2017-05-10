@@ -14,4 +14,4 @@ setup(  name = "guifoo",
         version = "0.1",
         description = "My GUI application!",
         options = {"build_exe": build_exe_options},
-        executables = [Executable("lunjian.py", base=base)])
+        executables = [Executable("lunjian1.py", base=base)])
