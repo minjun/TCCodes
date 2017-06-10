@@ -74,18 +74,17 @@ def isCap(strNew):
         #'龙骨宝甲','轩辕神盾','鎏金缦罗','天蚕围腰','龙鳞',
         '明月','月光宝甲衣','烈日','日光宝甲衣','残雪','金丝宝甲衣','斩龙','龙皮至尊甲衣',
         '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
-        '小还丹','狂暴丹','乾坤丹')
-    if True or strNew[0:1] != '【':
-        log(strNew)
-    if strNew.find('【系统】段老大对着') != -1:
-        return True;
-    if strNew.find('【系统】游侠会：') != -1:
-        return True;
+        '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝')
+    key = ('官府：二娘','官府：段老大','段老大','游侠会：')
+    #if True or strNew[0:1] != '【':
+        #log(strNew)
+    for key1 in key:
+        if strNew.find('【系统】' + key1) != -1:
+            return True;
     if strNew.find('【系统】青龙会组织：') != -1:
         for ql1 in ql:
             if strNew.find(ql1) != -1:
                 return True;
-        return False;
     return False;
 
 def qinglong():
@@ -119,6 +118,7 @@ def qinglong():
                     idx = text.rfind(strOld) + len(strOld) + 1
                 strNew = text[idx:]
                 if len(strNew) > 0 and isCap(strNew):
+                    log(strNew)
                     #driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
                     send_notification_via_pushbullet("您收到一条新消息！",strNew)
                 strOld = text[-300:]
