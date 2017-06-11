@@ -75,7 +75,8 @@ def isCap(strNew):
         '明月','月光宝甲衣','烈日','日光宝甲衣','残雪','金丝宝甲衣','斩龙','龙皮至尊甲衣',
         '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
         '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝')
-    key = ('官府：二娘','官府：段老大','段老大','游侠会：')
+    #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
+    key = ('段老大','游侠会：')
     #if True or strNew[0:1] != '【':
         #log(strNew)
     for key1 in key:
@@ -143,7 +144,7 @@ def killnpc(chapter, npc, path):
             clickIfExists(By.XPATH, '//button[text()="'+npc+'"]')
             clickIfExists(By.XPATH, '//button[text()="杀死"]')
             clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
-            clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
+            #clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
             clickIfExists(By.CLASS_NAME, 'prev')
 def key():
     clickIfExists(By.XPATH, '//span[text()="银钥匙"]', 10)
@@ -161,20 +162,17 @@ tc = 5
 id = ''
 pfm1 = '乾坤大挪移'
 task = 'qinglong'
-url="http://sword-direct16.yytou.cn:8083/?id=3996817&time=1489858143854&key=39c22dc86d6e92ead011c7ee4f8abd3e&s_line=1"
-#url="http://res.yytou.cn/site/sword/sword.html?key=7cc641d692a843b3cf1527b28e31f8ac&id=3996817&name=leid2&time=1493780769445&area=16&port=8083&type=1&arg=2757918"
+url="http://sword-direct16.yytou.cn:8083/?id=4423811&time=1497125692731&key=7099871afff97ccdaa68f8a98de3b372&s_line=1"
+#url="http://res.yytou.cn/site/sword/sword.html?key=7099871afff97ccdaa68f8a98de3b372&id=4423811&name=yekai2&time=1497125692731&area=16&port=8083&arg=3704963"
 if len(sys.argv) > 1:
     id = sys.argv[1]
     task = sys.argv[2]
     if id == 'nkgd':
         url="http://sword-direct16.yytou.cn:8083/?id=3704963&time=1488748381067&key=a79f77b6b4eb3de745dd3b2bedca88d2&s_line=1"
-        pfm2 = '紫霞神功'
     elif id == 'take':
         url="http://sword-direct16.yytou.cn:8083/?key=1ca170f824016f138db234aabcd4c404&id=3502846&name=take777&time=1490724173851&s_line=1"
-        pfm2 = '葵花宝典'
     elif id == 'nkgd1':
         url="http://sword-direct16.yytou.cn:8083/?id=3766773&time=1488748435257&key=1d07ac13bfe17ac32374a3b7fc67b4ac&s_line=1"
-        pfm2 = '葵花宝典'
 driver = webdriver.Chrome()        
 driver.get(url)
 while True:
