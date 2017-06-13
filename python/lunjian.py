@@ -69,24 +69,126 @@ def isCap(strNew):
         #'烈日宝靴','日光宝甲衣','烈日宝戒','烈日帽','烈日宝链','烈日宝镯',
         '斩神刀','诛仙剑','暴雨梨花针','龙象拳套','七星鞭','残阳棍','伏虎杖',
         #'玄铁宝甲','罗刹盾','披星戴月','钨金腰带','清刚',
-        #'斩龙宝靴','龙皮至尊衣','斩龙宝戒','斩龙帽','斩龙宝链','斩龙宝镯',
+        #'斩龙宝靴','龙皮至尊甲衣','斩龙宝戒','斩龙帽','斩龙宝链','斩龙宝镯',
         '飞宇天怒刀','九天龙吟剑','小李飞刀','天罡掌套','乌金玄火鞭','开天宝棍','达摩杖',
         #'龙骨宝甲','轩辕神盾','鎏金缦罗','天蚕围腰','龙鳞',
         '明月','月光宝甲衣','烈日','日光宝甲衣','残雪','金丝宝甲衣','斩龙','龙皮至尊甲衣',
         '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
         '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝')
+    qlsp = (
+        '斩龙宝靴','斩龙宝戒','斩龙帽','斩龙宝镯','九天龙吟剑','龙骨宝甲','轩辕神盾','鎏金缦罗','天蚕围腰','龙鳞'
+        )
     #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
     key = ('段老大','游侠会：')
     #if True or strNew[0:1] != '【':
         #log(strNew)
+    h = datetime.datetime.now().time().hour
     for key1 in key:
         if strNew.find('【系统】' + key1) != -1:
-            return True;
+            log(strNew)
+            return h > 5
     if strNew.find('【系统】青龙会组织：') != -1:
-        for ql1 in ql:
+        for ql1 in qlsp:
             if strNew.find(ql1) != -1:
+                log(strNew)
                 return True;
+        for ql1 in ql:
+            if strNew.find(ql1) != -1 :
+                log(strNew)
+                return h > 5
     return False;
+
+def ql_getNext():
+    global ql_idx,ql_path,ql_npc,ql_chapter;
+    ql_idx = ql_idx + 1
+    if ql_idx == 1:
+        ql_path = ('e','n','e','e','e','e','n')
+        ql_npc = '柳绘心'
+        ql_chapter = '第一章'
+    elif ql_idx == 2:
+        ql_path = ('e','n','n','w')
+        ql_npc = '王铁匠'
+        ql_chapter = '第一章'
+    elif ql_idx == 3:
+        ql_path = ('e','n','n','n','w')
+        ql_npc = '杨掌柜'
+        ql_chapter = '第一章'
+    elif ql_idx == 4:
+        ql_path = ('n','n','e')
+        ql_npc = '客商'
+        ql_chapter = '第二章'
+    elif ql_idx == 5:
+        ql_path = ('n','n','n','n','w','s','w')
+        ql_npc = '柳小花'
+        ql_chapter = '第二章'
+    elif ql_idx == 6:
+        ql_path = ('n','n','n','n','n','n','n')
+        ql_npc = '卖花姑娘'
+        ql_chapter = '第二章'
+    elif ql_idx == 7:
+        ql_path = ('n','n','n','n','n','n','n','e')
+        ql_npc = '刘守财'
+        ql_chapter = '第二章'
+    elif ql_idx == 8:
+        ql_path = ('s','s','e')
+        ql_npc = '方老板'
+        ql_chapter = '第三章'
+    elif ql_idx == 9:
+        ql_path = ('s','s','w')
+        ql_npc = '朱老伯'
+        ql_chapter = '第三章'
+    elif ql_idx == 10:
+        ql_path = ('s','s','w','n')
+        ql_npc = '方寡妇'
+        ql_chapter = '第三章'
+    else:
+        ql_idx = 0
+        ql_getNext()
+
+def check_exists_by_xpath(xpath, bClick=True):
+    try:
+        elem = driver.find_element_by_xpath(xpath)
+        if bClick:
+            click(elem)
+    except (NoSuchElementException,ElementNotVisibleException):
+        return False
+    return True
+
+def ql():
+    global ql_idx,ql_path,ql_npc,ql_chapter;
+    if check_exists_by_xpath('//button[text()="确定"]'):
+        return;
+    if check_exists_by_xpath('//button[@class="cmd_out_map"]'):
+        return
+    if check_exists_by_xpath('//button[@class="cmd_combat_byebye"]'): 
+        return
+    if check_exists_by_xpath('//img[@class="prev"]'):
+        return
+    if not check_exists_by_xpath('//button[@class="cmd_change_line"]',  False):
+        return
+    ql_getNext()
+    print('here')
+    try:
+        click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_main_jh'))))
+        click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="其他章节"]'))))
+        click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//span[text()="'+ql_chapter+'"]'))))            
+        click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="进入关卡"]'))))
+        for d in ql_path:
+            click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_click_exits_'+d))))
+    except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
+        return
+    times = 0
+    while times < 10:
+        print(times)
+        times = times + 1
+        if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or check_exists_by_xpath('//span[text()="玄阴符兵"]', False):
+            check_exists_by_xpath('//button[@class="cmd_combat_byebye"]')
+            check_exists_by_xpath('//img[@class="prev"]')
+            return
+        check_exists_by_xpath('//span[text()="'+ql_npc+'"]')
+        check_exists_by_xpath(By.XPATH, '//button[text()="杀死"]')
+        check_exists_by_xpath(By.XPATH, '//span[text()="茅山道术"]')
+        time.sleep(2)
 
 def qinglong():
     success = False
@@ -119,7 +221,6 @@ def qinglong():
                     idx = text.rfind(strOld) + len(strOld) + 1
                 strNew = text[idx:]
                 if len(strNew) > 0 and isCap(strNew):
-                    log(strNew)
                     #driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
                     send_notification_via_pushbullet("您收到一条新消息！",strNew)
                 strOld = text[-300:]
@@ -158,6 +259,10 @@ chromeOptions = webdriver.ChromeOptions()
 chromeOptions.binary_location = browser_url
 driver = webdriver.Chrome(chrome_options = chromeOptions)
 '''
+ql_idx = 0
+ql_path = ()
+ql_npc = ''
+ql_chapter = ''
 tc = 5
 id = ''
 pfm1 = '乾坤大挪移'
@@ -173,6 +278,9 @@ if len(sys.argv) > 1:
         url="http://sword-direct16.yytou.cn:8083/?key=1ca170f824016f138db234aabcd4c404&id=3502846&name=take777&time=1490724173851&s_line=1"
     elif id == 'nkgd1':
         url="http://sword-direct16.yytou.cn:8083/?id=3766773&time=1488748435257&key=1d07ac13bfe17ac32374a3b7fc67b4ac&s_line=1"
+    elif id == 'yekai':
+        url = "http://res.yytou.cn/site/sword/sword.html?key=9e9d0635f856e9970488b74ef4d3e002&id=3766452&time=1497125445931&area=16&port=8083"
+        url="http://sword-direct16.yytou.cn:8083/?id=3766452&time=1497125445931&key=9e9d0635f856e9970488b74ef4d3e002&s_line=1"
 driver = webdriver.Chrome()        
 driver.get(url)
 while True:
@@ -184,4 +292,7 @@ while True:
         qinglong()
     elif task == 'key':
         key()
+    elif task == 'ql':
+        ql()
+        time.sleep(1)
 #driver.close()
