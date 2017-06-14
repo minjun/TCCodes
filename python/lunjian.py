@@ -93,7 +93,7 @@ def isCap(strNew):
                 log(strNew)
                 return True;
         for ql1 in ql:
-            if strNew.find(ql1) != -1 :
+            if strNew.find(ql1) != -1:
                 log(strNew)
                 return h > 6 and h < 23
     return False;
