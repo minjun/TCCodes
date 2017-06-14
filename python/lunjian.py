@@ -34,7 +34,7 @@ def send_notification_via_pushbullet(title, body):
         log('send failed, aborting...')
         return
     data_send = {"type": "note", "title": title, "body": body}
-    ACCESS_TOKEN = 'o.0CuCyQ9NysaI9nNefjZstbIPADUqiuSs'
+    ACCESS_TOKEN = 'o.qw2oAMucRXoED8jFqwf0wmPjk6cFCh19'
     try:
         resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
                         headers={'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json'})
@@ -86,7 +86,7 @@ def isCap(strNew):
     for key1 in key:
         if strNew.find('【系统】' + key1) != -1:
             log(strNew)
-            return h > 5
+            return h > 6 and h < 23
     if strNew.find('【系统】青龙会组织：') != -1:
         for ql1 in qlsp:
             if strNew.find(ql1) != -1:
@@ -95,7 +95,7 @@ def isCap(strNew):
         for ql1 in ql:
             if strNew.find(ql1) != -1 :
                 log(strNew)
-                return h > 5
+                return h > 6 and h < 23
     return False;
 
 def ql_getNext():
