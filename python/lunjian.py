@@ -153,12 +153,15 @@ def check_exists_by_xpath(xpath, bClick=True):
         elem = driver.find_element_by_xpath(xpath)
         if bClick:
             click(elem)
+            time.sleep(0.5)
     except (NoSuchElementException,ElementNotVisibleException,WebDriverException):
         return False
     return True
 
 def ql():
     global ql_idx,ql_path,ql_npc,ql_chapter;
+    if check_exists_by_xpath('//button[text()="进入关卡"]'):
+        return
     if check_exists_by_xpath('//button[text()="确定"]'):
         return;
     if check_exists_by_xpath('//img[@class="prev"]'):
