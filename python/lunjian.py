@@ -184,7 +184,7 @@ def ql():
         return
     times = 0
     time.sleep(1)
-    while times < 10:
+    while times < 20:
         times = times + 1
         if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or check_exists_by_xpath('//span[text()="玄阴符兵"]', False):
             check_exists_by_xpath('//button[@class="cmd_combat_byebye"]')
