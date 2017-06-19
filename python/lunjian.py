@@ -161,11 +161,11 @@ def ql():
     global ql_idx,ql_path,ql_npc,ql_chapter;
     if check_exists_by_xpath('//button[text()="确定"]'):
         return;
+    if check_exists_by_xpath('//img[@class="prev"]'):
+        return
     if check_exists_by_xpath('//button[@class="cmd_out_map"]'):
         return
     if check_exists_by_xpath('//button[@class="cmd_combat_byebye"]'): 
-        return
-    if clickIfExists(By.CLASS_NAME, 'prev'):
         return
     if not check_exists_by_xpath('//button[@class="cmd_change_line"]',  False):
         return
@@ -186,7 +186,9 @@ def ql():
             check_exists_by_xpath('//button[@class="cmd_combat_byebye"]')
             check_exists_by_xpath('//img[@class="prev"]')
             return
-        time.sleep(0.5)
+        time.sleep(1)
+        if check_exists_by_xpath('//button[contains(text(),"的尸体")]', False):
+            break
         if not check_exists_by_xpath('//span[text()="'+ql_npc+'"]'):
             break
         time.sleep(1)
@@ -206,20 +208,21 @@ def idle1(inc):
     global schedule,schedule_time
     now = datetime.datetime.now()
     time = now.time()
-    if time > datetime.time(3, 59, 30) and time < datetime.time(4,0,0) and now - datetime.timedelta(seconds = 10) > schedule_time:
-        schedule_time = now
+    if time > datetime.time(3, 59, 30):
         buff()
     elif now - datetime.timedelta(minutes = 10) > schedule_time:
         schedule_time = now
         exp()
     else:
+        clickIfExists(By.CLASS_NAME, 'prev')
         pass
     schedule.enter(inc,0, idle1, (inc,))
     
 def exp():
     try:
-        click(WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_main_quest'))))
-        time.sleep(1)
+        if not check_exists_by_xpath('//img[@class="prev"'):
+            click(WebDriverWait(driver, 5).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_main_quest'))))
+            time.sleep(1)
         while True:
             if not clickIfExists(By.XPATH,'//span[text()="奖励"]'):
                 break;
@@ -264,45 +267,51 @@ def qinglong():
                     send_notification_via_pushbullet("您收到一条新消息！",strNew)
                 strOld = text[-300:]
                 time.sleep(5)
-buff_done = False
+
 def buff():
-    global buff_done
-    buff_done = False
     while True:
-        if buff_done and check_exists_by_xpath('//button[@class="cmd_change_line"]',  False):
-            break
-        buff1() 
+        if datetime.datetime.now().time() > datetime.time(4,0,30):
+            time.sleep(1)
+            if check_exists_by_xpath('//button[@class="cmd_change_line"]',  False):
+                break
+            if check_exists_by_xpath('//button[text()="确定"]'):
+                continue;
+            if check_exists_by_xpath('//button[@class="cmd_out_map"]'):
+                continue
+            if check_exists_by_xpath('//button[@class="cmd_combat_byebye"]'): 
+                continue
+            if check_exists_by_xpath('//img[@class="prev"]'):
+                continue
+        else:
+            buff1()
 
 def buff1():
-    global buff_done
     if check_exists_by_xpath('//button[text()="确定"]'):
-        return;
-    if check_exists_by_xpath('//button[@class="cmd_out_map"]'):
         return
+    '''
     if check_exists_by_xpath('//button[@class="cmd_combat_byebye"]'): 
         return
+    '''
     if check_exists_by_xpath('//img[@class="prev"]'):
         return
+    print('buff1')
+    if not check_exists_by_xpath('//button[@class="cmd_out_map"]', False):
+        try:
+            click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_main_jh'))))
+            click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="其他章节"]'))))
+            click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//span[text()="第一章"]'))))
+            click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="进入关卡"]'))))
+        except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
+            return
     try:
-        click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_main_jh'))))
-        click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="其他章节"]'))))
-        click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//span[text()="第一章"]'))))
-        click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="进入关卡"]'))))
         clickIfExists(By.XPATH, '//button[text()="店小二"]')
         clickIfExists(By.XPATH, '//button[text()="比试"]')
-        count = 0
-        while count < 2:
-            count = count + 1
-            clickIfExists(By.XPATH, '//span[text()="混元一气功"]')
-            time.sleep(2)
-            if id == 'take':
-                clickIfExists(By.XPATH, '//span[text()="葵花宝典"]')
-            else:
-                clickIfExists(By.XPATH, '//span[text()="紫霞神功"]')
-            time.sleep(2)
-            clickIfExists(By.XPATH, '//span[text()="天邪神功"]')
-            time.sleep(2)
-        buff_done = True
+        clickIfExists(By.XPATH, '//span[text()="混元一气功"]')
+        if id == 'take':
+            clickIfExists(By.XPATH, '//span[text()="葵花宝典"]')
+        else:
+            clickIfExists(By.XPATH, '//span[text()="紫霞神功"]')
+        clickIfExists(By.XPATH, '//span[text()="天邪神功"]')
     except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
         return
        
@@ -374,10 +383,9 @@ while True:
         key()
     elif task == 'ql':
         ql()
-        time.sleep(2)
+        time.sleep(1)
     elif task == 'idle':
         idle(5)
         #buff()
         #exp()
-        #time.sleep(5)
 #driver.close()
