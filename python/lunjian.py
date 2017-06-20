@@ -182,17 +182,17 @@ def ql():
             click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_click_exits_'+d))))
     except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
         return
-    times = 0
     time.sleep(1)
     if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
         return
-    clickIfExists(By.XPATH, '//button[text()="杀死"]')
-    while times < 5:
+    times = 0
+    while times < 10:
         times = times + 1
         if check_exists_by_xpath('//span[text()="金甲符兵"]', False):
             check_exists_by_xpath('//button[@class="cmd_combat_byebye"]')
             check_exists_by_xpath('//img[@class="prev"]')
             return
+        check_exists_by_xpath('//button[text()="杀死"]')
         clickIfExists(By.XPATH, '//span[text()="茅山道术"]')
 
 schedule = sched.scheduler(time.time, time.sleep)
