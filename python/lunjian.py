@@ -34,7 +34,7 @@ def send_notification_via_pushbullet(title, body):
         send_times = 0
         log('send failed, aborting...')
         return
-    data_send = {"type": "note", "title": title, "body": body}
+    data_send = {"type": "note", "title": datetime.datetime.now().strftime("%H:%M:%S ") + title, "body": body}
     ACCESS_TOKEN = 'o.qw2oAMucRXoED8jFqwf0wmPjk6cFCh19'
     try:
         resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
@@ -184,21 +184,16 @@ def ql():
         return
     times = 0
     time.sleep(1)
-    while times < 20:
+    if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
+        return
+    clickIfExists(By.XPATH, '//button[text()="杀死"]')
+    while times < 5:
         times = times + 1
-        if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or check_exists_by_xpath('//span[text()="玄阴符兵"]', False):
+        if check_exists_by_xpath('//span[text()="金甲符兵"]', False):
             check_exists_by_xpath('//button[@class="cmd_combat_byebye"]')
             check_exists_by_xpath('//img[@class="prev"]')
             return
-        if check_exists_by_xpath('//button[contains(text(),"的尸体")]', False):
-            break
-        if not check_exists_by_xpath('//span[text()="'+ql_npc+'"]'):
-            break
-        time.sleep(0.5)
-        clickIfExists(By.XPATH, '//button[text()="杀死"]')
-        time.sleep(0.5)
         clickIfExists(By.XPATH, '//span[text()="茅山道术"]')
-        time.sleep(0.5)
 
 schedule = sched.scheduler(time.time, time.sleep)
 schedule_time = datetime.datetime.now() - datetime.timedelta(hours=1)
