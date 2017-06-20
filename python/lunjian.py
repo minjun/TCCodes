@@ -194,6 +194,7 @@ def ql():
             return
         check_exists_by_xpath('//button[text()="杀死"]')
         clickIfExists(By.XPATH, '//span[text()="茅山道术"]')
+    ql_idx = ql_idx - 1
 
 schedule = sched.scheduler(time.time, time.sleep)
 schedule_time = datetime.datetime.now() - datetime.timedelta(hours=1)
