@@ -192,8 +192,10 @@ def ql():
             check_exists_by_xpath('//button[@class="cmd_combat_byebye"]')
             check_exists_by_xpath('//img[@class="prev"]')
             return
-        check_exists_by_xpath('//button[text()="杀死"]')
+        if not check_exists_by_xpath('//button[text()="杀死"]'):
+            time.sleep(1)
         clickIfExists(By.XPATH, '//span[text()="茅山道术"]')
+
     ql_idx = ql_idx - 1
 
 schedule = sched.scheduler(time.time, time.sleep)
