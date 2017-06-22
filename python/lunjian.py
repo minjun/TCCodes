@@ -183,8 +183,13 @@ def ql():
     except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
         return
     time.sleep(1)
-    if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
+    if check_exists_by_xpath('//span[text()="金甲符兵"]', False):
         return
+    if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="流寇" or text()="剧盗" or text()="云老四" or text()="岳老三"]]'):
+        if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
+            return
+    #if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
+        #return
     times = 0
     while times < 10:
         times = times + 1
