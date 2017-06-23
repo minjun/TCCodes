@@ -219,7 +219,7 @@ def idle1(inc):
     global schedule,schedule_time
     now = datetime.datetime.now()
     time = now.time()
-    if time > datetime.time(3, 59, 30):
+    if time > datetime.time(3, 59, 40):
         buff()
     elif now - datetime.timedelta(minutes = 10) > schedule_time:
         schedule_time = now
