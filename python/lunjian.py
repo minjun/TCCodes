@@ -79,7 +79,7 @@ def isCap(strNew):
         '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
         '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝')
     qlsp = (
-        '斩龙宝靴','斩龙宝戒','斩龙帽','斩龙宝镯','九天龙吟剑','龙骨宝甲','轩辕神盾','鎏金缦罗','天蚕围腰','龙鳞'
+        '斩龙宝靴','斩龙宝戒','斩龙帽','九天龙吟剑'
         )
     #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
     key = ('段老大','游侠会：')
@@ -183,7 +183,12 @@ def ql():
     except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
         return
     time.sleep(1)
-    if check_exists_by_xpath('//span[text()="金甲符兵"]', False):
+    player = 0
+    try:
+        player = len(driver.find_elements_by_xpath('//button[contains(@onclick,"score")]'))
+    except (NoSuchElementException,ElementNotVisibleException,WebDriverException):
+        pass
+    if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or player > 2:
         return
     if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="流寇" or text()="剧盗" or text()="云老四" or text()="岳老三"]]'):
         if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
@@ -338,7 +343,7 @@ def buff1():
                 click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="如来神掌"]'))))
             else:
                 click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH,  '//span[text()="九天龙吟剑法"]'))))
-        time.sleep(2)
+        time.sleep(1)
     except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
         return
 
