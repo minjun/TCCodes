@@ -219,7 +219,7 @@ def idle1(inc):
     global schedule,schedule_time
     now = datetime.datetime.now()
     time = now.time()
-    if time > datetime.time(3, 59, 40):
+    if time > datetime.time(3, 59, 30):
         buff()
     elif now - datetime.timedelta(minutes = 10) > schedule_time:
         schedule_time = now
@@ -285,7 +285,7 @@ def buff():
     buff_times = 0
     while True:
         if datetime.datetime.now().time() > datetime.time(4,0,30):
-            time.sleep(1)
+            #time.sleep(1)
             if check_exists_by_xpath('//button[@class="cmd_change_line"]',  False):
                 break
             if check_exists_by_xpath('//button[text()="确定"]'):
@@ -324,10 +324,12 @@ def buff1():
         try:
             click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="店小二"]'))))
             click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="比试"]'))))
-            click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[@class="cmd_combat_auto_fight"]'))))
+            #click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[@class="cmd_combat_no_auto_fight"]'))))
         except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
             return
     try:
+        check_exists_by_xpath('//button[@class="cmd_combat_no_auto_fight"]')
+        '''
         tc1 = 1
         if buff_times == 1:
             click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="混元一气功"]'))))
@@ -344,6 +346,7 @@ def buff1():
             else:
                 click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH,  '//span[text()="九天龙吟剑法"]'))))
         time.sleep(1)
+        '''
     except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
         return
 
