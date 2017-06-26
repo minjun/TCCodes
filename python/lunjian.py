@@ -195,6 +195,7 @@ def ql():
             return
     #if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
         #return
+    check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
     times = 0
     while times < 10:
         times = times + 1
@@ -210,16 +211,19 @@ def ql():
 
 schedule = sched.scheduler(time.time, time.sleep)
 schedule_time = datetime.datetime.now() - datetime.timedelta(hours=1)
+timeStart = datetime.time(3, 59, 30)
+timeEnd   = datetime.time(4,  0, 30)
+
 def idle(inc):
     global sechedule
     schedule.enter(0,0, idle1, (inc,))
     schedule.run()
 
 def idle1(inc):
-    global schedule,schedule_time
+    global schedule,schedule_time,timeStart,timeEnd
     now = datetime.datetime.now()
     time = now.time()
-    if time > datetime.time(3, 59, 30):
+    if time > timeStart and time < timeEnd:
         buff()
     elif now - datetime.timedelta(minutes = 10) > schedule_time:
         schedule_time = now
@@ -281,10 +285,10 @@ def qinglong():
 
 buff_times = 0
 def buff():
-    global buff_times
+    global buff_times, timeEnd
     buff_times = 0
     while True:
-        if datetime.datetime.now().time() > datetime.time(4,0,30):
+        if datetime.datetime.now().time() > timeEnd:
             #time.sleep(1)
             if check_exists_by_xpath('//button[@class="cmd_change_line"]',  False):
                 break
@@ -324,29 +328,29 @@ def buff1():
         try:
             click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="店小二"]'))))
             click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="比试"]'))))
-            #click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[@class="cmd_combat_no_auto_fight"]'))))
         except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
             return
     try:
-        check_exists_by_xpath('//button[@class="cmd_combat_no_auto_fight"]')
-        '''
-        tc1 = 1
-        if buff_times == 1:
-            click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="混元一气功"]'))))
-        if buff_times == 2:
-            if id == 'take':
-                click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH,'//span[text()="葵花宝典"]'))))
-            else:
-                click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="紫霞神功"]'))))
-        if buff_times == 3:
-            click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="天邪神功"]'))))
-        if buff_times == 4:
-            if id == 'take':
-                click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="如来神掌"]'))))
-            else:
-                click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH,  '//span[text()="九天龙吟剑法"]'))))
-        time.sleep(1)
-        '''
+        if True:
+            check_exists_by_xpath('//button[@class="cmd_combat_no_auto_fight"]')
+        else:
+            check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
+            tc1 = 1
+            if buff_times == 1:
+                click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="混元一气功"]'))))
+            if buff_times == 2:
+                if id == 'take':
+                    click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH,'//span[text()="葵花宝典"]'))))
+                else:
+                    click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="紫霞神功"]'))))
+            if buff_times == 3:
+                click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="天邪神功"]'))))
+            if buff_times == 4:
+                if id == 'take':
+                    click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH, '//span[text()="如来神掌"]'))))
+                else:
+                    click(WebDriverWait(driver, tc1).until(EC.presence_of_element_located((By.XPATH,  '//span[text()="九天龙吟剑法"]'))))
+            time.sleep(1)
     except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
         return
 
