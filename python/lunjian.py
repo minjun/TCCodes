@@ -102,7 +102,7 @@ def isCap(strNew):
     return False;
 
 def ql_getNext():
-    global ql_idx,ql_path,ql_npc,ql_chapter;
+    global ql_idx,ql_path,ql_npc,ql_chapter
     ql_idx = ql_idx + 1
     if ql_idx == 1:
         ql_path = ('e','n','e','e','e','e','n')
@@ -148,6 +148,20 @@ def ql_getNext():
         ql_idx = 0
         ql_getNext()
 
+ql_time = datetime.datetime.now()
+def ql_cango():
+    global ql_time
+    if ql_idx < 10:
+        return True
+    now = datetime.datetime.now()
+    if ((now - ql_time).seconds > 300):
+        #print(now)
+        ql_time = now
+        return True
+    time.sleep(10)
+    return False
+
+
 def check_exists_by_xpath(xpath, bClick=True):
     try:
         elem = driver.find_element_by_xpath(xpath)
@@ -171,6 +185,8 @@ def ql():
     if check_exists_by_xpath('//button[@class="cmd_combat_byebye"]'): 
         return
     if not check_exists_by_xpath('//button[@class="cmd_change_line"]',  False):
+        return
+    if not ql_cango():
         return
     ql_getNext()
     try:
