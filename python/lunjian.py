@@ -186,8 +186,8 @@ def ql():
         return
     if not check_exists_by_xpath('//button[@class="cmd_change_line"]',  False):
         return
-    if not ql_cango():
-        return
+    #if not ql_cango():
+        #return
     ql_getNext()
     try:
         click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_main_jh'))))
@@ -424,6 +424,9 @@ if len(sys.argv) > 1:
     elif id == 'yekai':
         url = "http://res.yytou.cn/site/sword/sword.html?key=9e9d0635f856e9970488b74ef4d3e002&id=3766452&time=1497125445931&area=16&port=8083"
         url="http://sword-direct16.yytou.cn:8083/?id=3766452&time=1497125445931&key=9e9d0635f856e9970488b74ef4d3e002&s_line=1"
+    else:
+        print('unknown user')
+        sys.exit()
 driver = webdriver.Chrome()        
 driver.get(url)
 while True:
