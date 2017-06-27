@@ -440,7 +440,7 @@ while True:
         key()
     elif task == 'ql':
         ql()
-        time.sleep(1)
+        time.sleep(2)
     elif task == 'idle':
         idle(5)
         #buff()
