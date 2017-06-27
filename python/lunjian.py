@@ -44,7 +44,7 @@ def send_notification_via_pushbullet(title, body):
         log('send failed ' + str(send_times))
         time.sleep(5)
         send_notification_via_pushbullet(title, body)
-        return;
+        return
     send_times = 0
     if resp.status_code != 200:
         log('send failed')
@@ -94,12 +94,12 @@ def isCap(strNew):
         for ql1 in qlsp:
             if strNew.find(ql1) != -1:
                 log(strNew)
-                return True;
+                return True
         for ql1 in ql:
             if strNew.find(ql1) != -1:
                 log(strNew)
                 return h > 6 and h < 23
-    return False;
+    return False
 
 def ql_getNext():
     global ql_idx,ql_path,ql_npc,ql_chapter
@@ -173,11 +173,11 @@ def check_exists_by_xpath(xpath, bClick=True):
     return True
 
 def ql():
-    global ql_idx,ql_path,ql_npc,ql_chapter;
+    global ql_idx,ql_path,ql_npc,ql_chapter
     if check_exists_by_xpath('//button[text()="进入关卡"]'):
         return
     if check_exists_by_xpath('//button[text()="确定"]'):
-        return;
+        return
     if check_exists_by_xpath('//img[@class="prev"]'):
         return
     if check_exists_by_xpath('//button[@class="cmd_out_map"]'):
@@ -256,7 +256,7 @@ def exp():
             time.sleep(1)
         while True:
             if not clickIfExists(By.XPATH,'//span[text()="奖励"]'):
-                break;
+                break
             time.sleep(1)
         clickIfExists(By.CLASS_NAME, 'prev')
         time.sleep(1)
@@ -309,7 +309,7 @@ def buff():
             if check_exists_by_xpath('//button[@class="cmd_change_line"]',  False):
                 break
             if check_exists_by_xpath('//button[text()="确定"]'):
-                continue;
+                continue
             if check_exists_by_xpath('//button[@class="cmd_out_map"]'):
                 continue
             if check_exists_by_xpath('//button[@class="cmd_combat_byebye"]'): 
@@ -390,6 +390,14 @@ def killnpc(chapter, npc, path):
             clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
             #clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
             clickIfExists(By.CLASS_NAME, 'prev')
+
+def test():
+    if check_exists_by_xpath('//button[text()="进入关卡"]'):
+        return
+    if check_exists_by_xpath('//button[text()="确定"]'):
+        return
+    if check_exists_by_xpath('//img[@class="prev"]'):
+        return
 def key():
     clickIfExists(By.XPATH, '//span[text()="银钥匙"]', 10)
     clickIfExists(By.XPATH, '//button[text()="捡起"]', 10)
@@ -445,4 +453,7 @@ while True:
         idle(5)
         #buff()
         #exp()
+    elif task == 'test':
+        test()
+        time.sleep(2)
 #driver.close()
