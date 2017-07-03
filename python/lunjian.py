@@ -79,7 +79,7 @@ def isCap(strNew):
         '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
         '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝')
     qlsp = (
-        '斩龙宝靴','斩龙宝戒','斩龙帽','九天龙吟剑'
+        '斩龙宝靴','斩龙宝戒','九天龙吟剑'
         )
     #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
     key = ('段老大','游侠会：')
@@ -204,18 +204,16 @@ def ql():
         player = len(driver.find_elements_by_xpath('//button[contains(@onclick,"score")]'))
     except (NoSuchElementException,ElementNotVisibleException,WebDriverException):
         pass
-    if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or player > 2:
+    if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or check_exists_by_xpath('//span[text()="玄阴符兵"]', False) or player > 1:
         return
     if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="流寇" or text()="剧盗" or text()="云老四" or text()="岳老三"]]'):
         if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
             return
-    #if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
-        #return
     check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
     times = 0
     while times < 10:
         times = times + 1
-        if check_exists_by_xpath('//span[text()="金甲符兵"]', False):
+        if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or check_exists_by_xpath('//span[text()="玄阴符兵"]', False):
             check_exists_by_xpath('//button[@class="cmd_combat_byebye"]')
             check_exists_by_xpath('//img[@class="prev"]')
             return
@@ -297,7 +295,7 @@ def qinglong():
                     #driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
                     send_notification_via_pushbullet("您收到一条新消息！",strNew)
                 strOld = text[-300:]
-                time.sleep(5)
+                time.sleep(2)
 
 buff_times = 0
 def buff():
