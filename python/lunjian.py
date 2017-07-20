@@ -79,10 +79,10 @@ def isCap(strNew):
         '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
         '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝')
     qlsp = (
-        '斩龙宝靴','斩龙宝戒','九天龙吟剑'
+        '斩龙宝靴','斩龙宝戒','九天龙吟剑','斩龙帽','斩龙宝链','斩龙宝镯'
         )
     #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
-    key = ('段老大','游侠会：')
+    key = ('游侠会：')
     #if True or strNew[0:1] != '【':
         #log(strNew)
     h = datetime.datetime.now().time().hour
@@ -90,7 +90,7 @@ def isCap(strNew):
         if strNew.find('【系统】' + key1) != -1:
             log(strNew)
             return h > 6 and h < 23
-    if strNew.find('【系统】青龙会组织：') != -1:
+    if strNew.find('【系统】青龙会组织：') != -1 or strNew.find('【系统】跨服：[16-20区]') != -1:
         for ql1 in qlsp:
             if strNew.find(ql1) != -1:
                 log(strNew)
