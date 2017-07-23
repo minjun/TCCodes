@@ -18,6 +18,7 @@ import datetime
 import requests
 import sys
 import sched
+import re
 
 def log(str):
     str = datetime.datetime.now().strftime("%m:%d %H:%M:%S ") + str
@@ -35,7 +36,7 @@ def send_notification_via_pushbullet(title, body):
         log('send failed, aborting...')
         return
     data_send = {"type": "note", "title": datetime.datetime.now().strftime("%H:%M:%S ") + title, "body": body}
-    ACCESS_TOKEN = 'o.qw2oAMucRXoED8jFqwf0wmPjk6cFCh19'
+    ACCESS_TOKEN = 'o.JimOOI57jl6nzlhIEWp0hfVTm2CnSevd'
     try:
         resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
                         headers={'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json'})
@@ -209,7 +210,6 @@ def ql():
     if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="流寇" or text()="剧盗" or text()="云老四" or text()="岳老三"]]'):
         if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
             return
-    check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
     times = 0
     while times < 10:
         times = times + 1
@@ -219,6 +219,7 @@ def ql():
             return
         if not check_exists_by_xpath('//button[text()="杀死"]'):
             time.sleep(1)
+        check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
         clickIfExists(By.XPATH, '//span[text()="茅山道术"]')
 
     ql_idx = ql_idx - 1
@@ -296,6 +297,42 @@ def qinglong():
                     send_notification_via_pushbullet("您收到一条新消息！",strNew)
                 strOld = text[-300:]
                 time.sleep(2)
+
+def fight():
+    strOld = ""
+    regex1= ".+你.*"
+    regex = ".+(冲|向|对准|拍|已将|点|扣)你.*"
+    regex_no = "()"
+    if id == 'nkgd':
+        pfm = "九天龙吟剑"
+    elif id == 'take':
+        pfm = "如来神掌"
+    elif id == 'nkgd1':
+        pfm = '覆雨剑法'
+    else:
+        pfm = '没有设置'
+    while True:
+        check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
+        if check_exists_by_xpath('//div[@id="out"]',  False):
+            text = driver.find_element_by_xpath('//div[@id="out"]').text[-600:]
+            idx = 0
+            if strOld != "":
+                idx = text.rfind(strOld) + len(strOld) + 1
+            strNew = text[idx:]
+            m = re.search(regex1, strNew)
+            if m != None:
+                print(strNew[m.start():m.end()])
+                m = re.search(regex, strNew)
+                if m != None:
+                    try:
+                        time.sleep(0.5)
+                        driver.find_element_by_xpath('//span[text()="'+pfm+'"]').click()
+                    except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
+                        print('pfm failed!')
+                        return
+                    print('pfm ok')
+            strOld = text[-300:]
+        time.sleep(0.5)
 
 buff_times = 0
 def buff():
@@ -454,4 +491,6 @@ while True:
     elif task == 'test':
         test()
         time.sleep(2)
+    elif task == 'fight':
+        fight()
 #driver.close()
