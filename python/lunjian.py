@@ -298,41 +298,66 @@ def qinglong():
                 strOld = text[-300:]
                 time.sleep(2)
 
+
+pfm_buff_time = datetime.datetime.now() - datetime.timedelta(hours=1)
+pfm_dodge_time = datetime.datetime.now() - datetime.timedelta(hours=1)
+
 def fight():
+    global pfm_buff_time, pfm_dodge_time
     strOld = ""
-    regex1= ".+你.*"
-    regex = ".+(冲|向|对准|拍|已将|点|扣)你.*"
-    regex_no = "()"
+    regex_exclude = "(希望扰乱|所破|直接对攻|大喝一声，来吧|双目赤红|企图防御)"
+    regex = "^\s*(只见)?(店小二|守剑人).*(你|右手小指一弹).*"
     if id == 'nkgd':
         pfm = "九天龙吟剑"
+        pfm_buff = '紫霞神功'
     elif id == 'take':
         pfm = "如来神掌"
+        pfm_buff = '葵花宝典'
     elif id == 'nkgd1':
-        pfm = '覆雨剑法'
+        pfm = '降龙十八掌'
+        pfm_buff = '葵花宝典'
     else:
         pfm = '没有设置'
     while True:
         check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
-        if check_exists_by_xpath('//div[@id="out"]',  False):
+        if check_exists_by_xpath('//div[@id="out"]',  False) and check_exists_by_xpath('//td[@id="combat_xdz_text"]', False):
+            qi = driver.find_element_by_id('combat_xdz_text').text
+            idx = qi.index('/')
+            qi = int(qi[:idx])
             text = driver.find_element_by_xpath('//div[@id="out"]').text[-600:]
             idx = 0
             if strOld != "":
                 idx = text.rfind(strOld) + len(strOld) + 1
             strNew = text[idx:]
-            m = re.search(regex1, strNew)
+            if False and strNew != "":
+                print("strNew:"+strNew)
+            bpfm = False
+            m = re.search(regex, strNew)
             if m != None:
                 print(strNew[m.start():m.end()])
-                m = re.search(regex, strNew)
-                if m != None:
-                    try:
-                        time.sleep(0.5)
+                m = re.search(regex_exclude, strNew)
+                if m == None:
+                    try: 
+                        bpfm = True
                         driver.find_element_by_xpath('//span[text()="'+pfm+'"]').click()
+                        print('pfm ok!')
                     except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
                         print('pfm failed!')
-                        return
-                    print('pfm ok')
+            if bpfm == False and qi > 4:
+                try: 
+                    now = datetime.datetime.now()
+                    if   (now - pfm_buff_time).seconds > 60 and (now - pfm_dodge_time).seconds > 2:
+                        pfm_buff_time = now
+                        driver.find_element_by_xpath('//span[text()="'+pfm_buff+'"]').click()
+                        print('buff ok')
+                    elif (now - pfm_dodge_time).seconds > 60 and (now - pfm_buff_time).seconds > 2:
+                        pfm_dodge_time = now
+                        driver.find_element_by_xpath('//span[text()="乾坤大挪移"]').click()
+                        print('dodge ok')
+                except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
+                    print('buff failed!')
             strOld = text[-300:]
-        time.sleep(0.5)
+        time.sleep(0.2)
 
 buff_times = 0
 def buff():
