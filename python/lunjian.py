@@ -175,6 +175,8 @@ def check_exists_by_xpath(xpath, bClick=True):
 
 def ql():
     global ql_idx,ql_path,ql_npc,ql_chapter
+    if check_exists_by_xpath('//span[text()="1"]'):
+        return
     if check_exists_by_xpath('//button[text()="进入关卡"]'):
         return
     if check_exists_by_xpath('//button[text()="确定"]'):
@@ -189,6 +191,11 @@ def ql():
         return
     #if not ql_cango():
         #return
+    h = datetime.datetime.now().time().hour
+    #if h > 23 or h < 9:
+    if h > 13 and h < 23:
+        time.sleep(30)
+        return
     ql_getNext()
     try:
         click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_main_jh'))))
@@ -207,7 +214,7 @@ def ql():
         pass
     if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or check_exists_by_xpath('//span[text()="玄阴符兵"]', False) or player > 1:
         return
-    if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="流寇" or text()="剧盗" or text()="云老四" or text()="岳老三"]]'):
+    if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="剧盗" or text()="云老四" or text()="岳老三"]]'):
         if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="'+ql_npc+'"]]'):
             return
     times = 0
@@ -221,6 +228,7 @@ def ql():
             time.sleep(1)
         check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
         clickIfExists(By.XPATH, '//span[text()="茅山道术"]')
+        clickIfExists(By.XPATH, '//span[text()="天师灭神剑"]')
 
     ql_idx = ql_idx - 1
 
@@ -445,6 +453,7 @@ def killnpc(chapter, npc, path):
         except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
             return
     while True:
+            check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
             clickIfExists(By.XPATH, '//button[text()="'+npc+'"]')
             clickIfExists(By.XPATH, '//button[text()="杀死"]')
             clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
@@ -489,9 +498,8 @@ if len(sys.argv) > 1:
         url="http://sword-direct16.yytou.cn:8083/?key=1ca170f824016f138db234aabcd4c404&id=3502846&name=take777&time=1490724173851&s_line=1"
     elif id == 'nkgd1':
         url="http://sword-direct16.yytou.cn:8083/?id=3766773&time=1488748435257&key=1d07ac13bfe17ac32374a3b7fc67b4ac&s_line=1"
-    elif id == 'yekai':
-        url = "http://res.yytou.cn/site/sword/sword.html?key=9e9d0635f856e9970488b74ef4d3e002&id=3766452&time=1497125445931&area=16&port=8083"
-        url="http://sword-direct16.yytou.cn:8083/?id=3766452&time=1497125445931&key=9e9d0635f856e9970488b74ef4d3e002&s_line=1"
+    elif id == 'leid':
+        url="http://sword-direct16.yytou.cn:8083/?id=3663136&time=1497125176527&key=d4298d92690d1ebf689d63b0acd4c6d6&s_line=1"
     else:
         print('unknown user')
         sys.exit()
@@ -502,6 +510,8 @@ while True:
         killnpc('第一章','醉汉',('e','n','n'))
     elif task == 'dipi':
         killnpc('第二章','地痞', ('n','n','n','n'))
+    elif task == 'she':
+        killnpc('第二章','青竹蛇', ('n','n','n','n','n','n','n','n','n','n','e'))
     elif task == 'qinglong':
         qinglong()
     elif task == 'key':
