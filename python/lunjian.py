@@ -192,8 +192,8 @@ def ql():
     #if not ql_cango():
         #return
     h = datetime.datetime.now().time().hour
-    #if h > 23 or h < 9:
-    if h > 13 and h < 23:
+    #if h > 22 or h < 9:
+    if h > 12 and h < 23:
         time.sleep(30)
         return
     ql_getNext()
