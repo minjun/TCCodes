@@ -304,7 +304,7 @@ def qinglong():
                     #driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
                     send_notification_via_pushbullet("您收到一条新消息！",strNew)
                 strOld = text[-300:]
-                time.sleep(5)
+                time.sleep(3)
 
 
 pfm_buff_time = datetime.datetime.now() - datetime.timedelta(hours=1)
