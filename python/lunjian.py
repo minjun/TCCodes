@@ -304,7 +304,7 @@ def qinglong():
                     #driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
                     send_notification_via_pushbullet("您收到一条新消息！",strNew)
                 strOld = text[-300:]
-                time.sleep(2)
+                time.sleep(5)
 
 
 pfm_buff_time = datetime.datetime.now() - datetime.timedelta(hours=1)
@@ -452,13 +452,18 @@ def killnpc(chapter, npc, path):
                 click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_click_exits_'+d))))
         except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
             return
-    while True:
+    count = 0
+    #while True:
+    while count < 20:
             check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
             clickIfExists(By.XPATH, '//button[text()="'+npc+'"]')
             clickIfExists(By.XPATH, '//button[text()="杀死"]')
             clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
             #clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
+            if check_exists_by_xpath('//img[@class="prev"]', False):
+                count += 1
             clickIfExists(By.CLASS_NAME, 'prev')
+            
 
 def test():
     if check_exists_by_xpath('//button[text()="进入关卡"]'):
