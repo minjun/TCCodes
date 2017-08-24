@@ -460,7 +460,7 @@ def killnpc(chapter, npc, path):
             clickIfExists(By.XPATH, '//button[text()="杀死"]')
             clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
             #clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
-            if check_exists_by_xpath('//img[@class="prev"]', False):
+            if check_exists_by_xpath('//span[text()="'+pfm1+'"]', False):
                 count += 1
             clickIfExists(By.CLASS_NAME, 'prev')
             
