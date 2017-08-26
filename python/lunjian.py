@@ -36,7 +36,7 @@ def send_notification_via_pushbullet(title, body):
         log('send failed, aborting...')
         return
     data_send = {"type": "note", "title": datetime.datetime.now().strftime("%H:%M:%S ") + title, "body": body}
-    ACCESS_TOKEN = 'o.JimOOI57jl6nzlhIEWp0hfVTm2CnSevd'
+    ACCESS_TOKEN = 'o.FwGROrOxHEXvLVRvJoM8TAeAOLrmCyy3'
     try:
         resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
                         headers={'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json'})
@@ -193,7 +193,7 @@ def ql():
         #return
     h = datetime.datetime.now().time().hour
     #if h > 22 or h < 9:
-    if h > 12 and h < 23:
+    if h > 6 and h < 23:
         time.sleep(30)
         return
     ql_getNext()
@@ -513,10 +513,13 @@ driver.get(url)
 while True:
     if task == 'zuihan':
         killnpc('第一章','醉汉',('e','n','n'))
+        break;
     elif task == 'dipi':
         killnpc('第二章','地痞', ('n','n','n','n'))
+        break
     elif task == 'she':
         killnpc('第二章','青竹蛇', ('n','n','n','n','n','n','n','n','n','n','e'))
+        break
     elif task == 'qinglong':
         qinglong()
     elif task == 'key':
