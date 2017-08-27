@@ -439,6 +439,7 @@ def buff1():
         return
 
 def killnpc(chapter, npc, path):
+    global g_killnpc_count
     try:
         driver.find_element_by_class_name('cmd_map')
         log('already in place')
@@ -452,16 +453,15 @@ def killnpc(chapter, npc, path):
                 click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.CLASS_NAME, 'cmd_click_exits_'+d))))
         except (TimeoutException,StaleElementReferenceException,WebDriverException,ElementNotVisibleException):
             return
-    count = 0
     #while True:
-    while count < 20:
+    while g_killnpc_count < 20:
             check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
             clickIfExists(By.XPATH, '//button[text()="'+npc+'"]')
             clickIfExists(By.XPATH, '//button[text()="杀死"]')
             clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
             #clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
             if check_exists_by_xpath('//span[text()="'+pfm1+'"]', False):
-                count += 1
+                g_killnpc_count += 1
             clickIfExists(By.CLASS_NAME, 'prev')
             
 
@@ -510,16 +510,14 @@ if len(sys.argv) > 1:
         sys.exit()
 driver = webdriver.Chrome()        
 driver.get(url)
-while True:
+g_killnpc_count = 0
+while g_killnpc_count < 20:
     if task == 'zuihan':
         killnpc('第一章','醉汉',('e','n','n'))
-        break;
     elif task == 'dipi':
         killnpc('第二章','地痞', ('n','n','n','n'))
-        break
     elif task == 'she':
         killnpc('第二章','青竹蛇', ('n','n','n','n','n','n','n','n','n','n','e'))
-        break
     elif task == 'qinglong':
         qinglong()
     elif task == 'key':
