@@ -1,32 +1,21 @@
 public class Solution {
-	public boolean canPartition(int[] nums) {
-		int sum = 0;
-
-		for (int num : nums) {
-			sum += num;
-		}
-
-		if ((sum & 1) == 1) {
-			return false;
-		}
-		sum /= 2;
-
-		int n = nums.length;
-		boolean[] dp = new boolean[sum + 1];
-		dp[0] = true;
-
-		for (int i = 1; i < n; ++i) {
-			for (int j = sum; j >= 0; --j) {
-				if (j >= nums[i]) {
-					System.out.println(String.format("%d-%b:%d-%b-%d",j,dp[j],j-nums[i],dp[j-nums[i]],nums[i]));
-					dp[j] = dp[j] || dp[j - nums[i]];
-				}
+	public int arrayNesting(int[] nums) {
+		if (nums == null || nums.length == 0)
+			return 0;
+		int res = 0;
+		for (int i = 0; i < nums.length; ++i) {
+			int count = 1;
+			int j = i;
+			while (nums[j] != i) {
+				count++;
+				j = nums[j];
 			}
+			res = Math.max(res, count);
 		}
-
-		return dp[sum];
+		return res;
 	}
+
 	public static void main(String[] args) {
-		new Solution().canPartition(new int[]{1, 5, 11, 5});
+		System.out.println(new Solution().arrayNesting(new int[]{5,4,0,3,1,6,2}));
 	}
 }

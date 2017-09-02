@@ -455,9 +455,9 @@ def killnpc(chapter, npc, path):
             return
     #while True:
     while g_killnpc_count < 20:
-            check_exists_by_xpath('//button[@class="cmd_combat_auto_fight"]')
             clickIfExists(By.XPATH, '//button[text()="'+npc+'"]')
             clickIfExists(By.XPATH, '//button[text()="杀死"]')
+            check_exists_by_xpath('//button[@class="cmd_combat_no_auto_fight"]')
             clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
             #clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
             if check_exists_by_xpath('//span[text()="'+pfm1+'"]', False):
@@ -505,6 +505,8 @@ if len(sys.argv) > 1:
         url="http://sword-direct16.yytou.cn:8083/?id=3766773&time=1488748435257&key=1d07ac13bfe17ac32374a3b7fc67b4ac&s_line=1"
     elif id == 'leid':
         url="http://sword-direct16.yytou.cn:8083/?id=3663136&time=1497125176527&key=d4298d92690d1ebf689d63b0acd4c6d6&s_line=1"
+    elif id == 'qiu':
+        url="http://sword-direct16.yytou.cn:8083/?key=291b252f34db634ed632158275270a7a&id=3473347&time=1500513686905&s_line=1"
     else:
         print('unknown user')
         sys.exit()
