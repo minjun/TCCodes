@@ -80,7 +80,7 @@ def isCap(strNew):
         '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
         '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝','碎片')
     qlsp = (
-        '斩龙宝靴','斩龙宝戒','九天龙吟剑','斩龙帽','斩龙宝链','斩龙宝镯'
+        '斩龙宝靴','斩龙宝戒','九天龙吟剑','斩龙宝链','斩龙宝镯'
         )
     #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
     key = ('游侠会：')
@@ -460,7 +460,7 @@ def killnpc(chapter, npc, path):
             check_exists_by_xpath('//button[@class="cmd_combat_no_auto_fight"]')
             clickIfExists(By.XPATH, '//span[text()="'+pfm1+'"]')
             #clickIfExists(By.XPATH, '//span[text()="'+pfm2+'"]')
-            if check_exists_by_xpath('//span[text()="'+pfm1+'"]', False):
+            if check_exists_by_xpath('//img[@class="prev"]', False):
                 g_killnpc_count += 1
             clickIfExists(By.CLASS_NAME, 'prev')
             
