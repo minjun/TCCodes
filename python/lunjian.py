@@ -12,6 +12,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from multiprocessing import Queue
+#from tzlocal import get_localzone
+from pytz import timezone
 import time
 import json
 import datetime
@@ -31,26 +33,27 @@ send_times = 0
 def send_notification_via_pushbullet(title, body):
     global send_times 
     send_times = send_times + 1
+    '''
     if send_times > 5:
         send_times = 0
         log('send failed, aborting...')
         return
+    '''
     data_send = {"type": "note", "title": datetime.datetime.now().strftime("%H:%M:%S ") + title, "body": body}
     ACCESS_TOKEN = 'o.FwGROrOxHEXvLVRvJoM8TAeAOLrmCyy3'
     try:
         resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
                         headers={'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json'})
+        send_times = 0
+        if resp.status_code != 200:
+           log('send failed:' + str(resp.status_code))
+        else:
+           log('sent successfully:' + str(send_times))
     except Exception as e:
-        print(e)
+        #print(e)
         log('send failed ' + str(send_times))
         time.sleep(5)
         send_notification_via_pushbullet(title, body)
-        return
-    send_times = 0
-    if resp.status_code != 200:
-        log('send failed')
-    else:
-        log('complete sending')
 
 def click(e):
     e.click()
@@ -64,6 +67,17 @@ def clickIfExists(by, text, tc=1):
     except (TimeoutException,StaleElementReferenceException,ElementNotVisibleException):
         pass
     return False
+
+tz_string = 'Asia/Shanghai'
+#tz_string = 'America/Denver'
+tz = timezone(tz_string)
+def isDaytime():
+    global tz_string,tz
+    h = datetime.datetime.now(tz).time().hour
+    if tz_string == 'Asia/Shanghai':
+        return h > 6 and h < 24;
+    else:
+        return h > 6 and h < 23;
 
 def isCap(strNew):
     ql = (
@@ -86,11 +100,10 @@ def isCap(strNew):
     key = ('游侠会：')
     #if True or strNew[0:1] != '【':
         #log(strNew)
-    h = datetime.datetime.now().time().hour
     for key1 in key:
         if strNew.find('【系统】' + key1) != -1:
             log(strNew)
-            return h > 6 and h < 23
+            return isDaytime()
     if strNew.find('【系统】青龙会组织：') != -1 or strNew.find('【系统】跨服：[16-20区]') != -1:
         for ql1 in qlsp:
             if strNew.find(ql1) != -1:
@@ -99,7 +112,7 @@ def isCap(strNew):
         for ql1 in ql:
             if strNew.find(ql1) != -1:
                 log(strNew)
-                return h > 6 and h < 23
+                return isDaytime()
     return False
 
 def ql_getNext():
@@ -191,9 +204,7 @@ def ql():
         return
     #if not ql_cango():
         #return
-    h = datetime.datetime.now().time().hour
-    #if h > 22 or h < 9:
-    if h > 6 and h < 23:
+    if not isDaytime():
         time.sleep(30)
         return
     ql_getNext()
