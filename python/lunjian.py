@@ -23,7 +23,8 @@ import sched
 import re
 
 def log(str):
-    str = datetime.datetime.now().strftime("%m:%d %H:%M:%S ") + str
+    global tz
+    str = datetime.datetime.now(tz).strftime("%m:%d %H:%M:%S ") + str
     print(str)
     f = open('lunjian.log','a')
     f.write(str + '\n')
@@ -31,7 +32,7 @@ def log(str):
 
 send_times = 0
 def send_notification_via_pushbullet(title, body):
-    global send_times 
+    global send_times,tz
     send_times = send_times + 1
     '''
     if send_times > 5:
@@ -39,7 +40,7 @@ def send_notification_via_pushbullet(title, body):
         log('send failed, aborting...')
         return
     '''
-    data_send = {"type": "note", "title": datetime.datetime.now().strftime("%H:%M:%S ") + title, "body": body}
+    data_send = {"type": "note", "title": datetime.datetime.now(tz).strftime("%H:%M:%S ") + title, "body": body}
     ACCESS_TOKEN = 'o.FwGROrOxHEXvLVRvJoM8TAeAOLrmCyy3'
     try:
         resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
