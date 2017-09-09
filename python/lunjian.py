@@ -314,7 +314,11 @@ def qinglong():
                 strNew = text[idx:]
                 if len(strNew) > 0 and isCap(strNew):
                     #driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
-                    send_notification_via_pushbullet("您收到一条新消息！",strNew)
+                    title = "您收到一条新消息！"
+                    a = re.findall(r"(青龙会组织.+|游侠会.+|跨服.+)",strNew)
+                    if len(a) > 0:
+                        title = a[0]
+                    send_notification_via_pushbullet(title,strNew)
                 strOld = text[-300:]
                 time.sleep(3)
 
