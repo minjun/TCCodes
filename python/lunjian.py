@@ -323,7 +323,7 @@ def qinglong():
                         title = title.replace("施展力量，本会愿出","")
                         title = title.replace("的战利品奖励给本场战斗的最终获胜者。","")
                         title = title.replace("游侠会：听说","")
-                        title = title.replace("出来闯荡江湖了，目前正在前往","")
+                        title = title.replace("出来闯荡江湖了，目前前往","")
                         title = title.replace("的路上。","")
                     send_notification_via_pushbullet(title,strNew)
                 strOld = text[-300:]
