@@ -25,7 +25,7 @@ import re
 def log(str):
     global tz
     str = datetime.datetime.now(tz).strftime("%m:%d %H:%M:%S ") + str
-    print(str)
+    #print(str)
     f = open('lunjian.log','a')
     f.write(str + '\n')
     f.close()
