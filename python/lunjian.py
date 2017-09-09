@@ -318,6 +318,13 @@ def qinglong():
                     a = re.findall(r"(青龙会组织.+|游侠会.+|跨服.+)",strNew)
                     if len(a) > 0:
                         title = a[0]
+                        title = title.replace("青龙会组织：","")
+                        title = title.replace("正在","")
+                        title = title.replace("施展力量，本会愿出","")
+                        title = title.replace("的战利品奖励给本场战斗的最终获胜者。","")
+                        title = title.replace("游侠会：听说","")
+                        title = title.replace("出来闯荡江湖了，目前正在前往","")
+                        title = title.replace("的路上。","")
                     send_notification_via_pushbullet(title,strNew)
                 strOld = text[-300:]
                 time.sleep(3)
