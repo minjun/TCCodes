@@ -95,7 +95,7 @@ def isCap(strNew):
         '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
         '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝','碎片')
     qlsp = (
-        '斩龙宝靴','斩龙宝戒','九天龙吟剑','斩龙宝链','斩龙宝镯'
+        '斩龙宝靴','斩龙宝戒','九天龙吟剑','斩龙宝链','斩龙宝镯','胤天宝戒碎片','鱼肠碎片','轩辕剑碎片','破岳拳套碎片'
         )
     #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
     key = ('游侠会：')
@@ -224,6 +224,7 @@ def ql():
         player = len(driver.find_elements_by_xpath('//button[contains(@onclick,"score")]'))
     except (NoSuchElementException,ElementNotVisibleException,WebDriverException):
         pass
+    player = 0
     if check_exists_by_xpath('//span[text()="金甲符兵"]', False) or check_exists_by_xpath('//span[text()="玄阴符兵"]', False) or player > 1:
         return
     if not check_exists_by_xpath('//button[not(contains(text(),"的尸体")) and ./span[text()="剧盗" or text()="云老四" or text()="岳老三"]]'):
@@ -325,6 +326,10 @@ def qinglong():
                         title = title.replace("游侠会：听说","")
                         title = title.replace("出来闯荡江湖了，目前前往","")
                         title = title.replace("的路上。","")
+                        title = title.replace("：[16-20区]","")
+                        title = title.replace("逃到了跨服时空","")
+                        title = title.replace("之中，青龙会组织悬赏","")
+                        title = title.replace("惩治恶人，众位英雄快来诛杀。","")
                     send_notification_via_pushbullet(title,strNew)
                 strOld = text[-300:]
                 time.sleep(3)
