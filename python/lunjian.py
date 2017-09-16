@@ -300,13 +300,17 @@ def qinglong():
             while True:
                 try:
                     click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="系统"]'))))
-                    text = driver.find_element_by_class_name('out').text[-600:]
                 except (TimeoutException,StaleElementReferenceException):
                     log('failed2, retrying...')
                     time.sleep(5)
                     success = False
                     break
                 except UnexpectedAlertPresentException:
+                    time.sleep(5)
+                    break
+                try:
+                    text = driver.find_element_by_class_name('out').text[-600:]
+                except (StaleElementReferenceException):
                     time.sleep(5)
                     break
                 idx = 0
