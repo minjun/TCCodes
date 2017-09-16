@@ -95,7 +95,7 @@ def isCap(strNew):
         '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
         '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝','碎片')
     qlsp = (
-        '斩龙宝靴','斩龙宝戒','九天龙吟剑','斩龙宝链','斩龙宝镯','胤天宝戒碎片','鱼肠碎片','轩辕剑碎片','破岳拳套碎片'
+        '斩龙宝靴','斩龙宝戒','九天龙吟剑','斩龙宝链','胤天宝戒碎片','鱼肠碎片','轩辕剑碎片','破岳拳套碎片'
         )
     #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
     key = ('游侠会：')
@@ -300,6 +300,7 @@ def qinglong():
             while True:
                 try:
                     click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="系统"]'))))
+                    text = driver.find_element_by_class_name('out').text[-600:]
                 except (TimeoutException,StaleElementReferenceException):
                     log('failed2, retrying...')
                     time.sleep(5)
@@ -308,7 +309,6 @@ def qinglong():
                 except UnexpectedAlertPresentException:
                     time.sleep(5)
                     break
-                text = driver.find_element_by_class_name('out').text[-600:]
                 idx = 0
                 if strOld != "":
                     idx = text.rfind(strOld) + len(strOld) + 1
