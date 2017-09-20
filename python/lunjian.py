@@ -91,12 +91,13 @@ def isCap(strNew):
         #'斩龙宝靴','龙皮至尊甲衣','斩龙宝戒','斩龙帽','斩龙宝链','斩龙宝镯',
         '飞宇天怒刀','九天龙吟剑','小李飞刀','天罡掌套','乌金玄火鞭','开天宝棍','达摩杖',
         #'龙骨宝甲','轩辕神盾','鎏金缦罗','天蚕围腰','龙鳞',
-        '明月','月光宝甲衣','烈日','日光宝甲衣','残雪','金丝宝甲衣','斩龙','龙皮至尊甲衣',
-        '星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭',
-        '小还丹','狂暴丹','乾坤再造丹','灵草','紫芝','碎片')
+        '明月','月光宝甲衣','烈日','日光宝甲衣','斩龙','龙皮至尊甲衣',
+        '小还丹','狂暴丹','乾坤再造丹','碎片')
+    qlcx = ('残雪','金丝宝甲衣','星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭','灵草','紫芝')
     qlsp = (
-        '斩龙宝靴','斩龙宝戒','九天龙吟剑','斩龙宝链','胤天宝戒碎片','鱼肠碎片','轩辕剑碎片','破岳拳套碎片'
+        '斩龙宝靴','斩龙宝戒','斩龙宝链','胤天宝戒碎片','鱼肠碎片','轩辕剑碎片','破岳拳套碎片'
         )
+    npcs = ('二娘','段老大','岳老三')
     #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
     key = ('游侠会：')
     #if True or strNew[0:1] != '【':
@@ -114,6 +115,12 @@ def isCap(strNew):
             if strNew.find(ql1) != -1:
                 log(strNew)
                 return isDaytime()
+        for ql1 in qlcx:
+            if strNew.find(ql1) != -1:
+                log(strNew)
+                for npc in npcs:
+                    if strNew.find(npc) != -1:
+                        return isDaytime()
     return False
 
 def ql_getNext():
@@ -303,7 +310,7 @@ def qinglong():
                 except (TimeoutException,StaleElementReferenceException):
                     log('failed2, retrying...')
                     time.sleep(5)
-                    success = False
+                    #success = False
                     break
                 except UnexpectedAlertPresentException:
                     time.sleep(5)
