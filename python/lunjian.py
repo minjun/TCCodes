@@ -33,7 +33,7 @@ def log(str):
 
 send_times = 0
 def send_notification_via_pushover(title, body):
-    global send_times
+    global send_times,tz
     send_times = send_times + 1
     try:
         conn = http.client.HTTPSConnection("api.pushover.net:443")
@@ -41,7 +41,7 @@ def send_notification_via_pushover(title, body):
         urllib.parse.urlencode({
         "token": "an2bzuihw9oic9q5zyax7o8sdr761d",
         "user": "u5g72sm55udxxfem6e5f4raom89kf8",
-        "title": title,
+        "title": datetime.datetime.now(tz).strftime("%H:%M:%S ") + title,
         "message": body,
         }), { "Content-type": "application/x-www-form-urlencoded" })
         resp = conn.getresponse()
@@ -57,7 +57,7 @@ def send_notification_via_pushover(title, body):
         send_notification_via_pushover(title, body)
 
 def send_notification_via_pushbullet(title, body):
-    global send_times
+    global send_times,tz
     send_times = send_times + 1
     '''
     if send_times > 5:
