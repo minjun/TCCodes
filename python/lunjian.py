@@ -21,6 +21,7 @@ import requests
 import sys
 import sched
 import re
+import http.client, urllib
 
 def log(str):
     global tz
@@ -31,8 +32,30 @@ def log(str):
     f.close()
 
 send_times = 0
+def send_notification_via_pushover(title, body):
+    global send_times
+    send_times = send_times + 1
+    try:
+        conn = http.client.HTTPSConnection("api.pushover.net:443")
+        conn.request("POST", "/1/messages.json",
+        urllib.parse.urlencode({
+        "token": "an2bzuihw9oic9q5zyax7o8sdr761d",
+        "user": "u5g72sm55udxxfem6e5f4raom89kf8",
+        "message": "hello world",
+        }), { "Content-type": "application/x-www-form-urlencoded" })
+        resp = conn.getresponse()
+        if resp.status != 200:
+           log('send failed:' + str(resp.status_code))
+        else:
+           log('sent successfully:' + str(send_times))
+    except Exception as e:
+        print(e)
+        log('send failed ' + str(send_times))
+        time.sleep(5)
+        send_notification_via_pushover(title, body)
+
 def send_notification_via_pushbullet(title, body):
-    global send_times,tz
+    global send_times
     send_times = send_times + 1
     '''
     if send_times > 5:
@@ -45,7 +68,6 @@ def send_notification_via_pushbullet(title, body):
     try:
         resp = requests.post('https://api.pushbullet.com/v2/pushes', data=json.dumps(data_send),
                         headers={'Authorization': 'Bearer ' + ACCESS_TOKEN, 'Content-Type': 'application/json'})
-        send_times = 0
         if resp.status_code != 200:
            log('send failed:' + str(resp.status_code))
         else:
@@ -118,9 +140,12 @@ def isCap(strNew):
         for ql1 in qlcx:
             if strNew.find(ql1) != -1:
                 log(strNew)
+                return isDaytime()
+                '''
                 for npc in npcs:
                     if strNew.find(npc) != -1:
                         return isDaytime()
+                '''
     return False
 
 def ql_getNext():
@@ -341,7 +366,7 @@ def qinglong():
                         title = title.replace("逃到了跨服时空","")
                         title = title.replace("之中，青龙会组织悬赏","")
                         title = title.replace("惩治恶人，众位英雄快来诛杀。","")
-                    send_notification_via_pushbullet(title,strNew)
+                    send_notification_via_pushover(title,strNew)
                 strOld = text[-300:]
                 time.sleep(3)
 
