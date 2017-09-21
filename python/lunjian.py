@@ -49,6 +49,7 @@ def send_notification_via_pushover(title, body):
            log('send failed:' + str(resp.status_code))
         else:
            log('sent successfully:' + str(send_times))
+        send_times = 0
     except Exception as e:
         print(e)
         log('send failed ' + str(send_times))
@@ -73,6 +74,7 @@ def send_notification_via_pushbullet(title, body):
            log('send failed:' + str(resp.status_code))
         else:
            log('sent successfully:' + str(send_times))
+        send_times = 0
     except Exception as e:
         #print(e)
         log('send failed ' + str(send_times))
