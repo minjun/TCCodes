@@ -41,7 +41,8 @@ def send_notification_via_pushover(title, body):
         urllib.parse.urlencode({
         "token": "an2bzuihw9oic9q5zyax7o8sdr761d",
         "user": "u5g72sm55udxxfem6e5f4raom89kf8",
-        "message": "hello world",
+        "title": title,
+        "message": body,
         }), { "Content-type": "application/x-www-form-urlencoded" })
         resp = conn.getresponse()
         if resp.status != 200:
