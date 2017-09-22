@@ -319,59 +319,38 @@ def exp():
         pass
 
 def qinglong():
-    success = False
     strOld = ""
     while True:
-        if not success:
-            try:
-                click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//img[@alt="聊天"]'))))
-                success = True
-            except (TimeoutException,StaleElementReferenceException,UnexpectedAlertPresentException):
-                log('failed1, retrying...')
-                time.sleep(5)
-                pass
-        else:        
-            while True:
-                try:
-                    click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="系统"]'))))
-                except (TimeoutException,StaleElementReferenceException):
-                    log('failed2, retrying...')
-                    time.sleep(5)
-                    success = False
-                    break
-                except UnexpectedAlertPresentException:
-                    time.sleep(5)
-                    break
-                try:
-                    text = driver.find_element_by_class_name('out').text[-600:]
-                except (StaleElementReferenceException):
-                    time.sleep(5)
-                    break
-                idx = 0
-                if strOld != "":
-                    idx = text.rfind(strOld) + len(strOld) + 1
-                strNew = text[idx:]
-                if len(strNew) > 0 and isCap(strNew):
-                    #driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
-                    title = "您收到一条新消息！"
-                    a = re.findall(r"(青龙会组织.+|游侠会.+|跨服.+)",strNew)
-                    if len(a) > 0:
-                        title = a[0]
-                        title = title.replace("青龙会组织：","")
-                        title = title.replace("正在","")
-                        title = title.replace("施展力量，本会愿出","")
-                        title = title.replace("的战利品奖励给本场战斗的最终获胜者。","")
-                        title = title.replace("游侠会：听说","")
-                        title = title.replace("出来闯荡江湖了，目前前往","")
-                        title = title.replace("的路上。","")
-                        title = title.replace("：[16-20区]","")
-                        title = title.replace("逃到了跨服时空","")
-                        title = title.replace("之中，青龙会组织悬赏","")
-                        title = title.replace("惩治恶人，众位英雄快来诛杀。","")
-                    send_notification_via_pushover(title,strNew)
-                strOld = text[-300:]
-                time.sleep(3)
-
+        if check_exists_by_xpath('//img[@alt="聊天"]'):
+            pass
+        if not check_exists_by_xpath('//button[text()="系统"]'):
+            continue
+        try:
+            text = driver.find_element_by_class_name('out').text[-600:]
+        except (StaleElementReferenceException):
+            time.sleep(5)
+            break
+        idx = 0
+        if strOld != "":
+            idx = text.rfind(strOld) + len(strOld) + 1
+        strNew = text[idx:]
+        #print(strNew)
+        if len(strNew) > 0 and isCap(strNew):
+            #driver.execute_script("var w = window.open('','','width=500,height=500');w.document.write('游侠青龙会!');w.focus();setTimeout(function() {w.close();}, 30000)")
+            title = "您收到一条新消息！"
+            a = re.findall(r"(青龙会组织.+|游侠会.+|跨服.+)",strNew)
+            if len(a) > 0:
+                title = a[0]
+                title = title.replace("青龙会组织：","")
+                title = title.replace("正在","")
+                title = title.replace("施展力量，本会愿出","")
+                title = title.replace("的战利品奖励给本场战斗的最终获胜者。","")
+                title = title.replace("游侠会：听说","")
+                title = title.replace("出来闯荡江湖了，目前前往","")
+                title = title.replace("的路上。","")
+            send_notification_via_pushbullet(title,strNew)
+        strOld = text[-300:]
+        time.sleep(3)
 
 pfm_buff_time = datetime.datetime.now() - datetime.timedelta(hours=1)
 pfm_dodge_time = datetime.datetime.now() - datetime.timedelta(hours=1)
