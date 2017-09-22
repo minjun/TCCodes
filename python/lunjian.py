@@ -348,7 +348,11 @@ def qinglong():
                 title = title.replace("游侠会：听说","")
                 title = title.replace("出来闯荡江湖了，目前前往","")
                 title = title.replace("的路上。","")
-            send_notification_via_pushbullet(title,strNew)
+                title = title.replace("：[16-20区]","")
+                title = title.replace("逃到了跨服时空","")
+                title = title.replace("之中，青龙会组织悬赏","")
+                title = title.replace("惩治恶人，众位英雄快来诛杀。","")
+            send_notification_via_pushover(title,strNew)
         strOld = text[-300:]
         time.sleep(3)
 
