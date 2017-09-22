@@ -325,7 +325,6 @@ def qinglong():
         if not success:
             try:
                 click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//img[@alt="聊天"]'))))
-                click(WebDriverWait(driver, tc).until(EC.presence_of_element_located((By.XPATH, '//button[text()="系统"]'))))
                 success = True
             except (TimeoutException,StaleElementReferenceException,UnexpectedAlertPresentException):
                 log('failed1, retrying...')
@@ -338,7 +337,7 @@ def qinglong():
                 except (TimeoutException,StaleElementReferenceException):
                     log('failed2, retrying...')
                     time.sleep(5)
-                    #success = False
+                    success = False
                     break
                 except UnexpectedAlertPresentException:
                     time.sleep(5)
