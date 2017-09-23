@@ -324,12 +324,13 @@ def qinglong():
         if check_exists_by_xpath('//img[@alt="聊天"]'):
             pass
         if not check_exists_by_xpath('//button[text()="系统"]'):
+            time.sleep(2)
             continue
         try:
             text = driver.find_element_by_class_name('out').text[-600:]
         except (StaleElementReferenceException):
-            time.sleep(5)
-            break
+            time.sleep(2)
+            continue
         idx = 0
         if strOld != "":
             idx = text.rfind(strOld) + len(strOld) + 1
