@@ -55,7 +55,7 @@ def isCap(strNew):
     '''
     if strNew.find('【系统】游侠会：') != -1:
         return True;
-    if strNew.find('【系统】青龙会组织：') != -1:
+    if strNew.find('【系统】青龙会组织：') != -1 or strNew.find('【系统】跨服：[16-20区]') != -1:
         for ql1 in ql:
             if strNew.find(ql1) != -1:
                 return True;

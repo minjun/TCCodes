@@ -27,7 +27,7 @@ def log(str):
     global tz
     str = datetime.datetime.now(tz).strftime("%m:%d %H:%M:%S ") + str
     #print(str)
-    f = open('lunjian.log','a')
+    f = open('lunjian.log','a',encoding='utf8')
     f.write(str + '\n')
     f.close()
 
@@ -100,10 +100,14 @@ tz = timezone(tz_string)
 def isDaytime():
     global tz_string,tz
     h = datetime.datetime.now(tz).time().hour
+    '''
     if tz_string == 'Asia/Shanghai':
         return h > 6 and h < 24;
     else:
         return h > 6 and h < 23;
+    '''
+    #return h > 6 and h < 24;
+    return h > 22 or h < 14;
 
 def isCap(strNew):
     ql = (
@@ -119,9 +123,7 @@ def isCap(strNew):
         '明月','月光宝甲衣','烈日','日光宝甲衣','斩龙','龙皮至尊甲衣',
         '小还丹','狂暴丹','乾坤再造丹','碎片')
     qlcx = ('残雪','金丝宝甲衣','星河剑','血屠刀','霹雳掌套','生死符','玉清棍','疯魔杖','毒龙鞭','灵草','紫芝')
-    qlsp = (
-        '斩龙宝靴','斩龙宝戒','斩龙宝链','胤天宝戒碎片','鱼肠碎片','轩辕剑碎片','破岳拳套碎片'
-        )
+    qlsp = ('斩龙宝戒')
     npcs = ('二娘','段老大','岳老三')
     #key = ('官府：二娘','官府：段老大','段老大','游侠会：')
     key = ('游侠会：')
