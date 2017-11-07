@@ -107,7 +107,7 @@ def isDaytime():
         return h > 6 and h < 23;
     '''
     #return h > 6 and h < 24;
-    return h > 22 or h < 14;
+    return h > 21 or h < 14;
 
 def isCap(strNew):
     ql = (
