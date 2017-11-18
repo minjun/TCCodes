@@ -143,7 +143,7 @@ def isCap(strNew):
                 log(strNew)
                 return isDaytime()
         for ql1 in qlcx:
-            if strNew.find(ql1) != -1 and strNew.find("二娘") != -1:
+            if strNew.find(ql1) != -1 and re.search("【系统】青龙会组织：(二娘|岳老三)正在",strNew) != None:
                 log(strNew)
                 return isDaytime()
                 '''
