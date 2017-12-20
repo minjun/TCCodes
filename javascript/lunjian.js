@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        日常脚本
 // @namespace    http://tampermonkey.net/
-// @version      0.99
+// @version      0.11
 // @description  try to take over the world!
 // @author       You
 // @match        http://*.yytou.cn/*
@@ -1246,12 +1246,8 @@ function processMsg(type, subtype, msg) {
 		}
 		AutoGetFunc();
 	}
-    else if (qxAutofight && msg.match(/大米对著.*说道：.*大米，领教.*的高招！/) != null) {
-		$("button.cmd_click3").each(
-		function(){
-			if(isContains($(this).html() , "大米"))
-			eval($(this).attr("onclick").replace("score","fight"));
-		});
+    else if (msg.match(/大米对著.*说道：.*大米，领教.*的高招！/) != null) {
+		qixia_fight();
 	} else if (msg.match(/(什么都没射中。|获得朱果|射中了一只)/)!= null) {
         go('shediao');
     } else if (msg.match(/一头金凤凰似乎被你惊到/) != null) {
@@ -1287,6 +1283,95 @@ function processMsg(type, subtype, msg) {
 			killHuangMingTargetFunc();
 		if (m[1] == 5 && kfMonitor == 1)
 			listenKFFunc();
+	}else if ((m = msg.match(/对你悄声道：你现在去(.+)，应当会有发现……/)) != null) {
+		qixiaTimes++;
+		go('home');
+		youxia_go(m[1]);
+	} else if (msg.match(/你对.*(无一|段老大).*喝道：「*！今日不是你死就是我活！」/) != null) {
+		kfTaofanCheck();
+	}
+}
+var qixiaName = new Map();
+qixiaName["浪唤雨"] = "langfangyu";
+qixiaName["王蓉"] = "wangrong";
+qixiaName["李宇飞"] = "liyufei";
+qixiaName["步惊鸿"] = "bujinghong";
+qixiaName["风行骓"] = "fengxingya";
+qixiaName["郭济"] = "guoji";
+qixiaName["吴缜"] = "wuchen";
+qixiaName["风南"] = "fengnan";
+qixiaName["火云邪神"] = "huoyunxieshen";
+qixiaName["逆风舞"] = "nifengwu";
+qixiaName["狐苍雁"] = "gucangyan";
+qixiaName["护竺"] = "huzhu";
+var qixia = new Map();
+qixia["天龍◎雷动"] = ["李宇飞"];
+qixia["天龍◎缘"] = ["护竺"];
+qixia["天龍◎藰駹"] = ["风行雅"];
+qixia["天龍◎↗↗"] = ["风行雅"];
+var qixiaTimes = 0;
+var qixia_place = new Map();
+qixia_place['山坳'] = 'ShanAoFunc';
+qixia_place['石街'] = 'ShiJieFunc';
+qixia_place['桃花泉'] = 'TaoHuaFunc';
+qixia_place['沙丘小洞'] = 'ShaQiuFunc';
+qixia_place['九老洞'] = 'JiuLaoFunc';
+qixia_place['悬松根'] = 'XuanSongFunc';
+qixia_place['碧水寒潭'] = 'BiShuiFunc';
+qixia_place['戈壁'] = 'GeBiFunc';
+qixia_place['奇槐坡'] = 'QiHuaiFunc';
+qixia_place['危涯前'] = 'WeiYaFunc';
+qixia_place['小洞天'] = 'XiaoDongFunc';
+qixia_place['潭畔草地'] = 'CaoDiFunc';
+qixia_place['天梯'] = 'TianTiFunc';
+qixia_place['湖边'] = 'HuBianFunc';
+qixia_place['山溪畔'] = 'ShanXiFunc';
+qixia_place['卢崖瀑布'] = 'luyaFunc';
+qixia_place['玉壁瀑布'] = 'YuBiFunc';
+qixia_place['启母石'] = 'QiMuFunc';
+qixia_place['草原'] = 'CaoYuanFunc';
+qixia_place['悬崖'] = 'GMXuanYaFunc';
+qixia_place['云步桥'] = 'YunBuFunc';
+qixia_place['寒水潭'] = 'HanShuiFunc';
+qixia_place['千尺幢'] = 'QianChiFunc';
+qixia_place['猢狲愁'] = 'HuSunFunc';
+qixia_place['无名峡谷'] = 'WuMingFunc';
+qixia_place['观景台'] = 'GuanJingFunc';
+qixia_place['临渊石台'] = 'ShiTaiFunc';
+qixia_place['无极老姆洞'] = 'wujiLaomuFunc';
+qixia_place['夕阳岭'] = 'xiyanglingFunc';
+qixia_place['青云坪'] = 'QingYunFunc';
+
+function luyaFunc() {
+	go('jh 22;n;n;n;');
+}
+function wujiLaomuFunc() {
+	go('jh 22;n;n;w;n;n;n;n;');
+}
+function xiyanglingFunc() {
+	go('jh 9;n;n;e;');
+}
+
+function qixia_go(place) {
+	if (qixia_place.hasOwnProperty(place))
+		eval(qixia_place[place] + '()');
+	else
+		alert('请定义秘境函数!');
+}
+function qixia_timesFunc() {
+	qixiaTimes = prompt('已完成秘境次数?',0);
+}
+function qixia_fight() {
+	if (qixiaTimes < 3 || qixiaTimes > 4) {
+		$("button.cmd_click3").each(
+		function(){
+			if(isContains($(this).html() , "大米"))
+			eval($(this).attr("onclick").replace("score","fight"));
+		});
+	} else if (qixiaTimes == 3) {
+		clickButton('auto_zsjd_'+qixiaName[qixia[myname]]);
+	} else if (qixiaTimes == 4) {
+		clickButton('auto_zsjd20_'+qixiaName[qixia[myname]]);
 	}
 }
 
@@ -1352,7 +1437,6 @@ function processMsg(type, subtype, msg) {
                     kfKind = "跨服逃犯";
                     kf = "go('" + m[1] + "')"
                     kuafuFlyandKill();
-                    setTimeout(kfTaofanCheck, 5000);
                 }
                 var l = msg.match(/【系统】游侠会：听说(.*)出来闯荡江湖了，目前正在前往(.*)的路上。/);
                 if (l&&kfMonitor==1) {
@@ -3951,9 +4035,10 @@ var delta1 = 20;                 // 每个按钮间隔
 
 //按钮列表----------------------------------------------------------------------------------------------------------------------------
 //createButton1('回主页',GoHomeFunc);
-createButton1('撩奇侠',liaoSwordsmanFunc);
-createButton1('自动比试',autoFightFunc);
-createButton1('比试奇侠',BiShiFunc);
+createButton('撩奇侠',liaoSwordsmanFunc);
+createButton('秘境次数',qixia_TimesFunc);
+createButton('比试奇侠',BiShiFunc);
+/*
 createButton1('扫荡', saoDangFunc);
 createButton1('雪亭-山坳',ShanAoFunc);
 createButton1('洛阳-石街',ShiJieFunc);
@@ -3977,6 +4062,7 @@ createButton1('玉洞',langhuanFunc);
 createButton1('无尽深渊',wujinFunc);
 //createButton1('山崖1',shanya1Func);
 //createButton1('山崖2',shanya2Func);
+*/
 //奇侠顺序-----------------------------------------------------------------------------------
 //var qxList_input = prompt ("请输入奇侠顺序","步惊鸿；郭济；逆风舞；王蓉；风南；狐苍雁；浪唤雨；火云邪神；李宇飞；庞统；风行骓；吴缜；护竺");   //奇侠顺序
 //var qxList  = "步惊鸿；郭济；逆风舞；王蓉；风南；狐苍雁；浪唤雨；火云邪神；李宇飞；庞统；风行骓；吴缜；护竺".split("；");
@@ -3987,17 +4073,6 @@ qxLists.put("天龍◎藰駹", "浪唤雨；火云邪神；步惊鸿；郭济；
 qxLists.put("天龍◎↗↗", "步惊鸿；郭济；火云邪神；逆风舞；步惊鸿；郭济；火云邪神；逆风舞；王蓉；风南；狐苍雁；浪唤雨；李宇飞；庞统；风行骓；吴缜；护竺".split("；"));
 var qxList;
 
-var qxAutofight = false;
-function autoFightFunc() {
-    if(btnList1["自动比试"].innerText  == '自动比试'){
-        qxAutofight = true;
-        btnList1["自动比试"].innerText  = '手动比试';
-    }
-    else{
-         qxAutofight = true;
-         btnList1["自动比试"].innerText  = '自动比试';
-        }
-}
 function liaoSwordsmanFunc() {
     qxList = qxLists.get(myname);
     if (qxList === "undefined") {
@@ -4007,6 +4082,7 @@ function liaoSwordsmanFunc() {
     console.log(qxList);
     goSwordsman(0);
 }
+
 var sandangwait = 300;
 function saoDangGuozi(min, saodangcmd ,saodangOkCmd) {
         var elem = $('span.out4:contains(朱果x)');
