@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        日常脚本
 // @namespace    http://tampermonkey.net/
-// @version      1.00
+// @version      0.99
 // @description  try to take over the world!
 // @author       You
 // @match        http://*.yytou.cn/*
