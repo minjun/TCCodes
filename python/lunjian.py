@@ -107,7 +107,7 @@ def isDaytime():
         return h > 6 and h < 23;
     '''
     #return h > 6 and h < 24;
-    return h > 20 or h < 14;
+    return True or h > 20 or h < 14;
 
 def isCap(strNew):
     ql = (
@@ -142,15 +142,16 @@ def isCap(strNew):
             if strNew.find(ql1) != -1:
                 log(strNew)
                 return isDaytime()
+        '''
         for ql1 in qlcx:
             if strNew.find(ql1) != -1 and re.search("【系统】青龙会组织：(二娘|岳老三)正在",strNew) != None:
                 log(strNew)
                 return isDaytime()
-                '''
+
                 for npc in npcs:
                     if strNew.find(npc) != -1:
                         return isDaytime()
-                '''
+        '''
     return False
 
 def ql_getNext():
